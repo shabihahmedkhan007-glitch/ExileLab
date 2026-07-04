@@ -1,0 +1,20 @@
+# Normalize line endings: store LF in the repo, let editors use native endings.
+# Fixes the CRLF/LF warnings on Windows and keeps diffs clean across machines.
+* text=auto
+
+# Always LF (required by Linux containers/CI even when checked out on Windows)
+*.sh text eol=lf
+Dockerfile text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Binary — never diff or normalize
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.woff binary
+*.woff2 binary

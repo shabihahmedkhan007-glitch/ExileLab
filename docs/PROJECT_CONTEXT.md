@@ -27,7 +27,8 @@ None. RFC-0001 not yet created. (S7, the PRD v2 revision, does **not** need an R
 - 2026-07-04 — Repository reorganized: `docs/` structure, `rfcs/`, `research/`, scaffolded code dirs; VISION, TECH_ARCHITECTURE (placeholder), DECISIONS (ADR-001–003), GLOSSARY created.
 - 2026-07-04 — Repository operating system established: README session-start protocol, PRINCIPLES.md, WORKFLOW.md, this document.
 - 2026-07-04 — Git repository initialized; first commit `4ea751c` on `main` (founder).
-- 2026-07-04 — Root cleanup: pivot PDF archived to `research/archive/` (staged, commit pending).
+- 2026-07-04 — Root cleanup: pivot PDF archived to `research/archive/`.
+- 2026-07-04 — Dev environment finalized: `.gitignore`, `.gitattributes` (LF normalization), `CLAUDE.md` (auto-loads the README session-start protocol for Claude Code).
 
 ## Open Tasks
 
@@ -41,7 +42,6 @@ None. RFC-0001 not yet created. (S7, the PRD v2 revision, does **not** need an R
 8. S6 — aggregation feasibility (3-source normalize + diff demo).
 9. S7 — PRD v2 revision + founder sign-off.
 10. Decide: is an execution-level work-breakdown doc (BUILD-PLAN) needed for Phase 0, or does PRODUCT_PLAN.md suffice? (Requested pre-reorg, never written.)
-11. Add a minimal `CLAUDE.md` pointing at README.md so the session-start protocol auto-loads, and a `.gitignore` before code lands (recommended, not yet approved).
 
 ## Known Risks
 
