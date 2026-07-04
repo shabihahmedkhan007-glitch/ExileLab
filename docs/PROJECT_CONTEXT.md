@@ -16,7 +16,7 @@ Begin Phase 0 work: RFC-0001 — Canonical Build Model (BuildSnapshot), alongsid
 
 ## Current RFC
 
-**RFC-0001 — Canonical Build Model (BuildSnapshot): Discussion resolved 2026-07-04, cleared for drafting.** All open questions answered by founder (`rfcs/0001-canonical-build-model.discussion.md`): Q1 BuildSnapshot wins the canonical name (Genome stays reserved/derived); Q2 mutations as base+delta with promotion on adoption; Q3 hybrid game-data strategy (ID+patch references authoritative, display cache excluded from hash); Q4 time-boxed raw-payload retention (~90-day working default); Q5 multi-loadout modeled from day one. (S7, the PRD v2 revision, does **not** need an RFC — it applies the already-accepted ADR-003 pivot to a lagging document.)
+**RFC-0001 — Canonical Build Model (BuildSnapshot): drafted, In Review.** Draft at `rfcs/0001-canonical-build-model.md` (13 sections; decisions AD-1…AD-7; invariants I1–I7; consumer contract; two implementation-stage open questions OQ-1/OQ-2). Revised in review per founder directive: **I7 admission rule** — every element of the model must be justified by a named downstream consumer requirement; no convenience data (§5.3 category justifications added; Display Cache survives under a narrow multi-renderer justification). Incorporates all resolved discussion answers: Q1 BuildSnapshot wins the canonical name (Genome stays reserved/derived); Q2 mutations as base+delta with promotion on adoption; Q3 hybrid game-data strategy (ID+patch references authoritative, display cache excluded from hash); Q4 time-boxed raw-payload retention (~90-day working default); Q5 multi-loadout modeled from day one. Awaiting founder review → Accept/Reject. (S7, the PRD v2 revision, does **not** need an RFC — it applies the already-accepted ADR-003 pivot to a lagging document.)
 
 ## Completed Work
 
@@ -33,7 +33,7 @@ Begin Phase 0 work: RFC-0001 — Canonical Build Model (BuildSnapshot), alongsid
 
 ## Open Tasks
 
-1. RFC-0001 — Canonical Build Model (BuildSnapshot): **Discussion resolved (Q1–Q5 answered)** → draft the RFC → review → accept → apply to docs (incl. GLOSSARY reconciliation of Build Snapshot vs Build Genome).
+1. RFC-0001 — Canonical Build Model (BuildSnapshot): **drafted, In Review** → founder review → on acceptance, apply §13 Documentation Impact in one pass (GLOSSARY reconciliation + new terms, ADR-004, TECH_ARCHITECTURE System Components/Data Flow, status update).
 2. S4 — draft & submit GGG OAuth application (longest external lead time).
 3. S1 — engine benchmark spike (GO/NO-GO gate: median full calc <500ms, misc <50ms).
 4. Collect fixtures: 3 benchmark builds, 20-character import corpus, 1 archetype in 3 source versions (incl. a Twister Huntress).
@@ -54,7 +54,7 @@ Top of the register (full table in `PRODUCT_PLAN.md` → Risks): objective-funct
 
 ## Next Recommended Task
 
-**Draft RFC-0001** in `rfcs/0001-canonical-build-model.md` per the rfcs/README skeleton, incorporating the resolved Q1–Q5 answers from the discussion document. S4 (OAuth draft) can proceed in parallel — it has the longest external lead time.
+**Founder reviews RFC-0001** (`rfcs/0001-canonical-build-model.md`) → Accept or Reject. On acceptance: apply the §13 Documentation Impact pass. S4 (OAuth draft) can proceed in parallel — it has the longest external lead time.
 
 ## Recent Decisions
 
