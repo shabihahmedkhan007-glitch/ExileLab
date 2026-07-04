@@ -45,9 +45,9 @@ Update PROJECT_CONTEXT.md
 ## Session rules
 
 **Every new session begins by reading:**
-1. `README.md` (the entry point)
+1. `CLAUDE.md` (the operating rulebook — session protocol, read order, document ownership)
 2. `docs/PROJECT_CONTEXT.md` (current status)
-3. The documentation referenced by README.md's session-start protocol.
+3. The documents its read order points to for today's task.
 
 **Then, before any changes, the assistant explains:**
 - Current project state
@@ -61,7 +61,7 @@ If the user types only "Continue.", the objective is PROJECT_CONTEXT.md → *Nex
 
 ## Document ownership
 
-- Every change first determines its owning document (ownership map in README.md).
+- Every change first determines its owning document (ownership map in CLAUDE.md).
 - If multiple documents are affected, they are updated **together in the same pass**.
 - Documentation must never be internally inconsistent. If code and docs disagree, one of them is wrong — fix the contradiction before proceeding.
 

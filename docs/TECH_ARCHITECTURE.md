@@ -10,7 +10,7 @@ _TBD_
 
 ## Repository Structure
 
-_TBD — mirrors the top-level layout in `README.md`; expand per-directory conventions here as code lands._
+_TBD — mirrors the top-level layout in `CLAUDE.md` (Repository structure) and the repository↔architecture mapping in `ARCHITECTURE.md` §7; expand per-directory conventions here as code lands._
 
 ## System Components
 

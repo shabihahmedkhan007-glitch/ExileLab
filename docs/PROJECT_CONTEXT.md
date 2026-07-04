@@ -1,6 +1,6 @@
 # PROJECT_CONTEXT — Living Status Document
 
-> The first document every session reads (after README.md) and the last document every session updates. This replaces long chat handoffs. Keep entries short and link to owning docs instead of duplicating them.
+> The first document every session reads (after CLAUDE.md) and the last document every session updates. This replaces long chat handoffs. Keep entries short and link to owning docs instead of duplicating them.
 
 ## Current Phase
 
@@ -30,6 +30,7 @@ None in flight. **RFC-0001 — Canonical Build Model (BuildSnapshot): ACCEPTED (
 - 2026-07-04 — Root cleanup: pivot PDF archived to `research/archive/`.
 - 2026-07-04 — Dev environment finalized: `.gitignore`, `.gitattributes` (LF normalization), `CLAUDE.md` (auto-loads the README session-start protocol for Claude Code).
 - 2026-07-04 — Doc consistency pass (approved, maintenance-only): stale `PLAN.md`/`PRD.md` filename references fixed in PRODUCT_PLAN and UX_PRESENTATION (incl. its header), pivot-PDF path updated to `research/archive/`, "Build Aggregation Service" standardized to "Aggregation Engine" (ADR-003's historical text intentionally untouched). **Documentation frozen**; next milestone: RFC-0001.
+- 2026-07-04 — Repository operating rulebook restructure (founder-directed): `CLAUDE.md` rewritten from a thin README-pointer into the standalone **operating rulebook** — repository structure, document read-order + ownership map, session-start protocol, change lifecycle, non-negotiables, conventions, and a new **Build-with-GSD-skills** section mapping WORKFLOW stages to the GSD skills. `README.md` slimmed to a brief app pitch (+ non-affiliation disclaimer). New root `ARCHITECTURE.md` added as a system-overview/orientation map that owns nothing and defers to the source-of-truth docs. Session/ownership references repointed README→CLAUDE.md in WORKFLOW.md and this document; TECH_ARCHITECTURE repo-layout pointer updated. No product-doc content changed; no application code.
 
 ## Open Tasks
 
@@ -65,6 +66,8 @@ Top of the register (full table in `PRODUCT_PLAN.md` → Risks): objective-funct
 - Process (2026-07-04, this doc + WORKFLOW.md): repository is the source of truth; assistant memory stays minimal; teaching/mentor style is session-scoped, never persisted.
 
 ## Last Session Summary
+
+**2026-07-04 (operating rulebook restructure):** Reorganized the repository's operating system so "the rulebook" and "the app pitch" are separate concerns. `CLAUDE.md` is now the authoritative rulebook (it previously just deferred to README): it carries the repository structure, the read-order + document-ownership map, the session-start protocol, the change lifecycle, the non-negotiables, and a new section mandating the GSD skills (`/gsd-plan-phase`, `/gsd-execute-phase`, `/gsd-verify-work`, `/gsd-spike`, …) for build work rather than freehand coding. `README.md` is now a brief human-facing pitch that points at CLAUDE.md + `docs/`. Added `ARCHITECTURE.md` at the root — a readable system overview synthesized from PRODUCT_PLAN / TECH_ARCHITECTURE / RFC-0001 that explicitly owns nothing and defers to the source-of-truth docs. Repointed the README→CLAUDE.md session/ownership references in WORKFLOW.md and this document, and the repo-layout pointer in TECH_ARCHITECTURE.md, so the doc set stays internally consistent. No product-doc content or code changed. (CLAUDE.md structure grounded in the official Claude Code memory guidance: lean, scannable, imperative; plain-path references not `@`-imports, to avoid auto-loading `docs/` every session.)
 
 **2026-07-04 (RFC-0001 accepted + docs pass):** Founder accepted RFC-0001 (with the I7 admission rule added during review). Executed the §13 documentation impact pass in one sweep: GLOSSARY — BuildSnapshot takes the canonical definition, Build Genome re-scoped to reserved/derived, Aggregation Engine entry corrected ("normalizes into BuildSnapshots"), five new terms added; DECISIONS — ADR-004 appended; TECH_ARCHITECTURE — System Components and Data Flow populated from RFC-0001 §5.2 (first real content); PRODUCT_PRD/PLAN verified consistent, unchanged. Next milestone recorded: Phase 0 spikes (S4 OAuth first, S1 benchmark GO/NO-GO). No implementation.
 
