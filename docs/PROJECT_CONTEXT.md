@@ -4,7 +4,7 @@
 
 ## Current Phase
 
-**Foundation build landed (founder-directed, 2026-07-04)** — the monorepo, canonical model, core packages, mock-engine API, and web app now exist and are green (164 tests). The **Phase 0 validation spikes remain open and gating**: the engine is a clearly-marked deterministic MockEngine behind the RFC-0001 boundary adapter until S1 (PoB2 LuaJIT sidecar benchmark) is executed; S4 (GGG OAuth) unstarted. Workflow-wise: the build ran as one founder-approved execution pass; future changes return to the normal `WORKFLOW.md` lifecycle.
+**Foundation complete + Phase 0 spikes executed to their machine boundary (2026-07-05).** The monorepo, canonical model (fully consolidated onto `@exilelab/core`), core packages, engine-adapter-backed API with optional Postgres persistence, and web app are green: **174 tests + 4 skipped** (live-Postgres leg). Spike state: S2/S3/S6 executed green on the synthetic corpus with their real-data/real-engine gates honestly marked; S1 is a complete runnable harness blocked on a Docker host + upstream PoB2 submodule pin; S4 is a finished draft awaiting founder send; S5 note written; S7 PRD v2 applied awaiting founder sign-off. Everything remaining is founder-action or external-infrastructure gated. Future changes return to the normal `WORKFLOW.md` lifecycle.
 
 ## Current Milestone
 
@@ -35,18 +35,17 @@ None in flight. **RFC-0001 — Canonical Build Model (BuildSnapshot): ACCEPTED (
 
 ## Open Tasks
 
-1. S4 — draft & submit GGG OAuth application (longest external lead time).
-2. S1 — engine benchmark spike (GO/NO-GO gate: median full calc <500ms, misc <50ms) → then replace MockEngine with the real PoB2 LuaJIT sidecar behind the existing `engine/engine-adapter` conformance suite.
-3. **Consolidate the canonical model (verification finding, major):** `build-normalizer/src/model.ts`, `comparator/src/model.ts`, and `context-detector/src/types.ts` each carry a package-local BuildSnapshot mirror (built in parallel against core stubs; agents' notes say to re-export from `@exilelab/core` once it landed — it has). Collapse all three onto core's types, retire build-normalizer's divergent `bs1-` identity in favor of core's `computeBuildStateIdentity`, and delete the backend's `snapshot-adapter` bridging.
-4. **Backend engine dedup (verification finding):** `backend/api/src/engine/mock-engine.ts` is a local copy — switch backend to consume `@exilelab/engine-adapter`.
-5. Collect fixtures: 3 benchmark builds, 20-character import corpus, 1 archetype in 3 source versions (incl. a Twister Huntress).
-6. S2 — zlib shim + share-code round-trip (byte parity on 10 pobb.in codes).
-7. S5 — scoring design note (`docs/spikes/preference-engine.md`); the vertical slice itself shipped in `@exilelab/preference-engine` with the golden orderings.
-8. S3 — import heuristics (gate ≥90% sane FullDPS).
-9. S6 — aggregation feasibility (3-source normalize + diff demo).
-10. S7 — PRD v2 revision + founder sign-off (also covers PRD pillar-numbering cosmetics).
-11. Persistence: swap the API's in-memory repositories for Postgres behind the existing repository interfaces.
-12. Future RFCs when their phase needs them: BuildMutation semantics (before Optimizer core, Phase 2); Build Genome (Phase 3); Patch Adaptation (post-ExileCon); Canonical Build dedup (Phase 3).
+**Founder actions (nothing else blocks these):**
+1. S4 — personalize and SEND the OAuth application (`docs/spikes/s4-ggg-oauth-application.md`; decisions flagged inside: final name/domain, GGG account). Longest external lead — send first.
+2. S7 — review and sign off PRD v2.0 (`docs/PRODUCT_PRD.md`; §7.5 charter verified byte-untouched).
+3. S1 — provide a Docker host + pin the upstream PathOfBuilding-PoE2 submodule (exact command in `engine/benchmark/README.md`), then run the benchmark (GO/NO-GO: median full calc <500ms, misc <50ms). Green → wire the real sidecar behind `engine/engine-adapter`'s conformance suite, replacing MockEngine in one place.
+4. Provide real fixtures to close the synthetic gates: 10 real pobb.in codes (S2 byte parity), 20 real characters (S3 ≥90% sane-FullDPS gate — also needs S1), real 3-source archetype payloads (S6).
+
+**Engineering follow-ups:**
+5. PoB importer fidelity (S6 residual): parse item mod-lines cleanly (rarity/name/base-type currently fold into modifiers) and derive stable content-addressed skill-setup ids, so gear/gem changes reach cross-format consensus like tree changes already do.
+6. Backend `outputs.ts` calibration knobs (dps×75, ehp×4.77 mapping MockEngine scale to threshold contract ranges) — replaced by real calibration when S1 lands.
+7. Run the Postgres integration leg (4 skipped tests) once a Docker host exists: `docker compose -f backend/api/docker-compose.db.yml up` + `DATABASE_URL` per `backend/api/src/store/README.md`.
+8. Future RFCs when their phase needs them: BuildMutation semantics (before Optimizer core, Phase 2); Build Genome (Phase 3); Patch Adaptation (post-ExileCon); Canonical Build dedup (Phase 3).
 
 ## Known Risks
 
@@ -58,7 +57,7 @@ Top of the register (full table in `PRODUCT_PLAN.md` → Risks): objective-funct
 
 ## Next Recommended Task
 
-**Consolidate the canonical model onto `@exilelab/core`** (Open Task 3 — the highest-value cleanup from verification; every day it waits the three mirrors drift further), then **S4 — GGG OAuth application** (longest external lead) and **S1 — engine benchmark spike** (the GO/NO-GO gate that turns MockEngine into the real sidecar).
+**Founder: send the S4 OAuth application** (Open Task 1 — the draft is ready; approval latency is the schedule's long pole), then **stand up a Docker host and run S1** (Open Task 3 — the GO/NO-GO gate; the harness is complete and waiting). Everything engineering-side is green and unblocked-by-code.
 
 ## Recent Decisions
 
@@ -69,6 +68,8 @@ Top of the register (full table in `PRODUCT_PLAN.md` → Risks): objective-funct
 - Process (2026-07-04, this doc + WORKFLOW.md): repository is the source of truth; assistant memory stays minimal; teaching/mentor style is session-scoped, never persisted.
 
 ## Last Session Summary
+
+**2026-07-05 (complete-all pass: consolidation + Phase 0 spikes + persistence):** Founder directed completion of all remaining tasks via a 12-agent Opus workflow + independent verification. Landed: (1) **canonical-model consolidation** — the three package-local BuildSnapshot mirrors are gone, `@exilelab/core` is the sole definition, the `bs1-` identity is retired, backend bridging adapters deleted (verified by grep: zero mirrors, zero bs1 references); (2) **backend engine dedup** — backend consumes `@exilelab/engine-adapter`; the real-sidecar swap now happens in exactly one place; (3) **Postgres persistence** — full pg implementation with hydrate-refreeze + identity re-verification, env-switched, in-memory default unchanged; (4) **spikes**: S2 executed (10/10 parity, 200/200 fuzz, 3/3 bombs), S3 executed (20/20 corpus, gate blocked-on-S1), S6 executed (3 formats → canonical → diff matches documented intent → candidate promoted), S1 complete harness (blocked on Docker + submodule pin), S4 application drafted, S5 design note written (formulas verified against source), S7 PRD v2.0 applied (§7.5 charter byte-untouched, verified via git diff); (5) synthetic fixture corpus (26 fixtures, validated). Verification: matrix 174 passed + 4 skipped after regenerating engine-adapter goldens (stale due to the intentional I2 identity fix — root-caused, regenerated, reviewed); conformance auditor verdict "good", zero findings. Commits `76cef67`…`2f91fbf` + this docs update.
 
 **2026-07-04 (foundation build + verification):** Founder directed a full foundation build via a 13-agent Opus workflow (GSD stage order: scaffold → parallel package execution → services → frontend → 3-lens adversarial verification), followed by an independent verification pass in the main session. Everything specified for the build shipped and is green: 164 tests, all typechecks/builds clean, live API flow proven end-to-end (import → preset-dependent tune orderings → goal-aware Doctor grades → idempotent re-import). Verification (agents + independent re-check of every claim against source) found 0 critical / 5 major; the two surgical majors were fixed and regression-tested before commit (Assumptions out of Canonical Identity per RFC-0001 §5.3/I2; zlib inflate capped against decompression bombs on the untrusted paste path). The remaining majors are structural cleanups recorded as Open Tasks 3–4 (three package-local BuildSnapshot mirrors to collapse onto core — an artifact of parallel agents building against core stubs — and the backend's local MockEngine copy). The engine is deliberately a deterministic mock behind the RFC-0001 conformance-tested boundary until S1 executes. Commits `17ec218`…`15d2ff8` + this docs update.
 
@@ -82,4 +83,4 @@ Top of the register (full table in `PRODUCT_PLAN.md` → Risks): objective-funct
 
 ## Last Updated
 
-2026-07-04
+2026-07-05
