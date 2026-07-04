@@ -1,0 +1,15 @@
+packages:
+  - "packages/*"
+  - "engine/*"
+  - "backend/*"
+  - "frontend/*"
+allowBuilds:
+  esbuild: true
+  sharp: false
+onlyBuiltDependencies:
+  - esbuild
+# sharp is Next.js's optional image-optimization native dep. The web app does no
+# remote image optimization (compliance §7.5), so its native build is not needed;
+# ignore it explicitly to silence ERR_PNPM_IGNORED_BUILDS without a native build.
+ignoredBuiltDependencies:
+  - sharp
