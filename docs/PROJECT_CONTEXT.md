@@ -16,7 +16,7 @@ Begin Phase 0 work: RFC-0001 — Canonical Build Model (BuildSnapshot), alongsid
 
 ## Current RFC
 
-None yet. **Next up: RFC-0001 — Canonical Build Model (BuildSnapshot).** (S7, the PRD v2 revision, does **not** need an RFC — it applies the already-accepted ADR-003 pivot to a lagging document.)
+**RFC-0001 — Canonical Build Model (BuildSnapshot): Discussion resolved 2026-07-04, cleared for drafting.** All open questions answered by founder (`rfcs/0001-canonical-build-model.discussion.md`): Q1 BuildSnapshot wins the canonical name (Genome stays reserved/derived); Q2 mutations as base+delta with promotion on adoption; Q3 hybrid game-data strategy (ID+patch references authoritative, display cache excluded from hash); Q4 time-boxed raw-payload retention (~90-day working default); Q5 multi-loadout modeled from day one. (S7, the PRD v2 revision, does **not** need an RFC — it applies the already-accepted ADR-003 pivot to a lagging document.)
 
 ## Completed Work
 
@@ -33,7 +33,7 @@ None yet. **Next up: RFC-0001 — Canonical Build Model (BuildSnapshot).** (S7, 
 
 ## Open Tasks
 
-1. RFC-0001 — Canonical Build Model (BuildSnapshot): draft, review, accept, apply to docs.
+1. RFC-0001 — Canonical Build Model (BuildSnapshot): **Discussion resolved (Q1–Q5 answered)** → draft the RFC → review → accept → apply to docs (incl. GLOSSARY reconciliation of Build Snapshot vs Build Genome).
 2. S4 — draft & submit GGG OAuth application (longest external lead time).
 3. S1 — engine benchmark spike (GO/NO-GO gate: median full calc <500ms, misc <50ms).
 4. Collect fixtures: 3 benchmark builds, 20-character import corpus, 1 archetype in 3 source versions (incl. a Twister Huntress).
@@ -54,7 +54,7 @@ Top of the register (full table in `PRODUCT_PLAN.md` → Risks): objective-funct
 
 ## Next Recommended Task
 
-**Open Task 1: draft RFC-0001 — Canonical Build Model (BuildSnapshot)** in `rfcs/0001-canonical-build-model.md`, per the skeleton in rfcs/README.md. S4 (OAuth draft) can proceed in parallel — it has the longest external lead time.
+**Draft RFC-0001** in `rfcs/0001-canonical-build-model.md` per the rfcs/README skeleton, incorporating the resolved Q1–Q5 answers from the discussion document. S4 (OAuth draft) can proceed in parallel — it has the longest external lead time.
 
 ## Recent Decisions
 
@@ -64,6 +64,8 @@ Top of the register (full table in `PRODUCT_PLAN.md` → Risks): objective-funct
 - Process (2026-07-04, this doc + WORKFLOW.md): repository is the source of truth; assistant memory stays minimal; teaching/mentor style is session-scoped, never persisted.
 
 ## Last Session Summary
+
+**2026-07-04 (RFC-0001 Discussion):** Wrote the Discussion-stage document for RFC-0001 (`rfcs/0001-canonical-build-model.discussion.md`): BuildSnapshot as the system's immutable "narrow waist"; boundaries (no preferences/calc results/prices/guide content); invariants refined (honest fidelity over strict completeness; game-patch + format versioning; deterministic identity); category inventory (Configuration, Assumptions, Provenance first-class); pipeline recommendation raw→snapshot→calc→derived (normalized-only snapshot, Option A); "A-lite" independent-model recommendation vs PoB-format coupling; 8 risks; 5 open questions (Q1–Q5) awaiting founder answers before the RFC draft. No RFC created, no code — architecture discussion only.
 
 **2026-07-04 (cleanup):** Root cleanup before RFC-0001 — created `research/archive/` and moved the pivot PDF into it (contents untouched; the three by-name mentions in DECISIONS/PRODUCT_PLAN/UX_PRESENTATION are not path-links, so nothing broke; path notes folded into Open Task 1). Confirmed the repo was already git-initialized with first commit `4ea751c` by the founder — Blockers cleared. Move + this status update staged; commit left to founder. Earlier same day: full repo reorganization, planning review, and the repository operating system (README protocol, PRINCIPLES, WORKFLOW, this doc). No application code; no RFCs.
 
