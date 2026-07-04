@@ -1,0 +1,31 @@
+{
+  "name": "@exilelab/api",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/server.js",
+    "dev": "tsx watch src/server.ts",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@exilelab/core": "workspace:*",
+    "@exilelab/build-normalizer": "workspace:*",
+    "@exilelab/context-detector": "workspace:*",
+    "@exilelab/preference-engine": "workspace:*",
+    "@exilelab/rulebook": "workspace:*",
+    "@exilelab/engine-adapter": "workspace:*",
+    "@fastify/cors": "^10",
+    "fastify": "^5"
+  }
+}

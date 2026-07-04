@@ -1,0 +1,130 @@
+// Candidate generator (v0).
+//
+// The Upgrade Planner will eventually generate BuildMutations from a real search
+// over tree paths, gear, and gem links (RFC-0001 §8.2, future BuildMutation RFC).
+// This v0 samples a small, FIXED, deterministic panel of representative changes —
+// a few passive allocations that each emphasize one Preference Axis, plus two
+// gear swaps (one glass-cannon, one premium weapon) that trade axes against each
+// other and carry a Divine cost. It is intentionally simple and labelled v0; its
+// only contract is: deterministic, valid mutations against the given base.
+
+import { createBuildMutation } from "@exilelab/core";
+import type {
+  BuildMutation,
+  BuildSnapshot as CoreSnapshot,
+  MutationOperation,
+} from "@exilelab/core";
+
+/** A generated candidate: the mutation plus display metadata for the UI (UX §4.2). */
+export interface Candidate {
+  mutation: BuildMutation;
+  /** Human-readable, coach-voice change description (never shames — UX §9). */
+  description: string;
+  /** Priced cost of the change in Divines (0 for a free respec-style change). */
+  costDivines: number;
+}
+
+/** Node ids chosen so (id mod 8) targets a specific metric family in MockEngine. */
+const AXIS_NODES: ReadonlyArray<{ nodeId: number; description: string }> = [
+  { nodeId: 800, description: "Allocate a damage passive cluster (raw DPS)." },
+  { nodeId: 801, description: "Allocate a life/defence passive (effective HP)." },
+  { nodeId: 802, description: "Allocate a movement-speed passive." },
+  { nodeId: 803, description: "Allocate an attack-speed passive." },
+  { nodeId: 806, description: "Allocate a mana-sustain passive." },
+];
+
+/**
+ * Generate the v0 candidate panel for a base snapshot. Every mutation references
+ * the base by its Canonical Identity (AD-2) and targets the PRIMARY loadout.
+ */
+export function generateCandidates(base: CoreSnapshot): Candidate[] {
+  const primary =
+    base.buildState.loadoutContexts.find((l) => l.primary) ??
+    base.buildState.loadoutContexts[0];
+  if (primary === undefined) return [];
+  const loadoutContextId = primary.contextId;
+  const allocated = new Set(primary.passiveTree.allocatedNodes);
+
+  const candidates: Candidate[] = [];
+
+  for (const { nodeId, description } of AXIS_NODES) {
+    if (allocated.has(nodeId)) continue;
+    candidates.push(
+      makeCandidate(
+        base.identity,
+        [{ kind: "allocatePassiveNode", loadoutContextId, nodeId }],
+        description,
+        0,
+      ),
+    );
+  }
+
+  // Glass-cannon body-armour swap: big damage, "reduced maximum Life" tanks EHP —
+  // exercises the belowFloor cut under survivability-floored presets.
+  const bodySlot = primary.equipment.find((e) => /body|chest|armour/i.test(e.slot));
+  candidates.push(
+    makeCandidate(
+      base.identity,
+      [
+        {
+          kind: "swapItem",
+          loadoutContextId,
+          item: {
+            slot: bodySlot?.slot ?? "Body Armour",
+            itemRef: "Carnage Heart (glass-cannon chest)",
+            rarity: "unique",
+            modifiers: [
+              "250% increased Physical Damage",
+              "60% reduced maximum Life",
+            ],
+          },
+        },
+      ],
+      "Swap to a glass-cannon chest — large damage gain, but it cuts your Life.",
+      3,
+    ),
+  );
+
+  // Premium weapon upgrade: strong damage, expensive (Currency Efficiency penalty
+  // under budget-weighted presets).
+  const weaponSlot = primary.equipment.find((e) => /weapon|bow|wand|staff/i.test(e.slot));
+  candidates.push(
+    makeCandidate(
+      base.identity,
+      [
+        {
+          kind: "swapItem",
+          loadoutContextId,
+          item: {
+            slot: weaponSlot?.slot ?? "Weapon 1",
+            itemRef: "Top-tier rare weapon",
+            rarity: "rare",
+            modifiers: [
+              "Adds 120 to 260 Physical Damage",
+              "60% increased Attack Speed",
+              "25% increased Critical Hit Chance",
+              "40% increased Damage",
+            ],
+          },
+        },
+      ],
+      "Upgrade to a top-tier weapon — a big damage jump at a premium price.",
+      8,
+    ),
+  );
+
+  return candidates;
+}
+
+function makeCandidate(
+  baseSnapshotId: string,
+  operations: MutationOperation[],
+  description: string,
+  costDivines: number,
+): Candidate {
+  return {
+    mutation: createBuildMutation({ baseSnapshotId, operations }),
+    description,
+    costDivines,
+  };
+}
