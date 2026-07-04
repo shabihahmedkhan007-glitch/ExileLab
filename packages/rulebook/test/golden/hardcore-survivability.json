@@ -1,0 +1,182 @@
+{
+  "rulebookVersion": "1.0.0",
+  "goal": "hardcore-survivability",
+  "tier": 10,
+  "findings": [
+    {
+      "id": "DOC-3",
+      "category": "Defense",
+      "severity": "critical",
+      "statement": "For T10 at your hardcore-survivability goal, EHP is 40000 against a 67200 target — building toward that number is what unlocks the tier safely.",
+      "evidence": {
+        "totalEHP": 40000,
+        "ehpFloor": 67200,
+        "worstHitType": "physical",
+        "worstMaximumHitTaken": 12000,
+        "requiredHit": 15750,
+        "expectedTierHit": 10500,
+        "targetTier": 10
+      },
+      "fixTemplates": [
+        {
+          "id": "DOC-3-add-ehp",
+          "label": "Add effective HP",
+          "hint": "More life/ES, or a mitigation layer (armour, evasion, block), raises EHP fastest."
+        }
+      ]
+    },
+    {
+      "id": "DOC-9",
+      "category": "Overall",
+      "severity": "critical",
+      "statement": "T10 is a reach right now — the limiters are DOC-2, DOC-3, DOC-4. Clear those and your ceiling rises fast.",
+      "evidence": {
+        "targetTier": 10,
+        "readyTier": 0,
+        "worstSeverity": "critical",
+        "limitingFindings": "DOC-2, DOC-3, DOC-4"
+      },
+      "fixTemplates": [
+        {
+          "id": "DOC-9-address-limiters",
+          "label": "Address the flagged limiters first",
+          "hint": "Start with the critical-severity findings above — they gate the tier."
+        }
+      ]
+    },
+    {
+      "id": "DOC-2",
+      "category": "Defense",
+      "severity": "major",
+      "statement": "Chaos resistance is at 10%; lifting it about 15% toward 25% removes one of the most common \"died at full health\" causes for your goal.",
+      "evidence": {
+        "chaosResist": 10,
+        "chaosResFloor": 25,
+        "deficit": 15
+      },
+      "fixTemplates": [
+        {
+          "id": "DOC-2-chaos-res",
+          "label": "Pick up chaos resistance",
+          "hint": "Chaos res is gear-only in PoE2 — target it on rings, amulet, or a corrupted implicit."
+        }
+      ]
+    },
+    {
+      "id": "DOC-4",
+      "category": "Defense",
+      "severity": "major",
+      "statement": "Locking down stun avoidance sits at 40% (target 100%) keeps you in control when a fight turns dangerous — that's a big smoothness-and-safety win for hardcore-survivability.",
+      "evidence": {
+        "stunAvoidance": 40,
+        "stunAvoidanceFloor": 100,
+        "freezeAvoidance": 50,
+        "shockAvoidance": 60,
+        "igniteAvoidance": 55,
+        "ailmentAvoidanceFloor": 75
+      },
+      "fixTemplates": [
+        {
+          "id": "DOC-4-ailment",
+          "label": "Add stun/ailment protection",
+          "hint": "Stun threshold, freeze/shock/ignite avoidance on gear, or an ailment-immunity flask/charm."
+        }
+      ]
+    },
+    {
+      "id": "DOC-1",
+      "category": "Defense",
+      "severity": "pass",
+      "statement": "Your elemental resistances are capped with no overcap to reclaim — nicely balanced.",
+      "evidence": {
+        "fireResist": 78,
+        "fireCap": 75,
+        "coldResist": 76,
+        "coldCap": 75,
+        "lightningResist": 75,
+        "lightningCap": 75
+      },
+      "fixTemplates": []
+    },
+    {
+      "id": "DOC-5",
+      "category": "Defense",
+      "severity": "pass",
+      "statement": "Your defensive layers back each other up — no obvious single-point-of-failure in the mitigation stack.",
+      "evidence": {
+        "life": 4200,
+        "energyShield": 800,
+        "armour": 12000,
+        "evasion": 5000,
+        "blockChance": 25,
+        "spellSuppression": 40,
+        "energyShieldRechargeProtected": true,
+        "issueCount": 0
+      },
+      "fixTemplates": []
+    },
+    {
+      "id": "DOC-6",
+      "category": "Sustain",
+      "severity": "pass",
+      "statement": "Your recovery outpaces the damage you take between packs — sustain is holding up for this goal.",
+      "evidence": {
+        "netLifeRegen": 350,
+        "netRegenFloor": 315,
+        "totalBuildDegen": 0,
+        "lifeLeechRatePerSecond": 900,
+        "energyShieldRechargeRate": 200
+      },
+      "fixTemplates": []
+    },
+    {
+      "id": "DOC-7",
+      "category": "Offense",
+      "severity": "pass",
+      "statement": "Your 1600000 DPS is enough to clear T10 at your hardcore-survivability pace — no need to chase overkill damage; spend elsewhere.",
+      "evidence": {
+        "fullDps": 1600000,
+        "expectedDps": 900000,
+        "targetTier": 10
+      },
+      "fixTemplates": []
+    },
+    {
+      "id": "DOC-8",
+      "category": "QoL",
+      "severity": "pass",
+      "statement": "Every socketed skill is affordable to cast and the engine raised no cost warnings — nothing dead weight here.",
+      "evidence": {
+        "unreservedMana": 80,
+        "unreservedLife": 4200,
+        "warningCount": 0
+      },
+      "fixTemplates": []
+    }
+  ],
+  "grades": {
+    "Offense": "A",
+    "Defense": "F",
+    "Sustain": "A",
+    "QoL": "A"
+  },
+  "verdict": {
+    "id": "DOC-9",
+    "category": "Overall",
+    "severity": "critical",
+    "statement": "T10 is a reach right now — the limiters are DOC-2, DOC-3, DOC-4. Clear those and your ceiling rises fast.",
+    "evidence": {
+      "targetTier": 10,
+      "readyTier": 0,
+      "worstSeverity": "critical",
+      "limitingFindings": "DOC-2, DOC-3, DOC-4"
+    },
+    "fixTemplates": [
+      {
+        "id": "DOC-9-address-limiters",
+        "label": "Address the flagged limiters first",
+        "hint": "Start with the critical-severity findings above — they gate the tier."
+      }
+    ]
+  }
+}

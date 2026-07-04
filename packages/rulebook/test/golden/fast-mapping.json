@@ -1,0 +1,152 @@
+{
+  "rulebookVersion": "1.0.0",
+  "goal": "fast-mapping",
+  "tier": 10,
+  "findings": [
+    {
+      "id": "DOC-1",
+      "category": "Defense",
+      "severity": "pass",
+      "statement": "Your elemental resistances are capped with no overcap to reclaim — nicely balanced.",
+      "evidence": {
+        "fireResist": 78,
+        "fireCap": 75,
+        "coldResist": 76,
+        "coldCap": 75,
+        "lightningResist": 75,
+        "lightningCap": 75
+      },
+      "fixTemplates": []
+    },
+    {
+      "id": "DOC-2",
+      "category": "Defense",
+      "severity": "pass",
+      "statement": "Your chaos resistance (10%) clears the fast-mapping bar — chaos damage won't be the thing that catches you out.",
+      "evidence": {
+        "chaosResist": 10,
+        "chaosResFloor": -30,
+        "deficit": 0
+      },
+      "fixTemplates": []
+    },
+    {
+      "id": "DOC-3",
+      "category": "Defense",
+      "severity": "pass",
+      "statement": "Your 40000 EHP and 12000 worst-case (physical) hit both clear the T10 fast-mapping bar — you can take the punches this content throws.",
+      "evidence": {
+        "totalEHP": 40000,
+        "ehpFloor": 33600,
+        "worstHitType": "physical",
+        "worstMaximumHitTaken": 12000,
+        "requiredHit": 9450,
+        "expectedTierHit": 10500,
+        "targetTier": 10
+      },
+      "fixTemplates": []
+    },
+    {
+      "id": "DOC-4",
+      "category": "Defense",
+      "severity": "pass",
+      "statement": "Stun and ailment protection meet your fast-mapping targets — you won't get chain-locked when a pack lands on you.",
+      "evidence": {
+        "stunAvoidance": 40,
+        "stunAvoidanceFloor": 0,
+        "freezeAvoidance": 50,
+        "shockAvoidance": 60,
+        "igniteAvoidance": 55,
+        "ailmentAvoidanceFloor": 0
+      },
+      "fixTemplates": []
+    },
+    {
+      "id": "DOC-5",
+      "category": "Defense",
+      "severity": "pass",
+      "statement": "Your defensive layers back each other up — no obvious single-point-of-failure in the mitigation stack.",
+      "evidence": {
+        "life": 4200,
+        "energyShield": 800,
+        "armour": 12000,
+        "evasion": 5000,
+        "blockChance": 25,
+        "spellSuppression": 40,
+        "energyShieldRechargeProtected": true,
+        "issueCount": 0
+      },
+      "fixTemplates": []
+    },
+    {
+      "id": "DOC-6",
+      "category": "Sustain",
+      "severity": "pass",
+      "statement": "Your recovery outpaces the damage you take between packs — sustain is holding up for this goal.",
+      "evidence": {
+        "netLifeRegen": 350,
+        "netRegenFloor": 126,
+        "totalBuildDegen": 0,
+        "lifeLeechRatePerSecond": 900,
+        "energyShieldRechargeRate": 200
+      },
+      "fixTemplates": []
+    },
+    {
+      "id": "DOC-7",
+      "category": "Offense",
+      "severity": "pass",
+      "statement": "Your 1600000 DPS is enough to clear T10 at your fast-mapping pace — no need to chase overkill damage; spend elsewhere.",
+      "evidence": {
+        "fullDps": 1600000,
+        "expectedDps": 1500000,
+        "targetTier": 10
+      },
+      "fixTemplates": []
+    },
+    {
+      "id": "DOC-8",
+      "category": "QoL",
+      "severity": "pass",
+      "statement": "Every socketed skill is affordable to cast and the engine raised no cost warnings — nothing dead weight here.",
+      "evidence": {
+        "unreservedMana": 80,
+        "unreservedLife": 4200,
+        "warningCount": 0
+      },
+      "fixTemplates": []
+    },
+    {
+      "id": "DOC-9",
+      "category": "Overall",
+      "severity": "pass",
+      "statement": "Ready for T10: every core system meets your fast-mapping targets. Push the content with confidence.",
+      "evidence": {
+        "targetTier": 10,
+        "readyTier": 10,
+        "worstSeverity": "pass",
+        "limitingFindings": "none"
+      },
+      "fixTemplates": []
+    }
+  ],
+  "grades": {
+    "Offense": "A",
+    "Defense": "A",
+    "Sustain": "A",
+    "QoL": "A"
+  },
+  "verdict": {
+    "id": "DOC-9",
+    "category": "Overall",
+    "severity": "pass",
+    "statement": "Ready for T10: every core system meets your fast-mapping targets. Push the content with confidence.",
+    "evidence": {
+      "targetTier": 10,
+      "readyTier": 10,
+      "worstSeverity": "pass",
+      "limitingFindings": "none"
+    },
+    "fixTemplates": []
+  }
+}
