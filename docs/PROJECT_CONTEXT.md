@@ -12,11 +12,11 @@
 
 ## Current Objective
 
-Repository housekeeping before spikes begin: fix known documentation inconsistencies (see Open Tasks 1), then start S4 + S1.
+Begin Phase 0 work: RFC-0001 — Canonical Build Model (BuildSnapshot), alongside S4 (GGG OAuth draft) and S1 (engine benchmark). **Documentation is frozen as of 2026-07-04** — changes only via the WORKFLOW.md lifecycle (RFC → review → docs) from here on.
 
 ## Current RFC
 
-None. RFC-0001 not yet created. (S7, the PRD v2 revision, does **not** need an RFC — it applies the already-accepted ADR-003 pivot to a lagging document.)
+None yet. **Next up: RFC-0001 — Canonical Build Model (BuildSnapshot).** (S7, the PRD v2 revision, does **not** need an RFC — it applies the already-accepted ADR-003 pivot to a lagging document.)
 
 ## Completed Work
 
@@ -29,10 +29,11 @@ None. RFC-0001 not yet created. (S7, the PRD v2 revision, does **not** need an R
 - 2026-07-04 — Git repository initialized; first commit `4ea751c` on `main` (founder).
 - 2026-07-04 — Root cleanup: pivot PDF archived to `research/archive/`.
 - 2026-07-04 — Dev environment finalized: `.gitignore`, `.gitattributes` (LF normalization), `CLAUDE.md` (auto-loads the README session-start protocol for Claude Code).
+- 2026-07-04 — Doc consistency pass (approved, maintenance-only): stale `PLAN.md`/`PRD.md` filename references fixed in PRODUCT_PLAN and UX_PRESENTATION (incl. its header), pivot-PDF path updated to `research/archive/`, "Build Aggregation Service" standardized to "Aggregation Engine" (ADR-003's historical text intentionally untouched). **Documentation frozen**; next milestone: RFC-0001.
 
 ## Open Tasks
 
-1. Doc consistency pass: fix stale `PLAN.md`/`PRD.md`/`PRESENTATION.md` filename references inside `PRODUCT_PLAN.md` and `UX_PRESENTATION.md` (incl. its self-referencing header); note the pivot PDF's new location (`research/archive/`) where it is mentioned; settle "Build Aggregation Service" → "Aggregation Engine" naming (GLOSSARY already prefers the latter); PRD pillar-numbering cosmetics fold into S7.
+1. RFC-0001 — Canonical Build Model (BuildSnapshot): draft, review, accept, apply to docs.
 2. S4 — draft & submit GGG OAuth application (longest external lead time).
 3. S1 — engine benchmark spike (GO/NO-GO gate: median full calc <500ms, misc <50ms).
 4. Collect fixtures: 3 benchmark builds, 20-character import corpus, 1 archetype in 3 source versions (incl. a Twister Huntress).
@@ -40,7 +41,7 @@ None. RFC-0001 not yet created. (S7, the PRD v2 revision, does **not** need an R
 6. S5 — preference-engine vertical slice + scoring design note.
 7. S3 — import heuristics (gate ≥90% sane FullDPS).
 8. S6 — aggregation feasibility (3-source normalize + diff demo).
-9. S7 — PRD v2 revision + founder sign-off.
+9. S7 — PRD v2 revision + founder sign-off (also covers PRD pillar-numbering cosmetics).
 10. Decide: is an execution-level work-breakdown doc (BUILD-PLAN) needed for Phase 0, or does PRODUCT_PLAN.md suffice? (Requested pre-reorg, never written.)
 
 ## Known Risks
@@ -53,7 +54,7 @@ Top of the register (full table in `PRODUCT_PLAN.md` → Risks): objective-funct
 
 ## Next Recommended Task
 
-**Open Task 1:** the doc consistency pass (stale filename references, PDF location mentions, aggregation naming). After that, start S4 (OAuth draft) and S1 (engine benchmark) in parallel.
+**Open Task 1: draft RFC-0001 — Canonical Build Model (BuildSnapshot)** in `rfcs/0001-canonical-build-model.md`, per the skeleton in rfcs/README.md. S4 (OAuth draft) can proceed in parallel — it has the longest external lead time.
 
 ## Recent Decisions
 

@@ -1,6 +1,6 @@
 # Plan: ExileLab v2 — Personalized Build Optimization Layer (from scratch → public launch)
 
-**Date:** 2026-07-03 (v2 — supersedes v1 same day) · **Companion docs:** `PRD.md` (v1.0 — see "PRD deltas" below), `Plan File Modification Request — Architecture Pivot.pdf` (founder directive, applied in full)
+**Date:** 2026-07-03 (v2 — supersedes v1 same day) · **Companion docs:** `PRODUCT_PRD.md` (v1.0 — see "PRD deltas" below), `research/archive/Plan File Modification Request — Architecture Pivot.pdf` (founder directive, applied in full)
 **Constraint inherited from PRD §7.5 (LOCKED, unchanged):** fully legal & ToS-compliant — official/public APIs only for server-side collection, never POESESSID, never automation of player actions. Extended in this version to cover third-party build platforms (see Compliance notes).
 
 ---
@@ -12,12 +12,12 @@
 | Four pillars incl. **Build Market** ("Netflix for builds"): hosting, creator marketplace, ranked browsing, ladder ingestion as a product pillar | **Build Market DELETED.** No hosting, no creator platform, no ranked browsing. We sit **on top of** Maxroll, Mobalytics, poe.ninja, PoB links — never compete with them |
 | Optimizer assumes higher DPS = better | **Goal-based, preference-weighted optimizer** — the single most important feature. Users control priorities via sliders; the engine optimizes *their* objective, not max DPS |
 | Static build analysis | **Context-aware analysis** (e.g. Twister Huntress: attack speed IS movement → movement-speed stat is low priority) + **comparative optimization** against multiple public versions of the same archetype |
-| Internal build corpus (ladder + submissions) | **Build Aggregation Service**: fetch/normalize external builds from community sources as optimization baselines |
+| Internal build corpus (ladder + submissions) | **Aggregation Engine**: fetch/normalize external builds from community sources as optimization baselines |
 | Positioning: "Netflix for builds" | Positioning: **"An intelligent build optimizer that adapts builds to YOUR playstyle"** |
 
 **Kept from v1 (unchanged foundations):** PoB2 engine as headless Docker sidecar + conformance suite; multi-path import; Character Doctor (reframed goal-aware); freemium pricing ($5.99/mo · $49/yr · $9.99 League Pass); Raidbots-style compute metering; tech stack (Next.js/Fastify/BullMQ/Postgres/Redis/Hetzner); compliance charter; ExileCon checkpoint. Market/pricing data ingestion survives **demoted from product pillar to supporting service** — the upgrade finder and the Currency-Efficiency axis need prices; standalone currency dashboards move to post-launch backlog.
 
-### PRD deltas (PRD.md remains v1.0 until revised)
+### PRD deltas (PRODUCT_PRD.md remains v1.0 until revised)
 Superseded by this plan: PRD §4.3 (Build Market pillar — deleted), "Netflix for builds" positioning (§1), MKT-* features, Phase 4 of §11, parts of §4.1 that frame the optimizer as DPS-delta-maximization. A PRD v2 revision is a listed task in Phase 0. Everything legal/monetization/engine-feasibility in the PRD stands.
 
 ---
@@ -108,7 +108,7 @@ Instead of optimizing in a vacuum: import user's Twister Huntress → aggregatio
 4. [ ] **S4 — GGG OAuth application** — unchanged, start day 1 (longest lead time); PoB-code import keeps Phase 1 unblocked.
 5. [ ] **S5 — Preference-engine vertical slice (REPLACES v1's unique-price slice)** — hardcode 3 goal presets; score one build under different weight vectors; verify orderings flip sensibly (fast-mapper weights must rank a movement-speed boot swap above a pure-DPS ring swap; boss-carry weights the reverse). Deliverable: the scoring function design note (`docs/spikes/preference-engine.md`) — normalization curves per axis, satisficing target bands.
 6. [ ] **S6 — Aggregation feasibility (NEW)** — fetch the same archetype from Maxroll pob endpoint, pobb.in, poe.ninja; normalize all to one BuildSnapshot; comparator produces a sane tree/gear/gem diff for two versions of one archetype. Confirms the multi-source pipeline before we architect around it.
-7. [ ] **S7 — PRD v2 revision** — apply the pivot to PRD.md (delete §4.3, reposition §1/§4.1, re-derive success metrics); founder sign-off.
+7. [ ] **S7 — PRD v2 revision** — apply the pivot to PRODUCT_PRD.md (delete §4.3, reposition §1/§4.1, re-derive success metrics); founder sign-off.
 
 **Exit:** S1/S2/S3 gates passed; S5 orderings validated by founder on real examples; S6 diff demo works; S4 submitted; PRD v2 approved.
 
@@ -147,7 +147,7 @@ Instead of optimizing in a vacuum: import user's Twister Huntress → aggregatio
 
 **Goal:** the full "optimization layer over the ecosystem" experience.
 
-1. [ ] **Build Aggregation Service** — productionize S6: source fetchers (public interchange endpoints only), normalizer hardening, polite caching, per-source kill-switches, attribution pipeline; archetype index (main skill + ascendancy + patch) over the corpus (poe.ninja builds data + pobb.in publics + cached imports).
+1. [ ] **Aggregation Engine** — productionize S6: source fetchers (public interchange endpoints only), normalizer hardening, polite caching, per-source kill-switches, attribution pipeline; archetype index (main skill + ascendancy + patch) over the corpus (poe.ninja builds data + pobb.in publics + cached imports).
 2. [ ] **Comparator + comparative recommendations** — tree/gear/gem/config diffing; each diff engine-evaluated on the user's build; ranked by Δscore under user weights; "community consensus" boost for changes common across sources; every card attributes and links its source build/guide.
 3. [ ] **Price layer (supporting service)** — cxapi poller + poe2scout/ninja unique tables (ClickHouse); provenance tags, kill-switches, staleness alarms. No standalone dashboards at launch (backlog).
 4. [ ] **Budget upgrade finder, preference-driven** — slot headroom → priced unique candidates (+ user-initiated rare spot-lookups per §7.5 rule 6, deep-link fallback built in) → heuristic pre-filter → engine calc top-K → **rank by Δscore per divine** (Currency-Efficiency axis modulates: budget-farming preset penalizes expensive marginal upgrades — "avoid over-optimization" per the pivot directive). Official trade-site deep links only.

@@ -43,7 +43,7 @@ The Character Doctor's output: a severity-sorted, goal-aware diagnosis of a buil
 The product's single LLM-narration persona and the only channel through which generated text reaches the user (always inside the labeled AI callout). The Build Coach explains deterministic findings; it never produces a number, item name, or node name that isn't in the structured results it narrates.
 
 **Aggregation Engine**
-(Also "Build Aggregation Service" in `PRODUCT_PLAN.md` — same component; prefer **Aggregation Engine** going forward.) The service that collects public builds via public interchange endpoints only (never guide content), with attribution, normalizes them into Build Genomes, and maintains Canonical Builds and archetype statistics.
+(Formerly "Build Aggregation Service" — standardized to **Aggregation Engine** on 2026-07-04; the old name survives only in ADR-003's historical text.) The service that collects public builds via public interchange endpoints only (never guide content), with attribution, normalizes them into Build Genomes, and maintains Canonical Builds and archetype statistics.
 
 **Comparative Optimization**
 The feature that diffs a user's build snapshot against Canonical Builds of the same archetype and re-scores the differences under the *user's* weights — surfacing which specific divergences help or hurt *their* goals.

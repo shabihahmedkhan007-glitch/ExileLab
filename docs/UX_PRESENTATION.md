@@ -1,11 +1,11 @@
-# PRESENTATION.md — How ExileLab Presents Itself
+# UX_PRESENTATION.md — How ExileLab Presents Itself
 **The presentation layer for the Intelligent Build Optimization Layer**
 
 | | |
 |---|---|
 | Status | v1 — presentation/UX vision, post-pivot |
 | Date | 2026-07-03 |
-| Depends on | `PLAN.md` v2 (architecture, pivot applied), `PRD.md` (product spec), pivot PDF |
+| Depends on | `PRODUCT_PLAN.md` v2 (architecture, pivot applied), `PRODUCT_PRD.md` (product spec), pivot PDF (`research/archive/`) |
 | Doc hierarchy | PRD = what/why · PLAN = strategy/architecture · **PRESENTATION = how the user sees and touches it** |
 | Scope | Information architecture, core screens, component system, visual language, interaction flows, freemium presentation, LLM-narration presentation |
 | Out of scope | Visual design assets (mockups/Figma), copywriting, marketing site |
@@ -149,7 +149,7 @@ Split view. Left rail: controls. Right: consequences. **The controls never leave
 ```
 
 - **Presets first, sliders second.** Casuals pick a preset chip ("Fast Mapping") and never touch a slider; the sliders visibly move to the preset's weights so the mapping is learnable. Power users drag. **Pro mode** adds satisficing constraint rows ("EHP ≥ 40k, then maximize") — the Genshin Optimizer pattern.
-- **Slider moves re-rank in <1s.** This is why PLAN.md's S1/S5 spikes gate everything: cached engine deltas re-scored client-side against new weights means re-ranking is instant; only *new* candidate generation hits the queue.
+- **Slider moves re-rank in <1s.** This is why PRODUCT_PLAN.md's S1/S5 spikes gate everything: cached engine deltas re-scored client-side against new weights means re-ranking is instant; only *new* candidate generation hits the queue.
 - **Each recommendation is a Raidbots bar**: length = weighted-score gain, with sub-bars on hover decomposing the gain per axis ("+11 move, −2 damage, +0.4 sustain"). Cost chip (divines) on gear suggestions, wired to the price layer.
 - **The floor line.** Suggestions that would violate the survivability floor render *below a labeled cut line*, greyed: "won't suggest — drops you below your EHP floor." Showing what we *refused* to recommend builds more trust than the recommendations themselves.
 - **Every suggestion has an exit ramp**: `[apply]` (mutates the working copy, adds an undo-able entry to a change stack), `[Export to PoB]` (share code with changes applied), `[find on trade ↗]` (deep-link to official trade site — user-initiated, per compliance charter).
@@ -160,7 +160,7 @@ WoWAnalyzer's checklist, in PoE's dialect:
 
 - Header: overall **letter grade per category** (Offense / Defense / Sustain / QoL), each grade a chip that expands to its rules. Grades are goal-aware: graded against the *active preset* ("B for Fast Mapping — would be D for Hardcore").
 - Body: severity-sorted finding rows. Each row = severity chip + plain-language statement + **the deterministic evidence inline** ("MaximumHitTaken vs chaos: 4,120 — Xesht slam deals ~11k") + expandable fix options (each fix is a Tune-style suggestion with score delta).
-- Footer: the **LLM narration card** — a single distinctly-styled callout ("✨ Summary — generated") that reads the findings back as two sentences of coach-voice prose. Collapsible, cached, killswitch-able (PLAN.md), and *never* contains a number that isn't in the findings above it.
+- Footer: the **LLM narration card** — a single distinctly-styled callout ("✨ Summary — generated") that reads the findings back as two sentences of coach-voice prose. Collapsible, cached, killswitch-able (PRODUCT_PLAN.md), and *never* contains a number that isn't in the findings above it.
 
 ### 4.4 Compare — "the diff screen"
 
@@ -211,7 +211,7 @@ Rules (Raidbots-derived, compliance-friendly):
 
 1. LLM text appears **only** inside `AICallout` — never inline with engine numbers, never in a tooltip, never in a stat panel.
 2. Every callout is labeled *generated* and carries a hover: "Narration is AI-generated from the deterministic results above. The numbers are computed, not generated."
-3. The LLM never introduces a number, item name, or node name that isn't in the structured findings it narrates (enforced by the strict-schema pipeline in PLAN.md; the UI contract assumes it).
+3. The LLM never introduces a number, item name, or node name that isn't in the structured findings it narrates (enforced by the strict-schema pipeline in PRODUCT_PLAN.md; the UI contract assumes it).
 4. Kill-switch degradation is invisible: callouts simply don't render; no broken states.
 5. No chat interface in v1. Chat invites open-ended questions the deterministic engine can't answer, which manufactures hallucination surface. Narration is one-way.
 
@@ -228,7 +228,7 @@ Rules (Raidbots-derived, compliance-friendly):
 - Respect the archetype: recommendations phrased relative to *their* goal ("for faster mapping…"), never absolute ("optimal is…").
 - Numbers are exact, claims are scoped: "graded for tier-15 mapping with your config" not "your build is B-tier."
 - PoE-literate but not memey: use the game's real terms (ES, EHP, ailment, avoidance); no forced slang.
-- Attribution copy is warm: "based on {author}'s Maxroll guide — see the full guide ↗" (partnership posture, per PLAN.md compliance notes).
+- Attribution copy is warm: "based on {author}'s Maxroll guide — see the full guide ↗" (partnership posture, per PRODUCT_PLAN.md compliance notes).
 
 ## 10. Open presentation questions (for design phase)
 
@@ -240,4 +240,4 @@ Rules (Raidbots-derived, compliance-friendly):
 
 ---
 
-*Consistent with PLAN.md v2 (pivot applied): no Build Market screens exist in this document. The preference panel is the product's face; comparison and aggregation surfaces carry mandatory attribution; all trade interactions are user-initiated deep links per the compliance charter (PRD §7.5).*
+*Consistent with PRODUCT_PLAN.md v2 (pivot applied): no Build Market screens exist in this document. The preference panel is the product's face; comparison and aggregation surfaces carry mandatory attribution; all trade interactions are user-initiated deep links per the compliance charter (PRD §7.5).*
