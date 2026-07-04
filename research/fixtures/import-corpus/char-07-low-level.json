@@ -1,0 +1,83 @@
+{
+  "format": "exilelab-build",
+  "formatVersion": 1,
+  "gamePatch": "poe2-0.3.0",
+  "character": {
+    "className": "Mercenary",
+    "level": 30
+  },
+  "loadouts": [
+    {
+      "id": "main",
+      "primary": true,
+      "allocatedNodeIds": [
+        1749,
+        4965,
+        5769,
+        10194,
+        10897,
+        10980,
+        13210,
+        13616,
+        16355,
+        16842,
+        17500,
+        19620,
+        19767,
+        19965,
+        24549,
+        26953,
+        30838,
+        34177,
+        34372,
+        35223,
+        36065,
+        36412,
+        36437,
+        40783,
+        44525,
+        45737,
+        47708,
+        49759,
+        49901,
+        57177,
+        59428,
+        62823,
+        63522,
+        63588
+      ],
+      "items": [
+        {
+          "slot": "Weapon 1",
+          "name": "Crossbow",
+          "rarity": "Magic",
+          "lines": [
+            "Adds 5 to 10 Physical Damage"
+          ]
+        }
+      ],
+      "skills": [
+        {
+          "id": "sg",
+          "isMain": true,
+          "gems": [
+            {
+              "name": "Galvanic Shards",
+              "skillId": "GalvanicShards",
+              "level": 8
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "provenance": {
+    "attribution": "SYNTHETIC-FIXTURE"
+  },
+  "metadata": {
+    "league": "Synthetic League",
+    "labels": [
+      "SYNTHETIC-FIXTURE"
+    ]
+  }
+}

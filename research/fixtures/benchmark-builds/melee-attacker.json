@@ -1,0 +1,334 @@
+{
+  "format": "exilelab-build",
+  "formatVersion": 1,
+  "gamePatch": "poe2-0.3.0",
+  "character": {
+    "className": "Warrior",
+    "ascendancyName": "Titan",
+    "level": 94
+  },
+  "loadouts": [
+    {
+      "id": "main",
+      "name": "Slam Set",
+      "primary": true,
+      "allocatedNodeIds": [
+        1060,
+        2881,
+        3621,
+        3704,
+        4369,
+        4624,
+        4902,
+        5369,
+        5860,
+        5970,
+        6916,
+        7483,
+        7901,
+        8006,
+        8038,
+        8643,
+        8848,
+        8967,
+        9681,
+        10230,
+        10323,
+        10356,
+        11142,
+        11151,
+        11230,
+        11770,
+        11928,
+        12107,
+        13196,
+        13505,
+        13515,
+        14780,
+        15056,
+        15629,
+        16952,
+        18359,
+        18824,
+        22544,
+        22545,
+        23395,
+        24465,
+        24496,
+        25581,
+        25588,
+        25686,
+        26022,
+        26044,
+        27733,
+        28665,
+        28817,
+        28853,
+        28887,
+        28919,
+        29831,
+        31377,
+        31458,
+        32041,
+        33115,
+        34015,
+        35598,
+        35924,
+        36136,
+        36634,
+        37750,
+        38601,
+        38782,
+        38960,
+        39280,
+        39697,
+        39989,
+        40645,
+        41138,
+        41150,
+        41331,
+        42021,
+        42120,
+        42153,
+        42182,
+        42344,
+        42421,
+        43128,
+        43717,
+        45267,
+        45374,
+        45648,
+        47519,
+        48758,
+        49168,
+        49675,
+        49783,
+        49947,
+        50268,
+        50646,
+        51820,
+        53086,
+        53287,
+        54248,
+        54320,
+        54343,
+        55929,
+        56048,
+        57019,
+        57105,
+        57643,
+        58443,
+        59913,
+        60498,
+        61785,
+        62310,
+        62453,
+        62653,
+        64483
+      ],
+      "items": [
+        {
+          "id": "Mace-w1",
+          "slot": "Weapon 1",
+          "name": "Mace Warmonger",
+          "rarity": "Rare",
+          "lines": [
+            "Adds 20 to 40 Physical Damage",
+            "+12% Attack Speed"
+          ]
+        },
+        {
+          "id": "Mace-w2",
+          "slot": "Weapon 2",
+          "name": "Mace Bulwark",
+          "rarity": "Rare",
+          "lines": [
+            "+320 to Armour",
+            "+30% Block Chance"
+          ]
+        },
+        {
+          "id": "Mace-helm",
+          "slot": "Helmet",
+          "name": "Barbute Helmet",
+          "rarity": "Rare",
+          "lines": [
+            "+80 to maximum Life",
+            "+35% to Cold Resistance"
+          ]
+        },
+        {
+          "id": "Mace-body",
+          "slot": "Body Armour",
+          "name": "Glorious Plate",
+          "rarity": "Rare",
+          "lines": [
+            "+80 to maximum Life",
+            "+42% to Fire Resistance"
+          ]
+        },
+        {
+          "id": "Mace-glove",
+          "slot": "Gloves",
+          "name": "Gauntlets",
+          "rarity": "Rare",
+          "lines": [
+            "+15% Attack Speed",
+            "+28% to Lightning Resistance"
+          ]
+        },
+        {
+          "id": "Mace-boot",
+          "slot": "Boots",
+          "name": "Greaves",
+          "rarity": "Rare",
+          "lines": [
+            "+25% Movement Speed",
+            "+60 to maximum Life"
+          ]
+        },
+        {
+          "id": "Mace-belt",
+          "slot": "Belt",
+          "name": "Heavy Belt",
+          "rarity": "Rare",
+          "lines": [
+            "+90 to maximum Life",
+            "+18% to Chaos Resistance"
+          ]
+        },
+        {
+          "id": "Mace-amu",
+          "slot": "Amulet",
+          "name": "Stellar Amulet",
+          "rarity": "Rare",
+          "lines": [
+            "+40 to all Attributes",
+            "+18% Critical Damage Bonus"
+          ]
+        },
+        {
+          "id": "Mace-r1",
+          "slot": "Ring 1",
+          "name": "Sapphire Ring",
+          "rarity": "Rare",
+          "lines": [
+            "+30% to Cold Resistance",
+            "+55 to maximum Life"
+          ]
+        },
+        {
+          "id": "Mace-r2",
+          "slot": "Ring 2",
+          "name": "Ruby Ring",
+          "rarity": "Rare",
+          "lines": [
+            "+30% to Fire Resistance",
+            "+12 to Strength"
+          ]
+        }
+      ],
+      "skills": [
+        {
+          "id": "sg-main",
+          "isMain": true,
+          "gems": [
+            {
+              "name": "Boneshatter",
+              "skillId": "Boneshatter",
+              "level": 20,
+              "quality": 20
+            },
+            {
+              "name": "Melee Physical Damage",
+              "skillId": "SupportMeleePhysical",
+              "level": 20,
+              "quality": 20
+            },
+            {
+              "name": "Brutality",
+              "skillId": "SupportBrutality",
+              "level": 20,
+              "quality": 0
+            },
+            {
+              "name": "Fist of War",
+              "skillId": "SupportFistOfWar",
+              "level": 20,
+              "quality": 0
+            },
+            {
+              "name": "Rage",
+              "skillId": "SupportRage",
+              "level": 20,
+              "quality": 0
+            }
+          ]
+        },
+        {
+          "id": "sg-secondary",
+          "gems": [
+            {
+              "name": "Hammer of the Gods",
+              "skillId": "HammerOfTheGods",
+              "level": 20,
+              "quality": 0
+            }
+          ]
+        },
+        {
+          "id": "sg-move",
+          "gems": [
+            {
+              "name": "Leap Slam",
+              "skillId": "LeapSlam",
+              "level": 12,
+              "quality": 0
+            }
+          ]
+        },
+        {
+          "id": "sg-buffs",
+          "gems": [
+            {
+              "name": "Herald of Ash",
+              "skillId": "HeraldOfAsh",
+              "level": 20,
+              "quality": 0
+            },
+            {
+              "name": "War Banner",
+              "skillId": "WarBanner",
+              "level": 20,
+              "quality": 0
+            }
+          ]
+        }
+      ],
+      "configuration": {
+        "enemyIsBoss": true,
+        "useFistOfWar": true,
+        "rageStacks": 30
+      },
+      "resources": {
+        "spirit": 100,
+        "spiritReserved": 60,
+        "life": 4800,
+        "mana": 120
+      }
+    }
+  ],
+  "provenance": {
+    "attribution": "SYNTHETIC-FIXTURE",
+    "reference": "synthetic/melee-attacker"
+  },
+  "metadata": {
+    "league": "Synthetic League",
+    "labels": [
+      "SYNTHETIC-FIXTURE",
+      "benchmark",
+      "melee",
+      "attack"
+    ]
+  }
+}

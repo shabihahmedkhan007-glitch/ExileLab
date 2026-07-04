@@ -1,0 +1,333 @@
+{
+  "format": "exilelab-build",
+  "formatVersion": 1,
+  "gamePatch": "poe2-0.3.0",
+  "character": {
+    "className": "Witch",
+    "ascendancyName": "Blood Mage",
+    "level": 92
+  },
+  "loadouts": [
+    {
+      "id": "main",
+      "name": "Chaos DoT",
+      "primary": true,
+      "allocatedNodeIds": [
+        1442,
+        1974,
+        2028,
+        4028,
+        4077,
+        4807,
+        4827,
+        5938,
+        6080,
+        6746,
+        6841,
+        10063,
+        10654,
+        11929,
+        12085,
+        12822,
+        15443,
+        15810,
+        15955,
+        16590,
+        17232,
+        17767,
+        17915,
+        18077,
+        18820,
+        20145,
+        21421,
+        22169,
+        23045,
+        23211,
+        23385,
+        23896,
+        23944,
+        24880,
+        25693,
+        26133,
+        26654,
+        26815,
+        29408,
+        30018,
+        30022,
+        30577,
+        30716,
+        32204,
+        32645,
+        32662,
+        32668,
+        33605,
+        33724,
+        33975,
+        34326,
+        35029,
+        35898,
+        36204,
+        36305,
+        37143,
+        37943,
+        38248,
+        38477,
+        38829,
+        39385,
+        39807,
+        41350,
+        41736,
+        41815,
+        42096,
+        42970,
+        43648,
+        44335,
+        45270,
+        46589,
+        47139,
+        47601,
+        47735,
+        48841,
+        48943,
+        49270,
+        49533,
+        49789,
+        49881,
+        51727,
+        52431,
+        52923,
+        53688,
+        56686,
+        57133,
+        57148,
+        57606,
+        58125,
+        59250,
+        59522,
+        60621,
+        60626,
+        60730,
+        61109,
+        61707,
+        62072,
+        62502,
+        62513,
+        63515,
+        64120,
+        64132,
+        64253,
+        64494
+      ],
+      "items": [
+        {
+          "id": "Wither-w1",
+          "slot": "Weapon 1",
+          "name": "Wither Warmonger",
+          "rarity": "Rare",
+          "lines": [
+            "Adds 20 to 40 Physical Damage",
+            "+12% Attack Speed"
+          ]
+        },
+        {
+          "id": "Wither-w2",
+          "slot": "Weapon 2",
+          "name": "Wither Bulwark",
+          "rarity": "Rare",
+          "lines": [
+            "+320 to Armour",
+            "+30% Block Chance"
+          ]
+        },
+        {
+          "id": "Wither-helm",
+          "slot": "Helmet",
+          "name": "Hubris Circlet",
+          "rarity": "Rare",
+          "lines": [
+            "+18% to Energy Shield",
+            "+35% to Cold Resistance"
+          ]
+        },
+        {
+          "id": "Wither-body",
+          "slot": "Body Armour",
+          "name": "Vaal Regalia",
+          "rarity": "Rare",
+          "lines": [
+            "+18% to Energy Shield",
+            "+42% to Fire Resistance"
+          ]
+        },
+        {
+          "id": "Wither-glove",
+          "slot": "Gloves",
+          "name": "Sorcerer Gloves",
+          "rarity": "Rare",
+          "lines": [
+            "+15% Attack Speed",
+            "+28% to Lightning Resistance"
+          ]
+        },
+        {
+          "id": "Wither-boot",
+          "slot": "Boots",
+          "name": "Arcanist Slippers",
+          "rarity": "Rare",
+          "lines": [
+            "+25% Movement Speed",
+            "+60 to maximum Life"
+          ]
+        },
+        {
+          "id": "Wither-belt",
+          "slot": "Belt",
+          "name": "Heavy Belt",
+          "rarity": "Rare",
+          "lines": [
+            "+90 to maximum Life",
+            "+18% to Chaos Resistance"
+          ]
+        },
+        {
+          "id": "Wither-amu",
+          "slot": "Amulet",
+          "name": "Stellar Amulet",
+          "rarity": "Rare",
+          "lines": [
+            "+40 to all Attributes",
+            "+18% Critical Damage Bonus"
+          ]
+        },
+        {
+          "id": "Wither-r1",
+          "slot": "Ring 1",
+          "name": "Sapphire Ring",
+          "rarity": "Rare",
+          "lines": [
+            "+30% to Cold Resistance",
+            "+55 to maximum Life"
+          ]
+        },
+        {
+          "id": "Wither-r2",
+          "slot": "Ring 2",
+          "name": "Ruby Ring",
+          "rarity": "Rare",
+          "lines": [
+            "+30% to Fire Resistance",
+            "+12 to Strength"
+          ]
+        }
+      ],
+      "skills": [
+        {
+          "id": "sg-main",
+          "isMain": true,
+          "gems": [
+            {
+              "name": "Essence Drain",
+              "skillId": "EssenceDrain",
+              "level": 20,
+              "quality": 20
+            },
+            {
+              "name": "Swift Affliction",
+              "skillId": "SupportSwiftAffliction",
+              "level": 20,
+              "quality": 20
+            },
+            {
+              "name": "Deadly Poison",
+              "skillId": "SupportDeadlyPoison",
+              "level": 20,
+              "quality": 0
+            },
+            {
+              "name": "Void Manipulation",
+              "skillId": "SupportVoidManipulation",
+              "level": 20,
+              "quality": 0
+            },
+            {
+              "name": "Controlled Destruction",
+              "skillId": "SupportControlledDestruction",
+              "level": 20,
+              "quality": 0
+            }
+          ]
+        },
+        {
+          "id": "sg-contagion",
+          "gems": [
+            {
+              "name": "Contagion",
+              "skillId": "Contagion",
+              "level": 20,
+              "quality": 20
+            },
+            {
+              "name": "Increased Duration",
+              "skillId": "SupportIncreasedDuration",
+              "level": 20,
+              "quality": 0
+            }
+          ]
+        },
+        {
+          "id": "sg-move",
+          "gems": [
+            {
+              "name": "Blink",
+              "skillId": "Blink",
+              "level": 12,
+              "quality": 0
+            }
+          ]
+        },
+        {
+          "id": "sg-buffs",
+          "gems": [
+            {
+              "name": "Malevolence",
+              "skillId": "Malevolence",
+              "level": 20,
+              "quality": 0
+            },
+            {
+              "name": "Despair",
+              "skillId": "Despair",
+              "level": 20,
+              "quality": 0
+            }
+          ]
+        }
+      ],
+      "configuration": {
+        "enemyIsBoss": true,
+        "wearsOffAfter": false,
+        "contagionSpread": true
+      },
+      "resources": {
+        "spirit": 150,
+        "spiritReserved": 120,
+        "energyShield": 4100,
+        "mana": 60
+      }
+    }
+  ],
+  "provenance": {
+    "attribution": "SYNTHETIC-FIXTURE",
+    "reference": "synthetic/dot-caster"
+  },
+  "metadata": {
+    "league": "Synthetic League",
+    "labels": [
+      "SYNTHETIC-FIXTURE",
+      "benchmark",
+      "dot",
+      "chaos",
+      "caster"
+    ]
+  }
+}

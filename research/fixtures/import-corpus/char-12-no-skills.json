@@ -1,0 +1,200 @@
+{
+  "format": "exilelab-build",
+  "formatVersion": 1,
+  "gamePatch": "poe2-0.3.0",
+  "character": {
+    "className": "Mercenary",
+    "ascendancyName": "Witchhunter",
+    "level": 68
+  },
+  "loadouts": [
+    {
+      "id": "main",
+      "primary": true,
+      "allocatedNodeIds": [
+        1140,
+        1876,
+        2024,
+        2910,
+        2948,
+        3815,
+        4470,
+        4785,
+        5496,
+        5842,
+        7494,
+        9443,
+        10465,
+        10571,
+        10777,
+        11883,
+        11936,
+        12967,
+        15345,
+        16059,
+        16421,
+        16704,
+        18418,
+        18993,
+        19441,
+        20021,
+        20512,
+        21739,
+        21892,
+        23129,
+        24925,
+        25195,
+        25815,
+        25821,
+        26574,
+        26594,
+        27378,
+        27633,
+        27856,
+        28444,
+        29953,
+        33685,
+        33978,
+        34255,
+        34992,
+        35007,
+        35273,
+        36507,
+        37017,
+        37736,
+        38130,
+        39104,
+        39838,
+        40597,
+        41968,
+        42757,
+        45544,
+        46228,
+        48134,
+        48408,
+        48982,
+        49204,
+        49440,
+        52075,
+        55637,
+        58071,
+        60396,
+        61247,
+        61929,
+        64838
+      ],
+      "items": [
+        {
+          "id": "Crossbow-w1",
+          "slot": "Weapon 1",
+          "name": "Crossbow Warmonger",
+          "rarity": "Rare",
+          "lines": [
+            "Adds 20 to 40 Physical Damage",
+            "+12% Attack Speed"
+          ]
+        },
+        {
+          "id": "Crossbow-w2",
+          "slot": "Weapon 2",
+          "name": "Crossbow Bulwark",
+          "rarity": "Rare",
+          "lines": [
+            "+320 to Armour",
+            "+30% Block Chance"
+          ]
+        },
+        {
+          "id": "Crossbow-helm",
+          "slot": "Helmet",
+          "name": "Barbute Helmet",
+          "rarity": "Rare",
+          "lines": [
+            "+80 to maximum Life",
+            "+35% to Cold Resistance"
+          ]
+        },
+        {
+          "id": "Crossbow-body",
+          "slot": "Body Armour",
+          "name": "Glorious Plate",
+          "rarity": "Rare",
+          "lines": [
+            "+80 to maximum Life",
+            "+42% to Fire Resistance"
+          ]
+        },
+        {
+          "id": "Crossbow-glove",
+          "slot": "Gloves",
+          "name": "Gauntlets",
+          "rarity": "Rare",
+          "lines": [
+            "+15% Attack Speed",
+            "+28% to Lightning Resistance"
+          ]
+        },
+        {
+          "id": "Crossbow-boot",
+          "slot": "Boots",
+          "name": "Greaves",
+          "rarity": "Rare",
+          "lines": [
+            "+25% Movement Speed",
+            "+60 to maximum Life"
+          ]
+        },
+        {
+          "id": "Crossbow-belt",
+          "slot": "Belt",
+          "name": "Heavy Belt",
+          "rarity": "Rare",
+          "lines": [
+            "+90 to maximum Life",
+            "+18% to Chaos Resistance"
+          ]
+        },
+        {
+          "id": "Crossbow-amu",
+          "slot": "Amulet",
+          "name": "Stellar Amulet",
+          "rarity": "Rare",
+          "lines": [
+            "+40 to all Attributes",
+            "+18% Critical Damage Bonus"
+          ]
+        },
+        {
+          "id": "Crossbow-r1",
+          "slot": "Ring 1",
+          "name": "Sapphire Ring",
+          "rarity": "Rare",
+          "lines": [
+            "+30% to Cold Resistance",
+            "+55 to maximum Life"
+          ]
+        },
+        {
+          "id": "Crossbow-r2",
+          "slot": "Ring 2",
+          "name": "Ruby Ring",
+          "rarity": "Rare",
+          "lines": [
+            "+30% to Fire Resistance",
+            "+12 to Strength"
+          ]
+        }
+      ],
+      "skills": []
+    }
+  ],
+  "provenance": {
+    "attribution": "SYNTHETIC-FIXTURE"
+  },
+  "metadata": {
+    "league": "Synthetic League",
+    "labels": [
+      "SYNTHETIC-FIXTURE"
+    ]
+  }
+}

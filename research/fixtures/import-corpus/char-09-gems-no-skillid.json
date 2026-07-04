@@ -1,0 +1,234 @@
+{
+  "format": "exilelab-build",
+  "formatVersion": 1,
+  "gamePatch": "poe2-0.3.0",
+  "character": {
+    "className": "Sorceress",
+    "ascendancyName": "Chronomancer",
+    "level": 80
+  },
+  "loadouts": [
+    {
+      "id": "main",
+      "primary": true,
+      "allocatedNodeIds": [
+        2371,
+        4078,
+        5373,
+        5442,
+        5783,
+        7082,
+        8853,
+        9375,
+        10073,
+        11248,
+        12504,
+        13148,
+        13595,
+        13718,
+        14090,
+        15865,
+        17813,
+        19139,
+        19157,
+        19369,
+        19697,
+        20820,
+        21491,
+        21657,
+        21821,
+        22347,
+        23140,
+        24483,
+        30140,
+        32283,
+        32621,
+        32797,
+        34122,
+        34686,
+        35145,
+        35204,
+        35274,
+        35352,
+        36392,
+        36414,
+        36639,
+        37344,
+        37932,
+        38347,
+        38586,
+        39202,
+        40276,
+        41466,
+        41966,
+        42034,
+        42086,
+        43022,
+        43034,
+        43158,
+        43614,
+        44346,
+        44865,
+        44911,
+        45087,
+        45673,
+        46038,
+        46762,
+        47323,
+        47737,
+        47832,
+        48009,
+        50223,
+        51763,
+        51849,
+        52183,
+        53586,
+        54390,
+        55477,
+        55872,
+        56395,
+        56916,
+        57083,
+        58436,
+        58910,
+        59718,
+        59845,
+        60499,
+        61020,
+        61261,
+        62252,
+        62258,
+        63389,
+        63881
+      ],
+      "items": [
+        {
+          "id": "Wand-w1",
+          "slot": "Weapon 1",
+          "name": "Wand Warmonger",
+          "rarity": "Rare",
+          "lines": [
+            "Adds 20 to 40 Physical Damage",
+            "+12% Attack Speed"
+          ]
+        },
+        {
+          "id": "Wand-w2",
+          "slot": "Weapon 2",
+          "name": "Wand Bulwark",
+          "rarity": "Rare",
+          "lines": [
+            "+320 to Armour",
+            "+30% Block Chance"
+          ]
+        },
+        {
+          "id": "Wand-helm",
+          "slot": "Helmet",
+          "name": "Hubris Circlet",
+          "rarity": "Rare",
+          "lines": [
+            "+18% to Energy Shield",
+            "+35% to Cold Resistance"
+          ]
+        },
+        {
+          "id": "Wand-body",
+          "slot": "Body Armour",
+          "name": "Vaal Regalia",
+          "rarity": "Rare",
+          "lines": [
+            "+18% to Energy Shield",
+            "+42% to Fire Resistance"
+          ]
+        },
+        {
+          "id": "Wand-glove",
+          "slot": "Gloves",
+          "name": "Sorcerer Gloves",
+          "rarity": "Rare",
+          "lines": [
+            "+15% Attack Speed",
+            "+28% to Lightning Resistance"
+          ]
+        },
+        {
+          "id": "Wand-boot",
+          "slot": "Boots",
+          "name": "Arcanist Slippers",
+          "rarity": "Rare",
+          "lines": [
+            "+25% Movement Speed",
+            "+60 to maximum Life"
+          ]
+        },
+        {
+          "id": "Wand-belt",
+          "slot": "Belt",
+          "name": "Heavy Belt",
+          "rarity": "Rare",
+          "lines": [
+            "+90 to maximum Life",
+            "+18% to Chaos Resistance"
+          ]
+        },
+        {
+          "id": "Wand-amu",
+          "slot": "Amulet",
+          "name": "Stellar Amulet",
+          "rarity": "Rare",
+          "lines": [
+            "+40 to all Attributes",
+            "+18% Critical Damage Bonus"
+          ]
+        },
+        {
+          "id": "Wand-r1",
+          "slot": "Ring 1",
+          "name": "Sapphire Ring",
+          "rarity": "Rare",
+          "lines": [
+            "+30% to Cold Resistance",
+            "+55 to maximum Life"
+          ]
+        },
+        {
+          "id": "Wand-r2",
+          "slot": "Ring 2",
+          "name": "Ruby Ring",
+          "rarity": "Rare",
+          "lines": [
+            "+30% to Fire Resistance",
+            "+12 to Strength"
+          ]
+        }
+      ],
+      "skills": [
+        {
+          "id": "sg",
+          "isMain": true,
+          "gems": [
+            {
+              "name": "Frostbolt"
+            },
+            {
+              "name": "Frost Nexus"
+            },
+            {
+              "name": "Cold Penetration"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "provenance": {
+    "attribution": "SYNTHETIC-FIXTURE"
+  },
+  "metadata": {
+    "league": "Synthetic League",
+    "labels": [
+      "SYNTHETIC-FIXTURE"
+    ]
+  }
+}

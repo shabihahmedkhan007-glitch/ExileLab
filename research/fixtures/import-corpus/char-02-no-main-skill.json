@@ -1,0 +1,247 @@
+{
+  "format": "exilelab-build",
+  "formatVersion": 1,
+  "gamePatch": "poe2-0.3.0",
+  "character": {
+    "className": "Monk",
+    "ascendancyName": "Invoker",
+    "level": 84
+  },
+  "loadouts": [
+    {
+      "id": "main",
+      "primary": true,
+      "allocatedNodeIds": [
+        1040,
+        1454,
+        2180,
+        2758,
+        3120,
+        3508,
+        4294,
+        4368,
+        4700,
+        4979,
+        5553,
+        5641,
+        6449,
+        7103,
+        8298,
+        9193,
+        10024,
+        11701,
+        13283,
+        13464,
+        13898,
+        14128,
+        14254,
+        15899,
+        17635,
+        18846,
+        19258,
+        19437,
+        21000,
+        21054,
+        21799,
+        23099,
+        23287,
+        23353,
+        23863,
+        24468,
+        26247,
+        26294,
+        27824,
+        28150,
+        28635,
+        29048,
+        29522,
+        29605,
+        29932,
+        30949,
+        31441,
+        32948,
+        34358,
+        34562,
+        34753,
+        35384,
+        35429,
+        36071,
+        38204,
+        40947,
+        41373,
+        41617,
+        42061,
+        42358,
+        44022,
+        44385,
+        46645,
+        46702,
+        47992,
+        50726,
+        50790,
+        51021,
+        51295,
+        52148,
+        52521,
+        53936,
+        54163,
+        54439,
+        54685,
+        54688,
+        55000,
+        55321,
+        56512,
+        57018,
+        58764,
+        59341,
+        59572,
+        59849,
+        60414,
+        61033,
+        61166,
+        61725,
+        61949,
+        62458,
+        63183,
+        63231,
+        63721,
+        63853,
+        64258,
+        64328
+      ],
+      "items": [
+        {
+          "id": "Quarterstaff-w1",
+          "slot": "Weapon 1",
+          "name": "Quarterstaff Warmonger",
+          "rarity": "Rare",
+          "lines": [
+            "Adds 20 to 40 Physical Damage",
+            "+12% Attack Speed"
+          ]
+        },
+        {
+          "id": "Quarterstaff-w2",
+          "slot": "Weapon 2",
+          "name": "Quarterstaff Bulwark",
+          "rarity": "Rare",
+          "lines": [
+            "+320 to Armour",
+            "+30% Block Chance"
+          ]
+        },
+        {
+          "id": "Quarterstaff-helm",
+          "slot": "Helmet",
+          "name": "Hunter Hood",
+          "rarity": "Rare",
+          "lines": [
+            "+80 to maximum Life",
+            "+35% to Cold Resistance"
+          ]
+        },
+        {
+          "id": "Quarterstaff-body",
+          "slot": "Body Armour",
+          "name": "Assassin's Garb",
+          "rarity": "Rare",
+          "lines": [
+            "+80 to maximum Life",
+            "+42% to Fire Resistance"
+          ]
+        },
+        {
+          "id": "Quarterstaff-glove",
+          "slot": "Gloves",
+          "name": "Wrapped Mitts",
+          "rarity": "Rare",
+          "lines": [
+            "+15% Attack Speed",
+            "+28% to Lightning Resistance"
+          ]
+        },
+        {
+          "id": "Quarterstaff-boot",
+          "slot": "Boots",
+          "name": "Stealth Boots",
+          "rarity": "Rare",
+          "lines": [
+            "+25% Movement Speed",
+            "+60 to maximum Life"
+          ]
+        },
+        {
+          "id": "Quarterstaff-belt",
+          "slot": "Belt",
+          "name": "Heavy Belt",
+          "rarity": "Rare",
+          "lines": [
+            "+90 to maximum Life",
+            "+18% to Chaos Resistance"
+          ]
+        },
+        {
+          "id": "Quarterstaff-amu",
+          "slot": "Amulet",
+          "name": "Stellar Amulet",
+          "rarity": "Rare",
+          "lines": [
+            "+40 to all Attributes",
+            "+18% Critical Damage Bonus"
+          ]
+        },
+        {
+          "id": "Quarterstaff-r1",
+          "slot": "Ring 1",
+          "name": "Sapphire Ring",
+          "rarity": "Rare",
+          "lines": [
+            "+30% to Cold Resistance",
+            "+55 to maximum Life"
+          ]
+        },
+        {
+          "id": "Quarterstaff-r2",
+          "slot": "Ring 2",
+          "name": "Ruby Ring",
+          "rarity": "Rare",
+          "lines": [
+            "+30% to Fire Resistance",
+            "+12 to Strength"
+          ]
+        }
+      ],
+      "skills": [
+        {
+          "id": "sg-a",
+          "gems": [
+            {
+              "name": "Falling Thunder",
+              "skillId": "FallingThunder",
+              "level": 18
+            }
+          ]
+        },
+        {
+          "id": "sg-b",
+          "gems": [
+            {
+              "name": "Tempest Bell",
+              "skillId": "TempestBell",
+              "level": 18
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "provenance": {
+    "attribution": "SYNTHETIC-FIXTURE"
+  },
+  "metadata": {
+    "league": "Synthetic League",
+    "labels": [
+      "SYNTHETIC-FIXTURE"
+    ]
+  }
+}

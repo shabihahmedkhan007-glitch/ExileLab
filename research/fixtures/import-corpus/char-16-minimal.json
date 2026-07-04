@@ -1,0 +1,25 @@
+{
+  "format": "exilelab-build",
+  "formatVersion": 1,
+  "gamePatch": "poe2-0.3.0",
+  "character": {
+    "className": "Druid",
+    "ascendancyName": "Bloodletter",
+    "level": 55
+  },
+  "loadouts": [
+    {
+      "id": "main",
+      "primary": true
+    }
+  ],
+  "provenance": {
+    "attribution": "SYNTHETIC-FIXTURE"
+  },
+  "metadata": {
+    "league": "Synthetic League",
+    "labels": [
+      "SYNTHETIC-FIXTURE"
+    ]
+  }
+}

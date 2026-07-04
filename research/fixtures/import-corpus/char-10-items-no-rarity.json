@@ -1,0 +1,136 @@
+{
+  "format": "exilelab-build",
+  "formatVersion": 1,
+  "gamePatch": "poe2-0.3.0",
+  "character": {
+    "className": "Ranger",
+    "ascendancyName": "Pathfinder",
+    "level": 76
+  },
+  "loadouts": [
+    {
+      "id": "main",
+      "primary": true,
+      "allocatedNodeIds": [
+        1050,
+        2000,
+        3184,
+        3463,
+        3935,
+        4715,
+        5362,
+        5756,
+        6347,
+        6446,
+        8712,
+        9276,
+        9599,
+        10149,
+        10378,
+        11101,
+        11104,
+        11133,
+        11451,
+        13946,
+        14015,
+        14059,
+        15121,
+        16215,
+        19632,
+        19853,
+        20231,
+        21199,
+        21725,
+        22909,
+        25575,
+        25835,
+        25864,
+        25877,
+        25885,
+        26137,
+        27749,
+        28124,
+        29241,
+        29417,
+        29436,
+        29457,
+        29694,
+        30274,
+        31835,
+        31962,
+        33127,
+        33813,
+        34102,
+        34317,
+        36507,
+        36593,
+        39148,
+        39241,
+        40492,
+        41296,
+        44782,
+        45244,
+        45504,
+        47037,
+        48389,
+        48469,
+        49160,
+        50124,
+        51540,
+        51886,
+        52229,
+        52334,
+        52722,
+        56513,
+        57144,
+        57285,
+        57291,
+        59719,
+        59746,
+        60014,
+        60242,
+        60562,
+        60906,
+        62074,
+        64008,
+        64789
+      ],
+      "items": [
+        {
+          "slot": "Weapon 1",
+          "name": "Iron Bow"
+        },
+        {
+          "slot": "Body Armour",
+          "name": "Leather Vest"
+        },
+        {
+          "slot": "Boots",
+          "name": "Rawhide Boots"
+        }
+      ],
+      "skills": [
+        {
+          "id": "sg",
+          "isMain": true,
+          "gems": [
+            {
+              "name": "Poisonous Concoction",
+              "skillId": "PoisonousConcoction",
+              "level": 18
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "provenance": {
+    "attribution": "SYNTHETIC-FIXTURE"
+  },
+  "metadata": {
+    "league": "Synthetic League",
+    "labels": [
+      "SYNTHETIC-FIXTURE"
+    ]
+  }
+}

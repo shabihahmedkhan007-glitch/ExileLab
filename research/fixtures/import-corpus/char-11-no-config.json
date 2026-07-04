@@ -1,0 +1,240 @@
+{
+  "format": "exilelab-build",
+  "formatVersion": 1,
+  "gamePatch": "poe2-0.3.0",
+  "character": {
+    "className": "Warrior",
+    "ascendancyName": "Titan",
+    "level": 85
+  },
+  "loadouts": [
+    {
+      "id": "main",
+      "primary": true,
+      "allocatedNodeIds": [
+        1550,
+        2626,
+        3886,
+        4089,
+        4598,
+        5910,
+        6104,
+        6121,
+        6689,
+        7615,
+        8588,
+        8903,
+        9030,
+        9158,
+        10165,
+        10378,
+        11251,
+        11292,
+        12424,
+        17107,
+        18307,
+        18670,
+        19997,
+        20224,
+        20302,
+        20702,
+        21327,
+        23221,
+        23260,
+        23586,
+        24627,
+        25125,
+        25167,
+        25621,
+        26338,
+        27121,
+        27296,
+        27778,
+        27843,
+        27878,
+        28404,
+        28830,
+        29450,
+        29820,
+        30835,
+        31722,
+        32824,
+        33128,
+        33741,
+        33901,
+        33928,
+        34671,
+        34916,
+        34952,
+        35433,
+        35849,
+        36420,
+        36506,
+        36819,
+        37898,
+        37906,
+        38280,
+        38578,
+        38770,
+        39213,
+        39895,
+        39919,
+        40810,
+        40878,
+        40912,
+        41313,
+        41334,
+        41626,
+        42222,
+        43893,
+        44617,
+        47937,
+        47990,
+        48418,
+        48587,
+        48686,
+        49605,
+        50203,
+        52544,
+        53498,
+        54843,
+        54913,
+        54985,
+        55032,
+        55112,
+        55381,
+        55449,
+        55586,
+        57365,
+        59801,
+        60987,
+        63570,
+        63999
+      ],
+      "items": [
+        {
+          "id": "Axe-w1",
+          "slot": "Weapon 1",
+          "name": "Axe Warmonger",
+          "rarity": "Rare",
+          "lines": [
+            "Adds 20 to 40 Physical Damage",
+            "+12% Attack Speed"
+          ]
+        },
+        {
+          "id": "Axe-w2",
+          "slot": "Weapon 2",
+          "name": "Axe Bulwark",
+          "rarity": "Rare",
+          "lines": [
+            "+320 to Armour",
+            "+30% Block Chance"
+          ]
+        },
+        {
+          "id": "Axe-helm",
+          "slot": "Helmet",
+          "name": "Barbute Helmet",
+          "rarity": "Rare",
+          "lines": [
+            "+80 to maximum Life",
+            "+35% to Cold Resistance"
+          ]
+        },
+        {
+          "id": "Axe-body",
+          "slot": "Body Armour",
+          "name": "Glorious Plate",
+          "rarity": "Rare",
+          "lines": [
+            "+80 to maximum Life",
+            "+42% to Fire Resistance"
+          ]
+        },
+        {
+          "id": "Axe-glove",
+          "slot": "Gloves",
+          "name": "Gauntlets",
+          "rarity": "Rare",
+          "lines": [
+            "+15% Attack Speed",
+            "+28% to Lightning Resistance"
+          ]
+        },
+        {
+          "id": "Axe-boot",
+          "slot": "Boots",
+          "name": "Greaves",
+          "rarity": "Rare",
+          "lines": [
+            "+25% Movement Speed",
+            "+60 to maximum Life"
+          ]
+        },
+        {
+          "id": "Axe-belt",
+          "slot": "Belt",
+          "name": "Heavy Belt",
+          "rarity": "Rare",
+          "lines": [
+            "+90 to maximum Life",
+            "+18% to Chaos Resistance"
+          ]
+        },
+        {
+          "id": "Axe-amu",
+          "slot": "Amulet",
+          "name": "Stellar Amulet",
+          "rarity": "Rare",
+          "lines": [
+            "+40 to all Attributes",
+            "+18% Critical Damage Bonus"
+          ]
+        },
+        {
+          "id": "Axe-r1",
+          "slot": "Ring 1",
+          "name": "Sapphire Ring",
+          "rarity": "Rare",
+          "lines": [
+            "+30% to Cold Resistance",
+            "+55 to maximum Life"
+          ]
+        },
+        {
+          "id": "Axe-r2",
+          "slot": "Ring 2",
+          "name": "Ruby Ring",
+          "rarity": "Rare",
+          "lines": [
+            "+30% to Fire Resistance",
+            "+12 to Strength"
+          ]
+        }
+      ],
+      "skills": [
+        {
+          "id": "sg",
+          "isMain": true,
+          "gems": [
+            {
+              "name": "Earthshatter",
+              "skillId": "Earthshatter",
+              "level": 20
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "provenance": {
+    "attribution": "SYNTHETIC-FIXTURE"
+  },
+  "metadata": {
+    "league": "Synthetic League",
+    "labels": [
+      "SYNTHETIC-FIXTURE"
+    ]
+  }
+}

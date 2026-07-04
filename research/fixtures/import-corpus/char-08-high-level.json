@@ -1,0 +1,279 @@
+{
+  "format": "exilelab-build",
+  "formatVersion": 1,
+  "gamePatch": "poe2-0.3.0",
+  "character": {
+    "className": "Monk",
+    "ascendancyName": "Acolyte of Chayula",
+    "level": 95
+  },
+  "loadouts": [
+    {
+      "id": "main",
+      "primary": true,
+      "allocatedNodeIds": [
+        1071,
+        2449,
+        2968,
+        2981,
+        3520,
+        3538,
+        4066,
+        4787,
+        4848,
+        5688,
+        5694,
+        6823,
+        6861,
+        7062,
+        7661,
+        7858,
+        8046,
+        8370,
+        8659,
+        8976,
+        9179,
+        11002,
+        11275,
+        12415,
+        13205,
+        13212,
+        15103,
+        16284,
+        16997,
+        17405,
+        17508,
+        17914,
+        18024,
+        18061,
+        18707,
+        19208,
+        20201,
+        20242,
+        20698,
+        20849,
+        20851,
+        21293,
+        21545,
+        21726,
+        21735,
+        22545,
+        23951,
+        23988,
+        24266,
+        24961,
+        26393,
+        26605,
+        26802,
+        26819,
+        26944,
+        27697,
+        29182,
+        29311,
+        29422,
+        29486,
+        29761,
+        30052,
+        33026,
+        33423,
+        33729,
+        33907,
+        34187,
+        34192,
+        35174,
+        35203,
+        35250,
+        35301,
+        35999,
+        36131,
+        36583,
+        37365,
+        37445,
+        38057,
+        38412,
+        38440,
+        38655,
+        39816,
+        40351,
+        41012,
+        42551,
+        43882,
+        44729,
+        44761,
+        44836,
+        45379,
+        45541,
+        45948,
+        46793,
+        47316,
+        47919,
+        48349,
+        49143,
+        49163,
+        49173,
+        49282,
+        49284,
+        50547,
+        51509,
+        51833,
+        53400,
+        53861,
+        54653,
+        54826,
+        56071,
+        56098,
+        57772,
+        58113,
+        58578,
+        60938,
+        62097,
+        62102,
+        62373,
+        63584,
+        63921,
+        64636,
+        64860,
+        64991
+      ],
+      "items": [
+        {
+          "id": "Staff-w1",
+          "slot": "Weapon 1",
+          "name": "Staff Warmonger",
+          "rarity": "Rare",
+          "lines": [
+            "Adds 20 to 40 Physical Damage",
+            "+12% Attack Speed"
+          ]
+        },
+        {
+          "id": "Staff-w2",
+          "slot": "Weapon 2",
+          "name": "Staff Bulwark",
+          "rarity": "Rare",
+          "lines": [
+            "+320 to Armour",
+            "+30% Block Chance"
+          ]
+        },
+        {
+          "id": "Staff-helm",
+          "slot": "Helmet",
+          "name": "Hubris Circlet",
+          "rarity": "Rare",
+          "lines": [
+            "+18% to Energy Shield",
+            "+35% to Cold Resistance"
+          ]
+        },
+        {
+          "id": "Staff-body",
+          "slot": "Body Armour",
+          "name": "Vaal Regalia",
+          "rarity": "Rare",
+          "lines": [
+            "+18% to Energy Shield",
+            "+42% to Fire Resistance"
+          ]
+        },
+        {
+          "id": "Staff-glove",
+          "slot": "Gloves",
+          "name": "Sorcerer Gloves",
+          "rarity": "Rare",
+          "lines": [
+            "+15% Attack Speed",
+            "+28% to Lightning Resistance"
+          ]
+        },
+        {
+          "id": "Staff-boot",
+          "slot": "Boots",
+          "name": "Arcanist Slippers",
+          "rarity": "Rare",
+          "lines": [
+            "+25% Movement Speed",
+            "+60 to maximum Life"
+          ]
+        },
+        {
+          "id": "Staff-belt",
+          "slot": "Belt",
+          "name": "Heavy Belt",
+          "rarity": "Rare",
+          "lines": [
+            "+90 to maximum Life",
+            "+18% to Chaos Resistance"
+          ]
+        },
+        {
+          "id": "Staff-amu",
+          "slot": "Amulet",
+          "name": "Stellar Amulet",
+          "rarity": "Rare",
+          "lines": [
+            "+40 to all Attributes",
+            "+18% Critical Damage Bonus"
+          ]
+        },
+        {
+          "id": "Staff-r1",
+          "slot": "Ring 1",
+          "name": "Sapphire Ring",
+          "rarity": "Rare",
+          "lines": [
+            "+30% to Cold Resistance",
+            "+55 to maximum Life"
+          ]
+        },
+        {
+          "id": "Staff-r2",
+          "slot": "Ring 2",
+          "name": "Ruby Ring",
+          "rarity": "Rare",
+          "lines": [
+            "+30% to Fire Resistance",
+            "+12 to Strength"
+          ]
+        }
+      ],
+      "skills": [
+        {
+          "id": "sg",
+          "isMain": true,
+          "gems": [
+            {
+              "name": "Ice Strike",
+              "skillId": "IceStrike",
+              "level": 20,
+              "quality": 20
+            },
+            {
+              "name": "Martial Tempo",
+              "skillId": "SupportMartialTempo",
+              "level": 20
+            },
+            {
+              "name": "Cold Penetration",
+              "skillId": "SupportColdPen",
+              "level": 20
+            }
+          ]
+        }
+      ],
+      "configuration": {
+        "enemyIsBoss": true,
+        "powerCharges": 3
+      }
+    }
+  ],
+  "provenance": {
+    "attribution": "SYNTHETIC-FIXTURE"
+  },
+  "metadata": {
+    "league": "Synthetic League",
+    "labels": [
+      "SYNTHETIC-FIXTURE"
+    ]
+  }
+}

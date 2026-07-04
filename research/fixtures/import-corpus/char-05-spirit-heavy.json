@@ -1,0 +1,308 @@
+{
+  "format": "exilelab-build",
+  "formatVersion": 1,
+  "gamePatch": "poe2-0.3.0",
+  "character": {
+    "className": "Warrior",
+    "ascendancyName": "Warbringer",
+    "level": 91
+  },
+  "loadouts": [
+    {
+      "id": "main",
+      "primary": true,
+      "allocatedNodeIds": [
+        1520,
+        1878,
+        1884,
+        2217,
+        4169,
+        4318,
+        5913,
+        6115,
+        6123,
+        6180,
+        6448,
+        7246,
+        7541,
+        8033,
+        8129,
+        8888,
+        9868,
+        9936,
+        10920,
+        12214,
+        14330,
+        14904,
+        15064,
+        15683,
+        16710,
+        16948,
+        17135,
+        17219,
+        17228,
+        18406,
+        18447,
+        18848,
+        19254,
+        19439,
+        19592,
+        19819,
+        20229,
+        20921,
+        21110,
+        21171,
+        21289,
+        21893,
+        21908,
+        22857,
+        23407,
+        23467,
+        24154,
+        25710,
+        26790,
+        27083,
+        27402,
+        27963,
+        30318,
+        30785,
+        31084,
+        33739,
+        34582,
+        34885,
+        35122,
+        35571,
+        37967,
+        38049,
+        38898,
+        39766,
+        40002,
+        40883,
+        41707,
+        42162,
+        42545,
+        43275,
+        43288,
+        45145,
+        45959,
+        45977,
+        47086,
+        47231,
+        47302,
+        48021,
+        48037,
+        48399,
+        48625,
+        49339,
+        49544,
+        50079,
+        50455,
+        50848,
+        50911,
+        51144,
+        51784,
+        52524,
+        52559,
+        54354,
+        55196,
+        55309,
+        55816,
+        56630,
+        56974,
+        57243,
+        58379,
+        58959,
+        59739,
+        60522,
+        60629,
+        60648,
+        62047,
+        62215,
+        62242,
+        64087,
+        64465,
+        64890
+      ],
+      "items": [
+        {
+          "id": "Totem-w1",
+          "slot": "Weapon 1",
+          "name": "Totem Warmonger",
+          "rarity": "Rare",
+          "lines": [
+            "Adds 20 to 40 Physical Damage",
+            "+12% Attack Speed"
+          ]
+        },
+        {
+          "id": "Totem-w2",
+          "slot": "Weapon 2",
+          "name": "Totem Bulwark",
+          "rarity": "Rare",
+          "lines": [
+            "+320 to Armour",
+            "+30% Block Chance"
+          ]
+        },
+        {
+          "id": "Totem-helm",
+          "slot": "Helmet",
+          "name": "Barbute Helmet",
+          "rarity": "Rare",
+          "lines": [
+            "+80 to maximum Life",
+            "+35% to Cold Resistance"
+          ]
+        },
+        {
+          "id": "Totem-body",
+          "slot": "Body Armour",
+          "name": "Glorious Plate",
+          "rarity": "Rare",
+          "lines": [
+            "+80 to maximum Life",
+            "+42% to Fire Resistance"
+          ]
+        },
+        {
+          "id": "Totem-glove",
+          "slot": "Gloves",
+          "name": "Gauntlets",
+          "rarity": "Rare",
+          "lines": [
+            "+15% Attack Speed",
+            "+28% to Lightning Resistance"
+          ]
+        },
+        {
+          "id": "Totem-boot",
+          "slot": "Boots",
+          "name": "Greaves",
+          "rarity": "Rare",
+          "lines": [
+            "+25% Movement Speed",
+            "+60 to maximum Life"
+          ]
+        },
+        {
+          "id": "Totem-belt",
+          "slot": "Belt",
+          "name": "Heavy Belt",
+          "rarity": "Rare",
+          "lines": [
+            "+90 to maximum Life",
+            "+18% to Chaos Resistance"
+          ]
+        },
+        {
+          "id": "Totem-amu",
+          "slot": "Amulet",
+          "name": "Stellar Amulet",
+          "rarity": "Rare",
+          "lines": [
+            "+40 to all Attributes",
+            "+18% Critical Damage Bonus"
+          ]
+        },
+        {
+          "id": "Totem-r1",
+          "slot": "Ring 1",
+          "name": "Sapphire Ring",
+          "rarity": "Rare",
+          "lines": [
+            "+30% to Cold Resistance",
+            "+55 to maximum Life"
+          ]
+        },
+        {
+          "id": "Totem-r2",
+          "slot": "Ring 2",
+          "name": "Ruby Ring",
+          "rarity": "Rare",
+          "lines": [
+            "+30% to Fire Resistance",
+            "+12 to Strength"
+          ]
+        }
+      ],
+      "skills": [
+        {
+          "id": "sg-main",
+          "isMain": true,
+          "gems": [
+            {
+              "name": "Sunder",
+              "skillId": "Sunder",
+              "level": 20,
+              "quality": 20
+            }
+          ]
+        },
+        {
+          "id": "sg-h1",
+          "gems": [
+            {
+              "name": "Herald of Ash",
+              "skillId": "HeraldOfAsh",
+              "level": 20
+            }
+          ]
+        },
+        {
+          "id": "sg-h2",
+          "gems": [
+            {
+              "name": "Herald of Ice",
+              "skillId": "HeraldOfIce",
+              "level": 20
+            }
+          ]
+        },
+        {
+          "id": "sg-h3",
+          "gems": [
+            {
+              "name": "Herald of Thunder",
+              "skillId": "HeraldOfThunder",
+              "level": 20
+            }
+          ]
+        },
+        {
+          "id": "sg-a1",
+          "gems": [
+            {
+              "name": "War Banner",
+              "skillId": "WarBanner",
+              "level": 20
+            }
+          ]
+        },
+        {
+          "id": "sg-a2",
+          "gems": [
+            {
+              "name": "Dread Banner",
+              "skillId": "DreadBanner",
+              "level": 20
+            }
+          ]
+        }
+      ],
+      "resources": {
+        "spirit": 260,
+        "spiritReserved": 250,
+        "life": 5200
+      }
+    }
+  ],
+  "provenance": {
+    "attribution": "SYNTHETIC-FIXTURE"
+  },
+  "metadata": {
+    "league": "Synthetic League",
+    "labels": [
+      "SYNTHETIC-FIXTURE"
+    ]
+  }
+}

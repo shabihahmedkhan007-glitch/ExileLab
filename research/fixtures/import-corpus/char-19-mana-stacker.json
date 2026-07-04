@@ -1,0 +1,275 @@
+{
+  "format": "exilelab-build",
+  "formatVersion": 1,
+  "gamePatch": "poe2-0.3.0",
+  "character": {
+    "className": "Sorceress",
+    "ascendancyName": "Stormweaver",
+    "level": 92
+  },
+  "loadouts": [
+    {
+      "id": "main",
+      "primary": true,
+      "allocatedNodeIds": [
+        1048,
+        1093,
+        1839,
+        2459,
+        2768,
+        2775,
+        2985,
+        4746,
+        5159,
+        5820,
+        6402,
+        6432,
+        6858,
+        7100,
+        7586,
+        8280,
+        8281,
+        8437,
+        9034,
+        9955,
+        10275,
+        10874,
+        10875,
+        11528,
+        12858,
+        13489,
+        13631,
+        15356,
+        17693,
+        17876,
+        18310,
+        19374,
+        19577,
+        19670,
+        19893,
+        20831,
+        21641,
+        21910,
+        21920,
+        23905,
+        25139,
+        25937,
+        26071,
+        26465,
+        26829,
+        28451,
+        28682,
+        29140,
+        29430,
+        29961,
+        30563,
+        30888,
+        31071,
+        31397,
+        32191,
+        32566,
+        33138,
+        33209,
+        33614,
+        34388,
+        34625,
+        34900,
+        35001,
+        35857,
+        36288,
+        37369,
+        37903,
+        37912,
+        38217,
+        38615,
+        39165,
+        39811,
+        39857,
+        39919,
+        40361,
+        41207,
+        42354,
+        42590,
+        42827,
+        43703,
+        45263,
+        46691,
+        49443,
+        50184,
+        51258,
+        51636,
+        52864,
+        53179,
+        53299,
+        53624,
+        54422,
+        54491,
+        54571,
+        54954,
+        55297,
+        55376,
+        56372,
+        56384,
+        57317,
+        57416,
+        57861,
+        59722,
+        59764,
+        60518,
+        60715,
+        60770,
+        60866,
+        61052,
+        61316,
+        62559,
+        64141
+      ],
+      "items": [
+        {
+          "id": "Wand-w1",
+          "slot": "Weapon 1",
+          "name": "Wand Warmonger",
+          "rarity": "Rare",
+          "lines": [
+            "Adds 20 to 40 Physical Damage",
+            "+12% Attack Speed"
+          ]
+        },
+        {
+          "id": "Wand-w2",
+          "slot": "Weapon 2",
+          "name": "Wand Bulwark",
+          "rarity": "Rare",
+          "lines": [
+            "+320 to Armour",
+            "+30% Block Chance"
+          ]
+        },
+        {
+          "id": "Wand-helm",
+          "slot": "Helmet",
+          "name": "Hubris Circlet",
+          "rarity": "Rare",
+          "lines": [
+            "+18% to Energy Shield",
+            "+35% to Cold Resistance"
+          ]
+        },
+        {
+          "id": "Wand-body",
+          "slot": "Body Armour",
+          "name": "Vaal Regalia",
+          "rarity": "Rare",
+          "lines": [
+            "+18% to Energy Shield",
+            "+42% to Fire Resistance"
+          ]
+        },
+        {
+          "id": "Wand-glove",
+          "slot": "Gloves",
+          "name": "Sorcerer Gloves",
+          "rarity": "Rare",
+          "lines": [
+            "+15% Attack Speed",
+            "+28% to Lightning Resistance"
+          ]
+        },
+        {
+          "id": "Wand-boot",
+          "slot": "Boots",
+          "name": "Arcanist Slippers",
+          "rarity": "Rare",
+          "lines": [
+            "+25% Movement Speed",
+            "+60 to maximum Life"
+          ]
+        },
+        {
+          "id": "Wand-belt",
+          "slot": "Belt",
+          "name": "Heavy Belt",
+          "rarity": "Rare",
+          "lines": [
+            "+90 to maximum Life",
+            "+18% to Chaos Resistance"
+          ]
+        },
+        {
+          "id": "Wand-amu",
+          "slot": "Amulet",
+          "name": "Stellar Amulet",
+          "rarity": "Rare",
+          "lines": [
+            "+40 to all Attributes",
+            "+18% Critical Damage Bonus"
+          ]
+        },
+        {
+          "id": "Wand-r1",
+          "slot": "Ring 1",
+          "name": "Sapphire Ring",
+          "rarity": "Rare",
+          "lines": [
+            "+30% to Cold Resistance",
+            "+55 to maximum Life"
+          ]
+        },
+        {
+          "id": "Wand-r2",
+          "slot": "Ring 2",
+          "name": "Ruby Ring",
+          "rarity": "Rare",
+          "lines": [
+            "+30% to Fire Resistance",
+            "+12 to Strength"
+          ]
+        }
+      ],
+      "skills": [
+        {
+          "id": "sg",
+          "isMain": true,
+          "gems": [
+            {
+              "name": "Lightning Conduit",
+              "skillId": "LightningConduit",
+              "level": 20,
+              "quality": 20
+            },
+            {
+              "name": "Lightning Penetration",
+              "skillId": "SupportLightningPen",
+              "level": 20
+            }
+          ]
+        },
+        {
+          "id": "sg-aura",
+          "gems": [
+            {
+              "name": "Clarity",
+              "skillId": "Clarity",
+              "level": 20
+            }
+          ]
+        }
+      ],
+      "resources": {
+        "mana": 3200,
+        "manaReserved": 900,
+        "energyShield": 2600,
+        "spirit": 120
+      }
+    }
+  ],
+  "provenance": {
+    "attribution": "SYNTHETIC-FIXTURE"
+  },
+  "metadata": {
+    "league": "Synthetic League",
+    "labels": [
+      "SYNTHETIC-FIXTURE"
+    ]
+  }
+}

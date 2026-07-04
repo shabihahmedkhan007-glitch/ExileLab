@@ -1,0 +1,11 @@
+{
+  "name": "@exilelab/engine-benchmark",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "S1 engine-benchmark harness (PROJECT_CONTEXT Open Task 2 / PRD §9.3 spike 1). Runnable-elsewhere: needs a Docker host + the upstream PoB2 submodule pin. No runtime dependencies — convert-fixture.ts is self-contained so it typechecks without pnpm install.",
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "convert": "tsx convert-fixture.ts"
+  }
+}

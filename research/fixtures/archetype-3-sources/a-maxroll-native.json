@@ -1,0 +1,66 @@
+{
+  "_synthetic": "SYNTHETIC FIXTURE — invented Twister Huntress speed-mapper, NOT real Maxroll data. No network fetch. Source (a) of 3 for the S6 aggregation spike; represents 'as if imported from a Maxroll pob endpoint' in the ExileLab native-JSON interchange format.",
+  "format": "exilelab-build",
+  "formatVersion": 1,
+  "gamePatch": "poe2-0.3.0",
+  "character": {
+    "className": "Huntress",
+    "ascendancyName": "Amazon",
+    "level": 91
+  },
+  "loadouts": [
+    {
+      "id": "main-spear",
+      "name": "Twister Mapping",
+      "primary": true,
+      "allocatedNodeIds": [1075, 1320, 1485, 1966, 2432, 3091, 4784, 5034, 8341, 8389, 9514, 11857, 12368, 12585, 12703, 14463, 15604, 15862, 16933, 16938, 17145, 17229, 17350, 17735, 18071, 19400, 19691, 19722, 20483, 21013, 21696, 21906, 22430, 24483, 25125, 26269, 28193, 28196, 28483, 28579, 29009, 30394, 30423, 30593, 31317, 31348, 31877, 33320, 35198, 35367, 35496, 36446, 37185, 39707, 40234, 40260, 41097, 41695, 41715, 43751, 44364, 44733, 45043, 47244, 47808, 48021, 48410, 48469, 49355, 49658, 49815, 50109, 50249, 50388, 50447, 50847, 51149, 52068, 53480, 54062, 55090, 55562, 56713, 56737, 56870, 56878, 57204, 57371, 58606, 59102, 59266, 59296, 59302, 59583, 60819, 60862, 61580, 61894, 63689, 63814],
+      "items": [
+        { "id": "spear", "slot": "Weapon 1", "name": "Whirlwind Lance", "rarity": "Rare", "lines": ["Adds 32 to 58 Physical Damage", "+18% Attack Speed", "+120 to Accuracy Rating"] },
+        { "id": "buckler", "slot": "Weapon 2", "name": "Ironwood Buckler", "rarity": "Rare", "lines": ["+22% Block Chance", "+40 to maximum Life"] },
+        { "id": "helm", "slot": "Helmet", "name": "Hunter Hood", "rarity": "Rare", "lines": ["+72 to maximum Life", "+38% to Cold Resistance"] },
+        { "id": "body", "slot": "Body Armour", "name": "Assassin's Garb", "rarity": "Rare", "lines": ["+95 to maximum Life", "+44% to Fire Resistance", "+320 to Evasion Rating"] },
+        { "id": "glove", "slot": "Gloves", "name": "Wrapped Mitts", "rarity": "Rare", "lines": ["+16% Attack Speed", "+31% to Lightning Resistance"] },
+        { "id": "boot", "slot": "Boots", "name": "Stealth Boots", "rarity": "Rare", "lines": ["+30% Movement Speed", "+64 to maximum Life"] },
+        { "id": "belt", "slot": "Belt", "name": "Rugged Belt", "rarity": "Rare", "lines": ["+88 to maximum Life", "+15% to Chaos Resistance"] },
+        { "id": "amu", "slot": "Amulet", "name": "Stellar Amulet", "rarity": "Rare", "lines": ["+35 to all Attributes", "+22% Critical Damage Bonus", "+12% Attack Speed"] },
+        { "id": "r1", "slot": "Ring 1", "name": "Topaz Ring", "rarity": "Rare", "lines": ["+31% to Lightning Resistance", "+52 to maximum Life"] },
+        { "id": "r2", "slot": "Ring 2", "name": "Two-Stone Ring", "rarity": "Rare", "lines": ["+29% to Fire Resistance", "+27% to Cold Resistance"] }
+      ],
+      "skills": [
+        {
+          "id": "sg-main",
+          "isMain": true,
+          "gems": [
+            { "name": "Twister", "skillId": "Twister", "level": 20, "quality": 20 },
+            { "name": "Scattershot", "skillId": "SupportScattershot", "level": 20, "quality": 0 },
+            { "name": "Martial Tempo", "skillId": "SupportMartialTempo", "level": 20, "quality": 0 },
+            { "name": "Primal Armament", "skillId": "SupportPrimalArmament", "level": 20, "quality": 0 },
+            { "name": "Fork", "skillId": "SupportFork", "level": 20, "quality": 0 }
+          ]
+        },
+        {
+          "id": "sg-herald",
+          "gems": [
+            { "name": "Herald of Thunder", "skillId": "HeraldOfThunder", "level": 20, "quality": 0 }
+          ]
+        },
+        {
+          "id": "sg-aura",
+          "gems": [
+            { "name": "Grace", "skillId": "Grace", "level": 20, "quality": 0 }
+          ]
+        },
+        {
+          "id": "sg-move",
+          "gems": [
+            { "name": "Blink", "skillId": "Blink", "level": 14, "quality": 0 }
+          ]
+        }
+      ],
+      "configuration": { "enemyIsBoss": false, "movesByAttacking": true, "frenzyCharges": 3 },
+      "resources": { "spirit": 100, "spiritReserved": 60, "life": 3500, "mana": 110 }
+    }
+  ],
+  "provenance": { "reference": "synthetic/twister-huntress/source-a-maxroll", "attribution": "SYNTHETIC-FIXTURE (as-if Maxroll)" },
+  "metadata": { "labels": ["SYNTHETIC-FIXTURE", "archetype", "twister-huntress", "speed-mapper", "source-a"], "league": "Synthetic League" }
+}

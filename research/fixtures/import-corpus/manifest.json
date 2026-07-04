@@ -1,0 +1,188 @@
+{
+  "_synthetic": true,
+  "_note": "SYNTHETIC test corpus for the S3 import-heuristics spike. No real player data. Every build is game-plausible but invented; item names/mods/node ids are placeholders.",
+  "gamePatch": "poe2-0.3.0",
+  "count": 20,
+  "characters": [
+    {
+      "file": "char-01-happy-path.json",
+      "className": "Ranger",
+      "ascendancyName": "Deadeye",
+      "level": 90,
+      "loadouts": 1,
+      "edgeCase": "none (control)",
+      "description": "Fully specified attack build; every field present."
+    },
+    {
+      "file": "char-02-no-main-skill.json",
+      "className": "Monk",
+      "ascendancyName": "Invoker",
+      "level": 84,
+      "loadouts": 1,
+      "edgeCase": "no main skill flagged",
+      "description": "Two skill groups, neither isMain=true. Heuristic must infer the main."
+    },
+    {
+      "file": "char-03-empty-gear.json",
+      "className": "Sorceress",
+      "ascendancyName": "Stormweaver",
+      "level": 72,
+      "loadouts": 1,
+      "edgeCase": "empty gear",
+      "description": "Naked character: loadout has no items array. Config defaults must not crash."
+    },
+    {
+      "file": "char-04-multi-loadout.json",
+      "className": "Huntress",
+      "ascendancyName": "Amazon",
+      "level": 88,
+      "loadouts": 2,
+      "edgeCase": "multi-loadout, no primary flag",
+      "description": "Two loadouts (bow set / melee set), neither flagged primary. Normalizer must pick exactly one."
+    },
+    {
+      "file": "char-05-spirit-heavy.json",
+      "className": "Warrior",
+      "ascendancyName": "Warbringer",
+      "level": 91,
+      "loadouts": 1,
+      "edgeCase": "spirit-heavy",
+      "description": "Five persistent buffs reserving nearly all Spirit — tests resource/spirit handling."
+    },
+    {
+      "file": "char-06-es-only.json",
+      "className": "Witch",
+      "ascendancyName": "Blood Mage",
+      "level": 89,
+      "loadouts": 1,
+      "edgeCase": "ES-only (CI)",
+      "description": "Energy-shield-only defensive layer, zero life. Defense-archetype detection edge."
+    },
+    {
+      "file": "char-07-low-level.json",
+      "className": "Mercenary",
+      "ascendancyName": null,
+      "level": 30,
+      "loadouts": 1,
+      "edgeCase": "level 30, no ascendancy",
+      "description": "Fresh level-30 character with no ascendancy chosen and sparse tree."
+    },
+    {
+      "file": "char-08-high-level.json",
+      "className": "Monk",
+      "ascendancyName": "Acolyte of Chayula",
+      "level": 95,
+      "loadouts": 1,
+      "edgeCase": "level 95, dense tree",
+      "description": "Endgame level-95 character with a large allocated tree."
+    },
+    {
+      "file": "char-09-gems-no-skillid.json",
+      "className": "Sorceress",
+      "ascendancyName": "Chronomancer",
+      "level": 80,
+      "loadouts": 1,
+      "edgeCase": "gems without skillId",
+      "description": "Gems carry display names but no skillId; refs must fall back to names."
+    },
+    {
+      "file": "char-10-items-no-rarity.json",
+      "className": "Ranger",
+      "ascendancyName": "Pathfinder",
+      "level": 76,
+      "loadouts": 1,
+      "edgeCase": "items missing rarity/mods",
+      "description": "Equipment names only, no rarity and no modifier lines."
+    },
+    {
+      "file": "char-11-no-config.json",
+      "className": "Warrior",
+      "ascendancyName": "Titan",
+      "level": 85,
+      "loadouts": 1,
+      "edgeCase": "no configuration",
+      "description": "Loadout has no configuration map; calc-context defaults apply."
+    },
+    {
+      "file": "char-12-no-skills.json",
+      "className": "Mercenary",
+      "ascendancyName": "Witchhunter",
+      "level": 68,
+      "loadouts": 1,
+      "edgeCase": "no skills",
+      "description": "Fully geared but zero skill groups — no main skill can exist."
+    },
+    {
+      "file": "char-13-multi-main.json",
+      "className": "Huntress",
+      "ascendancyName": "Ritualist",
+      "level": 87,
+      "loadouts": 1,
+      "edgeCase": "multiple main skills flagged",
+      "description": "Two groups both isMain=true. Ambiguous main; first wins per normalizer."
+    },
+    {
+      "file": "char-14-six-link.json",
+      "className": "Witch",
+      "ascendancyName": "Infernalist",
+      "level": 90,
+      "loadouts": 1,
+      "edgeCase": "max-link main skill",
+      "description": "Main group with six gems (active + five supports)."
+    },
+    {
+      "file": "char-15-duplicate-nodes.json",
+      "className": "Monk",
+      "ascendancyName": "Invoker",
+      "level": 83,
+      "loadouts": 1,
+      "edgeCase": "duplicate allocated node ids",
+      "description": "allocatedNodeIds contains duplicates; canonical sort must still validate."
+    },
+    {
+      "file": "char-16-minimal.json",
+      "className": "Druid",
+      "ascendancyName": "Bloodletter",
+      "level": 55,
+      "loadouts": 1,
+      "edgeCase": "minimal loadout",
+      "description": "Only character + a bare loadout id. Everything else defaults."
+    },
+    {
+      "file": "char-17-attack-as-movement.json",
+      "className": "Huntress",
+      "ascendancyName": "Amazon",
+      "level": 89,
+      "loadouts": 1,
+      "edgeCase": "attack-as-movement (context)",
+      "description": "Spear build that moves by attacking — the archetype the context detector must not shame for low move speed."
+    },
+    {
+      "file": "char-18-config-dependent.json",
+      "className": "Mercenary",
+      "ascendancyName": "Gemling Legionnaire",
+      "level": 86,
+      "loadouts": 1,
+      "edgeCase": "config-dependent damage",
+      "description": "Delayed/placed damage whose DPS depends heavily on configuration flags."
+    },
+    {
+      "file": "char-19-mana-stacker.json",
+      "className": "Sorceress",
+      "ascendancyName": "Stormweaver",
+      "level": 92,
+      "loadouts": 1,
+      "edgeCase": "mana-heavy resource pattern",
+      "description": "Caster with a very large mana pool and heavy reservation — resource-sustain axis edge."
+    },
+    {
+      "file": "char-20-full-multiloadout.json",
+      "className": "Warrior",
+      "ascendancyName": "Titan",
+      "level": 93,
+      "loadouts": 2,
+      "edgeCase": "explicit multi-loadout",
+      "description": "Two fully-specified loadouts with an explicit primary — the well-formed multi-context case."
+    }
+  ]
+}

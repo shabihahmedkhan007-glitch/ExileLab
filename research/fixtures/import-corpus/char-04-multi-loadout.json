@@ -1,0 +1,461 @@
+{
+  "format": "exilelab-build",
+  "formatVersion": 1,
+  "gamePatch": "poe2-0.3.0",
+  "character": {
+    "className": "Huntress",
+    "ascendancyName": "Amazon",
+    "level": 88
+  },
+  "loadouts": [
+    {
+      "id": "set-a-spear",
+      "allocatedNodeIds": [
+        1069,
+        2978,
+        3401,
+        3420,
+        3918,
+        4685,
+        5045,
+        7071,
+        9084,
+        10295,
+        10646,
+        12460,
+        12488,
+        12630,
+        12738,
+        13262,
+        13825,
+        14231,
+        14610,
+        14847,
+        14898,
+        15859,
+        15994,
+        17367,
+        17707,
+        17825,
+        17916,
+        18019,
+        18469,
+        18601,
+        19165,
+        19185,
+        19269,
+        19282,
+        19712,
+        20419,
+        20834,
+        22170,
+        22857,
+        23735,
+        25361,
+        25646,
+        26046,
+        26283,
+        27005,
+        29365,
+        30291,
+        31612,
+        31692,
+        31733,
+        32481,
+        32885,
+        33566,
+        34100,
+        35592,
+        35636,
+        35728,
+        36148,
+        36465,
+        37018,
+        37126,
+        37871,
+        39245,
+        39440,
+        39862,
+        40008,
+        40022,
+        40338,
+        41028,
+        41300,
+        41602,
+        43463,
+        45373,
+        46407,
+        46647,
+        46652,
+        46879,
+        46990,
+        47599,
+        49436,
+        50343,
+        52814,
+        53855,
+        54095,
+        54224,
+        55456,
+        55464,
+        55526,
+        57081,
+        57145,
+        57486,
+        59140,
+        59367,
+        59507,
+        59850,
+        60035,
+        60689,
+        62227,
+        62663,
+        62666
+      ],
+      "items": [
+        {
+          "id": "Spear-w1",
+          "slot": "Weapon 1",
+          "name": "Spear Warmonger",
+          "rarity": "Rare",
+          "lines": [
+            "Adds 20 to 40 Physical Damage",
+            "+12% Attack Speed"
+          ]
+        },
+        {
+          "id": "Spear-w2",
+          "slot": "Weapon 2",
+          "name": "Spear Bulwark",
+          "rarity": "Rare",
+          "lines": [
+            "+320 to Armour",
+            "+30% Block Chance"
+          ]
+        },
+        {
+          "id": "Spear-helm",
+          "slot": "Helmet",
+          "name": "Hunter Hood",
+          "rarity": "Rare",
+          "lines": [
+            "+80 to maximum Life",
+            "+35% to Cold Resistance"
+          ]
+        },
+        {
+          "id": "Spear-body",
+          "slot": "Body Armour",
+          "name": "Assassin's Garb",
+          "rarity": "Rare",
+          "lines": [
+            "+80 to maximum Life",
+            "+42% to Fire Resistance"
+          ]
+        },
+        {
+          "id": "Spear-glove",
+          "slot": "Gloves",
+          "name": "Wrapped Mitts",
+          "rarity": "Rare",
+          "lines": [
+            "+15% Attack Speed",
+            "+28% to Lightning Resistance"
+          ]
+        },
+        {
+          "id": "Spear-boot",
+          "slot": "Boots",
+          "name": "Stealth Boots",
+          "rarity": "Rare",
+          "lines": [
+            "+25% Movement Speed",
+            "+60 to maximum Life"
+          ]
+        },
+        {
+          "id": "Spear-belt",
+          "slot": "Belt",
+          "name": "Heavy Belt",
+          "rarity": "Rare",
+          "lines": [
+            "+90 to maximum Life",
+            "+18% to Chaos Resistance"
+          ]
+        },
+        {
+          "id": "Spear-amu",
+          "slot": "Amulet",
+          "name": "Stellar Amulet",
+          "rarity": "Rare",
+          "lines": [
+            "+40 to all Attributes",
+            "+18% Critical Damage Bonus"
+          ]
+        },
+        {
+          "id": "Spear-r1",
+          "slot": "Ring 1",
+          "name": "Sapphire Ring",
+          "rarity": "Rare",
+          "lines": [
+            "+30% to Cold Resistance",
+            "+55 to maximum Life"
+          ]
+        },
+        {
+          "id": "Spear-r2",
+          "slot": "Ring 2",
+          "name": "Ruby Ring",
+          "rarity": "Rare",
+          "lines": [
+            "+30% to Fire Resistance",
+            "+12 to Strength"
+          ]
+        }
+      ],
+      "skills": [
+        {
+          "id": "sg",
+          "isMain": true,
+          "gems": [
+            {
+              "name": "Lightning Spear",
+              "skillId": "LightningSpear",
+              "level": 20
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "set-b-bow",
+      "allocatedNodeIds": [
+        1245,
+        2013,
+        2735,
+        3018,
+        3396,
+        4277,
+        4289,
+        4954,
+        5780,
+        5965,
+        6629,
+        6993,
+        7456,
+        8100,
+        8717,
+        9787,
+        12072,
+        12188,
+        12495,
+        12884,
+        13624,
+        14068,
+        14408,
+        16691,
+        16995,
+        18085,
+        18486,
+        18808,
+        19189,
+        19751,
+        19893,
+        19939,
+        20432,
+        20648,
+        21051,
+        21445,
+        21669,
+        22565,
+        24068,
+        28592,
+        28641,
+        28775,
+        29690,
+        29784,
+        29793,
+        31130,
+        31228,
+        31425,
+        31830,
+        32215,
+        33046,
+        33511,
+        34300,
+        34701,
+        34941,
+        35893,
+        36622,
+        37019,
+        38020,
+        38908,
+        39159,
+        39190,
+        39470,
+        40079,
+        40163,
+        40983,
+        42324,
+        43231,
+        43862,
+        44569,
+        44943,
+        45357,
+        45484,
+        45590,
+        46221,
+        47054,
+        47682,
+        48271,
+        48727,
+        51147,
+        51300,
+        52777,
+        53601,
+        54589,
+        54932,
+        54960,
+        55557,
+        55957,
+        56390,
+        57451,
+        57972,
+        58571,
+        58905,
+        59631,
+        60381,
+        60831,
+        61306,
+        61399,
+        64616,
+        64720
+      ],
+      "items": [
+        {
+          "id": "Bow-w1",
+          "slot": "Weapon 1",
+          "name": "Bow Warmonger",
+          "rarity": "Rare",
+          "lines": [
+            "Adds 20 to 40 Physical Damage",
+            "+12% Attack Speed"
+          ]
+        },
+        {
+          "id": "Bow-w2",
+          "slot": "Weapon 2",
+          "name": "Bow Bulwark",
+          "rarity": "Rare",
+          "lines": [
+            "+320 to Armour",
+            "+30% Block Chance"
+          ]
+        },
+        {
+          "id": "Bow-helm",
+          "slot": "Helmet",
+          "name": "Hunter Hood",
+          "rarity": "Rare",
+          "lines": [
+            "+80 to maximum Life",
+            "+35% to Cold Resistance"
+          ]
+        },
+        {
+          "id": "Bow-body",
+          "slot": "Body Armour",
+          "name": "Assassin's Garb",
+          "rarity": "Rare",
+          "lines": [
+            "+80 to maximum Life",
+            "+42% to Fire Resistance"
+          ]
+        },
+        {
+          "id": "Bow-glove",
+          "slot": "Gloves",
+          "name": "Wrapped Mitts",
+          "rarity": "Rare",
+          "lines": [
+            "+15% Attack Speed",
+            "+28% to Lightning Resistance"
+          ]
+        },
+        {
+          "id": "Bow-boot",
+          "slot": "Boots",
+          "name": "Stealth Boots",
+          "rarity": "Rare",
+          "lines": [
+            "+25% Movement Speed",
+            "+60 to maximum Life"
+          ]
+        },
+        {
+          "id": "Bow-belt",
+          "slot": "Belt",
+          "name": "Heavy Belt",
+          "rarity": "Rare",
+          "lines": [
+            "+90 to maximum Life",
+            "+18% to Chaos Resistance"
+          ]
+        },
+        {
+          "id": "Bow-amu",
+          "slot": "Amulet",
+          "name": "Stellar Amulet",
+          "rarity": "Rare",
+          "lines": [
+            "+40 to all Attributes",
+            "+18% Critical Damage Bonus"
+          ]
+        },
+        {
+          "id": "Bow-r1",
+          "slot": "Ring 1",
+          "name": "Sapphire Ring",
+          "rarity": "Rare",
+          "lines": [
+            "+30% to Cold Resistance",
+            "+55 to maximum Life"
+          ]
+        },
+        {
+          "id": "Bow-r2",
+          "slot": "Ring 2",
+          "name": "Ruby Ring",
+          "rarity": "Rare",
+          "lines": [
+            "+30% to Fire Resistance",
+            "+12 to Strength"
+          ]
+        }
+      ],
+      "skills": [
+        {
+          "id": "sg",
+          "isMain": true,
+          "gems": [
+            {
+              "name": "Rain of Arrows",
+              "skillId": "RainOfArrows",
+              "level": 20
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "provenance": {
+    "attribution": "SYNTHETIC-FIXTURE"
+  },
+  "metadata": {
+    "league": "Synthetic League",
+    "labels": [
+      "SYNTHETIC-FIXTURE"
+    ]
+  }
+}

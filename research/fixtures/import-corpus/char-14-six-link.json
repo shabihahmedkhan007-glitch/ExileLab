@@ -1,0 +1,274 @@
+{
+  "format": "exilelab-build",
+  "formatVersion": 1,
+  "gamePatch": "poe2-0.3.0",
+  "character": {
+    "className": "Witch",
+    "ascendancyName": "Infernalist",
+    "level": 90
+  },
+  "loadouts": [
+    {
+      "id": "main",
+      "primary": true,
+      "allocatedNodeIds": [
+        1013,
+        1320,
+        1346,
+        1684,
+        1685,
+        2124,
+        2310,
+        4232,
+        4297,
+        5003,
+        5350,
+        5794,
+        6085,
+        6903,
+        7013,
+        10880,
+        11411,
+        12950,
+        13435,
+        14202,
+        15007,
+        15127,
+        15969,
+        17342,
+        17440,
+        17627,
+        18189,
+        18924,
+        19639,
+        19940,
+        20083,
+        20559,
+        21923,
+        22556,
+        22738,
+        23384,
+        23646,
+        24117,
+        24436,
+        24636,
+        26103,
+        26277,
+        26532,
+        26610,
+        26683,
+        27137,
+        28228,
+        28234,
+        28251,
+        29538,
+        29669,
+        31569,
+        31953,
+        31993,
+        32194,
+        32632,
+        33684,
+        34298,
+        34642,
+        35593,
+        35652,
+        36029,
+        36033,
+        36486,
+        37220,
+        37855,
+        38620,
+        38984,
+        39039,
+        39280,
+        40162,
+        41784,
+        42238,
+        42500,
+        42610,
+        43110,
+        43249,
+        43444,
+        44021,
+        47192,
+        48271,
+        48702,
+        49599,
+        49638,
+        50439,
+        50536,
+        50622,
+        50845,
+        51169,
+        51221,
+        52294,
+        55987,
+        56061,
+        57052,
+        57426,
+        58102,
+        58679,
+        59408,
+        60640,
+        60852,
+        61357,
+        61664,
+        61671,
+        61930,
+        62718,
+        64852
+      ],
+      "items": [
+        {
+          "id": "Sceptre-w1",
+          "slot": "Weapon 1",
+          "name": "Sceptre Warmonger",
+          "rarity": "Rare",
+          "lines": [
+            "Adds 20 to 40 Physical Damage",
+            "+12% Attack Speed"
+          ]
+        },
+        {
+          "id": "Sceptre-w2",
+          "slot": "Weapon 2",
+          "name": "Sceptre Bulwark",
+          "rarity": "Rare",
+          "lines": [
+            "+320 to Armour",
+            "+30% Block Chance"
+          ]
+        },
+        {
+          "id": "Sceptre-helm",
+          "slot": "Helmet",
+          "name": "Hubris Circlet",
+          "rarity": "Rare",
+          "lines": [
+            "+18% to Energy Shield",
+            "+35% to Cold Resistance"
+          ]
+        },
+        {
+          "id": "Sceptre-body",
+          "slot": "Body Armour",
+          "name": "Vaal Regalia",
+          "rarity": "Rare",
+          "lines": [
+            "+18% to Energy Shield",
+            "+42% to Fire Resistance"
+          ]
+        },
+        {
+          "id": "Sceptre-glove",
+          "slot": "Gloves",
+          "name": "Sorcerer Gloves",
+          "rarity": "Rare",
+          "lines": [
+            "+15% Attack Speed",
+            "+28% to Lightning Resistance"
+          ]
+        },
+        {
+          "id": "Sceptre-boot",
+          "slot": "Boots",
+          "name": "Arcanist Slippers",
+          "rarity": "Rare",
+          "lines": [
+            "+25% Movement Speed",
+            "+60 to maximum Life"
+          ]
+        },
+        {
+          "id": "Sceptre-belt",
+          "slot": "Belt",
+          "name": "Heavy Belt",
+          "rarity": "Rare",
+          "lines": [
+            "+90 to maximum Life",
+            "+18% to Chaos Resistance"
+          ]
+        },
+        {
+          "id": "Sceptre-amu",
+          "slot": "Amulet",
+          "name": "Stellar Amulet",
+          "rarity": "Rare",
+          "lines": [
+            "+40 to all Attributes",
+            "+18% Critical Damage Bonus"
+          ]
+        },
+        {
+          "id": "Sceptre-r1",
+          "slot": "Ring 1",
+          "name": "Sapphire Ring",
+          "rarity": "Rare",
+          "lines": [
+            "+30% to Cold Resistance",
+            "+55 to maximum Life"
+          ]
+        },
+        {
+          "id": "Sceptre-r2",
+          "slot": "Ring 2",
+          "name": "Ruby Ring",
+          "rarity": "Rare",
+          "lines": [
+            "+30% to Fire Resistance",
+            "+12 to Strength"
+          ]
+        }
+      ],
+      "skills": [
+        {
+          "id": "sg",
+          "isMain": true,
+          "gems": [
+            {
+              "name": "Fireball",
+              "skillId": "Fireball",
+              "level": 20,
+              "quality": 20
+            },
+            {
+              "name": "Fire Penetration",
+              "skillId": "SupportFirePen",
+              "level": 20
+            },
+            {
+              "name": "Controlled Destruction",
+              "skillId": "SupportControlledDestruction",
+              "level": 20
+            },
+            {
+              "name": "Elemental Focus",
+              "skillId": "SupportElementalFocus",
+              "level": 20
+            },
+            {
+              "name": "Concentrated Effect",
+              "skillId": "SupportConcentratedEffect",
+              "level": 20
+            },
+            {
+              "name": "Ignite Proliferation",
+              "skillId": "SupportIgniteProliferation",
+              "level": 20
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "provenance": {
+    "attribution": "SYNTHETIC-FIXTURE"
+  },
+  "metadata": {
+    "league": "Synthetic League",
+    "labels": [
+      "SYNTHETIC-FIXTURE"
+    ]
+  }
+}

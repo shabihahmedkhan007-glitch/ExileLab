@@ -1,0 +1,253 @@
+{
+  "format": "exilelab-build",
+  "formatVersion": 1,
+  "gamePatch": "poe2-0.3.0",
+  "character": {
+    "className": "Mercenary",
+    "ascendancyName": "Gemling Legionnaire",
+    "level": 86
+  },
+  "loadouts": [
+    {
+      "id": "main",
+      "primary": true,
+      "allocatedNodeIds": [
+        3709,
+        4392,
+        4491,
+        6216,
+        6361,
+        6643,
+        7619,
+        8099,
+        8266,
+        9113,
+        10041,
+        11800,
+        13616,
+        13706,
+        13731,
+        13910,
+        13981,
+        14099,
+        14179,
+        14396,
+        16287,
+        16378,
+        16478,
+        16827,
+        17264,
+        17957,
+        18794,
+        20197,
+        20203,
+        20598,
+        21633,
+        22496,
+        23386,
+        24219,
+        24451,
+        24475,
+        26041,
+        26339,
+        26482,
+        26655,
+        26720,
+        26790,
+        28743,
+        31128,
+        32186,
+        32625,
+        33526,
+        34198,
+        34681,
+        35061,
+        35446,
+        35829,
+        36044,
+        36600,
+        38027,
+        39617,
+        39678,
+        39744,
+        41169,
+        41848,
+        43805,
+        45365,
+        45428,
+        46105,
+        46716,
+        46786,
+        46837,
+        47205,
+        47880,
+        48353,
+        48699,
+        49226,
+        49806,
+        51053,
+        51274,
+        52441,
+        52692,
+        53863,
+        54704,
+        55242,
+        55871,
+        56121,
+        57063,
+        57535,
+        58082,
+        58093,
+        58957,
+        59085,
+        59138,
+        59555,
+        59649,
+        61177,
+        61237,
+        61321,
+        61752,
+        61825,
+        62231,
+        63404,
+        64952
+      ],
+      "items": [
+        {
+          "id": "Crossbow-w1",
+          "slot": "Weapon 1",
+          "name": "Crossbow Warmonger",
+          "rarity": "Rare",
+          "lines": [
+            "Adds 20 to 40 Physical Damage",
+            "+12% Attack Speed"
+          ]
+        },
+        {
+          "id": "Crossbow-w2",
+          "slot": "Weapon 2",
+          "name": "Crossbow Bulwark",
+          "rarity": "Rare",
+          "lines": [
+            "+320 to Armour",
+            "+30% Block Chance"
+          ]
+        },
+        {
+          "id": "Crossbow-helm",
+          "slot": "Helmet",
+          "name": "Barbute Helmet",
+          "rarity": "Rare",
+          "lines": [
+            "+80 to maximum Life",
+            "+35% to Cold Resistance"
+          ]
+        },
+        {
+          "id": "Crossbow-body",
+          "slot": "Body Armour",
+          "name": "Glorious Plate",
+          "rarity": "Rare",
+          "lines": [
+            "+80 to maximum Life",
+            "+42% to Fire Resistance"
+          ]
+        },
+        {
+          "id": "Crossbow-glove",
+          "slot": "Gloves",
+          "name": "Gauntlets",
+          "rarity": "Rare",
+          "lines": [
+            "+15% Attack Speed",
+            "+28% to Lightning Resistance"
+          ]
+        },
+        {
+          "id": "Crossbow-boot",
+          "slot": "Boots",
+          "name": "Greaves",
+          "rarity": "Rare",
+          "lines": [
+            "+25% Movement Speed",
+            "+60 to maximum Life"
+          ]
+        },
+        {
+          "id": "Crossbow-belt",
+          "slot": "Belt",
+          "name": "Heavy Belt",
+          "rarity": "Rare",
+          "lines": [
+            "+90 to maximum Life",
+            "+18% to Chaos Resistance"
+          ]
+        },
+        {
+          "id": "Crossbow-amu",
+          "slot": "Amulet",
+          "name": "Stellar Amulet",
+          "rarity": "Rare",
+          "lines": [
+            "+40 to all Attributes",
+            "+18% Critical Damage Bonus"
+          ]
+        },
+        {
+          "id": "Crossbow-r1",
+          "slot": "Ring 1",
+          "name": "Sapphire Ring",
+          "rarity": "Rare",
+          "lines": [
+            "+30% to Cold Resistance",
+            "+55 to maximum Life"
+          ]
+        },
+        {
+          "id": "Crossbow-r2",
+          "slot": "Ring 2",
+          "name": "Ruby Ring",
+          "rarity": "Rare",
+          "lines": [
+            "+30% to Fire Resistance",
+            "+12 to Strength"
+          ]
+        }
+      ],
+      "skills": [
+        {
+          "id": "sg",
+          "isMain": true,
+          "gems": [
+            {
+              "name": "Explosive Grenade",
+              "skillId": "ExplosiveGrenade",
+              "level": 20,
+              "quality": 20
+            },
+            {
+              "name": "Scattershot",
+              "skillId": "SupportScattershot",
+              "level": 20
+            }
+          ]
+        }
+      ],
+      "configuration": {
+        "enemyIsBoss": true,
+        "detonateAllStacks": true,
+        "fuseStacks": 5,
+        "enemyShocked": true
+      }
+    }
+  ],
+  "provenance": {
+    "attribution": "SYNTHETIC-FIXTURE"
+  },
+  "metadata": {
+    "league": "Synthetic League",
+    "labels": [
+      "SYNTHETIC-FIXTURE"
+    ]
+  }
+}

@@ -1,0 +1,347 @@
+{
+  "format": "exilelab-build",
+  "formatVersion": 1,
+  "gamePatch": "poe2-0.3.0",
+  "character": {
+    "className": "Witch",
+    "ascendancyName": "Infernalist",
+    "level": 93
+  },
+  "loadouts": [
+    {
+      "id": "main",
+      "name": "Skeleton Army",
+      "primary": true,
+      "allocatedNodeIds": [
+        2785,
+        3296,
+        3963,
+        5189,
+        7372,
+        7395,
+        7491,
+        7908,
+        8278,
+        8508,
+        9239,
+        10627,
+        11202,
+        11303,
+        12832,
+        13171,
+        13739,
+        13962,
+        15006,
+        15071,
+        15968,
+        16568,
+        17963,
+        18195,
+        18199,
+        18549,
+        18959,
+        19416,
+        19936,
+        20425,
+        20437,
+        21316,
+        22638,
+        23167,
+        23732,
+        24125,
+        24292,
+        24338,
+        24447,
+        25226,
+        26410,
+        27466,
+        27716,
+        28976,
+        29198,
+        29932,
+        31073,
+        31588,
+        31634,
+        32189,
+        32670,
+        33140,
+        33241,
+        33273,
+        33318,
+        35777,
+        36782,
+        36961,
+        37293,
+        38350,
+        38777,
+        39093,
+        40056,
+        40534,
+        40688,
+        40975,
+        41459,
+        42160,
+        43127,
+        43724,
+        43784,
+        43857,
+        44272,
+        44351,
+        45176,
+        45907,
+        47018,
+        47518,
+        47756,
+        48381,
+        49227,
+        50318,
+        50389,
+        50684,
+        51511,
+        52807,
+        52946,
+        53100,
+        53401,
+        53870,
+        55971,
+        56703,
+        57108,
+        57365,
+        57621,
+        57963,
+        58886,
+        59808,
+        60094,
+        61144,
+        61322,
+        61351,
+        62274,
+        62655,
+        62720,
+        63181,
+        63835,
+        64830
+      ],
+      "items": [
+        {
+          "id": "Bone-w1",
+          "slot": "Weapon 1",
+          "name": "Bone Warmonger",
+          "rarity": "Rare",
+          "lines": [
+            "Adds 20 to 40 Physical Damage",
+            "+12% Attack Speed"
+          ]
+        },
+        {
+          "id": "Bone-w2",
+          "slot": "Weapon 2",
+          "name": "Bone Bulwark",
+          "rarity": "Rare",
+          "lines": [
+            "+320 to Armour",
+            "+30% Block Chance"
+          ]
+        },
+        {
+          "id": "Bone-helm",
+          "slot": "Helmet",
+          "name": "Hubris Circlet",
+          "rarity": "Rare",
+          "lines": [
+            "+18% to Energy Shield",
+            "+35% to Cold Resistance"
+          ]
+        },
+        {
+          "id": "Bone-body",
+          "slot": "Body Armour",
+          "name": "Vaal Regalia",
+          "rarity": "Rare",
+          "lines": [
+            "+18% to Energy Shield",
+            "+42% to Fire Resistance"
+          ]
+        },
+        {
+          "id": "Bone-glove",
+          "slot": "Gloves",
+          "name": "Sorcerer Gloves",
+          "rarity": "Rare",
+          "lines": [
+            "+15% Attack Speed",
+            "+28% to Lightning Resistance"
+          ]
+        },
+        {
+          "id": "Bone-boot",
+          "slot": "Boots",
+          "name": "Arcanist Slippers",
+          "rarity": "Rare",
+          "lines": [
+            "+25% Movement Speed",
+            "+60 to maximum Life"
+          ]
+        },
+        {
+          "id": "Bone-belt",
+          "slot": "Belt",
+          "name": "Heavy Belt",
+          "rarity": "Rare",
+          "lines": [
+            "+90 to maximum Life",
+            "+18% to Chaos Resistance"
+          ]
+        },
+        {
+          "id": "Bone-amu",
+          "slot": "Amulet",
+          "name": "Stellar Amulet",
+          "rarity": "Rare",
+          "lines": [
+            "+40 to all Attributes",
+            "+18% Critical Damage Bonus"
+          ]
+        },
+        {
+          "id": "Bone-r1",
+          "slot": "Ring 1",
+          "name": "Sapphire Ring",
+          "rarity": "Rare",
+          "lines": [
+            "+30% to Cold Resistance",
+            "+55 to maximum Life"
+          ]
+        },
+        {
+          "id": "Bone-r2",
+          "slot": "Ring 2",
+          "name": "Ruby Ring",
+          "rarity": "Rare",
+          "lines": [
+            "+30% to Fire Resistance",
+            "+12 to Strength"
+          ]
+        }
+      ],
+      "skills": [
+        {
+          "id": "sg-main",
+          "isMain": true,
+          "gems": [
+            {
+              "name": "Summon Skeletal Warriors",
+              "skillId": "SummonSkeletalWarriors",
+              "level": 20,
+              "quality": 20
+            },
+            {
+              "name": "Minion Damage",
+              "skillId": "SupportMinionDamage",
+              "level": 20,
+              "quality": 20
+            },
+            {
+              "name": "Melee Physical Damage",
+              "skillId": "SupportMeleePhysical",
+              "level": 20,
+              "quality": 0
+            },
+            {
+              "name": "Feeding Frenzy",
+              "skillId": "SupportFeedingFrenzy",
+              "level": 20,
+              "quality": 0
+            },
+            {
+              "name": "Minion Instability",
+              "skillId": "SupportMinionInstability",
+              "level": 20,
+              "quality": 0
+            }
+          ]
+        },
+        {
+          "id": "sg-snipers",
+          "gems": [
+            {
+              "name": "Summon Skeletal Snipers",
+              "skillId": "SummonSkeletalSnipers",
+              "level": 20,
+              "quality": 0
+            },
+            {
+              "name": "Elemental Army",
+              "skillId": "SupportElementalArmy",
+              "level": 20,
+              "quality": 0
+            }
+          ]
+        },
+        {
+          "id": "sg-reaper",
+          "gems": [
+            {
+              "name": "Summon Reaper",
+              "skillId": "SummonReaper",
+              "level": 20,
+              "quality": 0
+            }
+          ]
+        },
+        {
+          "id": "sg-curse",
+          "gems": [
+            {
+              "name": "Despair",
+              "skillId": "Despair",
+              "level": 20,
+              "quality": 0
+            }
+          ]
+        },
+        {
+          "id": "sg-buffs",
+          "gems": [
+            {
+              "name": "Grim Feast",
+              "skillId": "GrimFeast",
+              "level": 20,
+              "quality": 0
+            },
+            {
+              "name": "Clarity",
+              "skillId": "Clarity",
+              "level": 20,
+              "quality": 0
+            }
+          ]
+        }
+      ],
+      "configuration": {
+        "enemyIsBoss": true,
+        "minionCount": 12,
+        "aliveMinions": true
+      },
+      "resources": {
+        "spirit": 200,
+        "spiritReserved": 180,
+        "energyShield": 3200,
+        "mana": 90
+      }
+    }
+  ],
+  "provenance": {
+    "attribution": "SYNTHETIC-FIXTURE",
+    "reference": "synthetic/minion-build"
+  },
+  "metadata": {
+    "league": "Synthetic League",
+    "labels": [
+      "SYNTHETIC-FIXTURE",
+      "benchmark",
+      "minion",
+      "summoner"
+    ]
+  }
+}
