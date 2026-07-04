@@ -1,14 +1,27 @@
 // Public types for the Context Detector.
 //
-// NOTE ON @exilelab/core: RFC-0001 defines BuildSnapshot as the canonical,
-// immutable, source-independent build model. At the time this package was
-// written, `@exilelab/core` is still a stub and exports no BuildSnapshot type.
-// Per the consumer contract in RFC-0001 §8.1, a consumer is "source-blind" and
-// only needs the *slice* of the snapshot it actually reads. We therefore model
-// that slice structurally here as `BuildSnapshot`. When core lands its canonical
-// type, core's BuildSnapshot is expected to be assignable to this structural
-// view (the categories below are drawn directly from RFC-0001 §5.3), so the
-// detector keeps working without change.
+// The canonical BuildSnapshot now lives in @exilelab/core (RFC-0001 landed) and is
+// re-exported here — there is no package-local structural mirror anymore. The
+// detector is a source-blind consumer (RFC-0001 §8.1): it reads build state
+// (character, loadout contexts, skills) from the core snapshot and resolves skill
+// display names from its Display Cache.
+//
+// Engine-derived defensive/resource MAGNITUDES (energy shield, reserved spirit, …)
+// are NOT build state — RFC-0001 AD-7 keeps calculated values in Calculation
+// Results, never in the snapshot. So they arrive through an OPTIONAL companion
+// `CalculationView` overlay keyed by Loadout Context id; without it, detection
+// keys off skill mechanics alone, which is sufficient for the launch rules table.
+
+import type { BuildSnapshot, LoadoutContext } from "@exilelab/core";
+
+export type {
+  BuildSnapshot,
+  BuildState,
+  LoadoutContext,
+  SkillSetup,
+  Character,
+  DisplayCache,
+} from "@exilelab/core";
 
 /**
  * The eight Preference Axes (GLOSSARY — exact names, do not rename).
@@ -16,52 +29,43 @@
  * Preference Engine / UI can turn into slider defaults.
  */
 export type PreferenceAxis =
-  | 'Damage'
-  | 'Survivability'
-  | 'Movement Speed'
-  | 'Attack Speed'
-  | 'Cast Speed'
-  | 'Skill Mobility Efficiency'
-  | 'Resource Sustain'
-  | 'Currency Efficiency';
+  | "Damage"
+  | "Survivability"
+  | "Movement Speed"
+  | "Attack Speed"
+  | "Cast Speed"
+  | "Skill Mobility Efficiency"
+  | "Resource Sustain"
+  | "Currency Efficiency";
 
 /** Qualitative emphasis a detected archetype suggests for an axis. */
-export type AxisEmphasis = 'high' | 'medium' | 'low';
+export type AxisEmphasis = "high" | "medium" | "low";
 
 /**
  * Goal Preset names (GLOSSARY canonical + PRODUCT_PLAN "The Preference Engine").
  * A detection suggests exactly one; the user always sees and may override it.
  */
 export type GoalPreset =
-  | 'Fast Mapping'
-  | 'Speed Clearing'
-  | 'Boss Farming'
-  | 'Hardcore Survivability'
-  | 'Tanky'
-  | 'Budget Farming'
-  | 'Balanced';
+  | "Fast Mapping"
+  | "Speed Clearing"
+  | "Boss Farming"
+  | "Hardcore Survivability"
+  | "Tanky"
+  | "Budget Farming"
+  | "Balanced";
 
 /** How a skill delivers its damage (PRODUCT_PLAN: hit / DoT / minion). */
-export type DamageDelivery = 'hit' | 'dot' | 'minion';
+export type DamageDelivery = "hit" | "dot" | "minion";
 
 /** The two PoE2 active-skill resources under pressure in a build. */
-export type ResourceKind = 'mana' | 'spirit';
+export type ResourceKind = "mana" | "spirit";
 
 // ---------------------------------------------------------------------------
-// Structural BuildSnapshot view (RFC-0001 §5.3 categories — build state only).
+// Engine-derived overlay (Calculation Result slice, RFC-0001 AD-7 — NOT in the
+// snapshot). Optional: supplied when calculated numbers are available.
 // ---------------------------------------------------------------------------
 
-/** One active/support skill as it appears in a snapshot's Skills & Gems. */
-export interface SnapshotSkill {
-  /** Patch-scoped canonical skill id (RFC-0001 AD-3 — the authoritative ref). */
-  skillId: string;
-  /** Display Cache name (rendering only; never semantic truth — RFC-0001 AD-3). */
-  displayName?: string;
-  /** Main-skill designation (RFC-0001 §5.3 build state). */
-  isMainSkill?: boolean;
-}
-
-/** Snapshot-carried defensive layer magnitudes for the loadout. */
+/** Snapshot-external defensive layer magnitudes for a loadout (engine-derived). */
 export interface DefensiveLayers {
   energyShield?: number;
   armour?: number;
@@ -70,7 +74,7 @@ export interface DefensiveLayers {
   block?: number;
 }
 
-/** Snapshot-carried resource state for the loadout. */
+/** Snapshot-external resource state for a loadout (engine-derived). */
 export interface ResourceState {
   unreservedMana?: number;
   unreservedSpirit?: number;
@@ -80,34 +84,43 @@ export interface ResourceState {
   mainSkillCost?: number;
 }
 
-/**
- * One Loadout Context (RFC-0001 AD-5): a coherent equipment-and-tree config.
- * A snapshot has one or more; consumers must not assume exactly one exists.
- */
-export interface LoadoutContext {
-  id: string;
-  isPrimary: boolean;
-  skills: SnapshotSkill[];
+/** Engine-derived metrics for one Loadout Context. */
+export interface LoadoutMetrics {
   defence?: DefensiveLayers;
   resources?: ResourceState;
 }
 
-/** Character build-state slice the detector reads. */
-export interface SnapshotCharacter {
-  className?: string;
-  ascendancy?: string;
-  level?: number;
-}
+/** Engine-derived overlay keyed by Loadout Context id (RFC-0001 AD-7). */
+export type CalculationView = Readonly<Record<string, LoadoutMetrics>>;
 
 /**
- * Structural view of a BuildSnapshot — the slice the Context Detector consumes.
- * Immutable input (RFC-0001 I1): the detector never mutates it.
+ * The detector's input: a canonical core BuildSnapshot plus the OPTIONAL
+ * engine-derived overlay. A bare BuildSnapshot is accepted directly (calc absent).
  */
-export interface BuildSnapshot {
-  snapshotFormatVersion: string;
-  gamePatch: string;
-  character: SnapshotCharacter;
-  loadouts: LoadoutContext[];
+export interface DetectionInput {
+  snapshot: BuildSnapshot;
+  calc?: CalculationView;
+}
+
+/** Normalize either accepted input form to the {snapshot, calc} shape. */
+export function resolveInput(input: BuildSnapshot | DetectionInput): DetectionInput {
+  return "buildState" in input ? { snapshot: input } : input;
+}
+
+/** The detector's normalized per-skill view (skillId + display name + main flag). */
+export interface DetectorSkill {
+  /** Patch-scoped canonical skill id (skillGemRef, falling back to setupId). */
+  skillId: string;
+  /** Display Cache name (rendering only; never semantic truth — RFC-0001 AD-3). */
+  displayName?: string;
+  /** Main-skill designation (RFC-0001 §5.3 build state). */
+  isMainSkill: boolean;
+}
+
+/** Resolve the primary Loadout Context (RFC-0001 AD-5: never assume exactly one). */
+export function primaryLoadout(snapshot: BuildSnapshot): LoadoutContext | undefined {
+  const loadouts = snapshot.buildState.loadoutContexts;
+  return loadouts.find((l) => l.primary) ?? loadouts[0];
 }
 
 // ---------------------------------------------------------------------------

@@ -17,6 +17,11 @@ import {
   type RawImportArtifact,
 } from "./index.js";
 
+// The normalizer now emits @exilelab/core's canonical BuildSnapshot directly:
+//   snap.buildState.{character,loadoutContexts,configuration,assumptions}
+//   snap.metadata.{patchVersion,formatVersion,provenance,label,league}
+//   snap.displayCache.{names,icons}   snap.identity (core Canonical Identity)
+
 // --- Fixtures -------------------------------------------------------------
 
 const POB_XML = `<?xml version="1.0" encoding="UTF-8"?>
@@ -115,34 +120,38 @@ describe("NativeJsonImporter + normalize (full fidelity)", () => {
     const artifact = new NativeJsonImporter().import(JSON.stringify(NATIVE_BUILD));
     const snap = normalize(artifact);
 
-    expect(snap.character).toEqual({
-      className: "Witch",
-      ascendancyName: "Infernalist",
+    expect(snap.buildState.character).toEqual({
+      class: "Witch",
+      ascendancy: "Infernalist",
       level: 88,
     });
-    expect(snap.versioning).toEqual({
-      gamePatch: "poe2-0.2.0",
-      snapshotFormatVersion: SNAPSHOT_FORMAT_VERSION,
-    });
-    expect(snap.loadouts).toHaveLength(1);
-    const lo = snap.loadouts[0]!;
-    expect(lo.primary).toBe(true);
-    expect(lo.passiveTree.allocatedNodeIds).toEqual([100, 300, 500]); // canonically sorted
-    expect(lo.equipment[0]).toMatchObject({ slot: "Weapon 1", name: "Doomfire", rarity: "Unique" });
-    expect(lo.skills[0]!.isMain).toBe(true);
-    expect(lo.skills[0]!.gems[0]).toMatchObject({ name: "Fireball", level: 20, quality: 20 });
-    expect(lo.configuration).toEqual({ enemyIsBoss: true });
-    expect(lo.resources).toEqual({ manaReserved: 50 });
+    expect(snap.metadata.patchVersion).toBe("poe2-0.2.0");
+    expect(snap.metadata.formatVersion).toBe(String(SNAPSHOT_FORMAT_VERSION));
 
-    expect(snap.provenance).toMatchObject({
+    expect(snap.buildState.loadoutContexts).toHaveLength(1);
+    const lo = snap.buildState.loadoutContexts[0]!;
+    expect(lo.primary).toBe(true);
+    expect(lo.passiveTree.allocatedNodes).toEqual([100, 300, 500]); // canonically sorted
+    expect(lo.equipment[0]).toMatchObject({ slot: "Weapon 1", itemRef: "Doomfire", rarity: "Unique" });
+    expect(lo.skills[0]!.isMainSkill).toBe(true);
+    expect(lo.skills[0]!.skillGemRef).toBe("Fireball");
+
+    // Configuration is build-state (RFC-0001 §5.3), lifted from the primary loadout.
+    expect(snap.buildState.configuration).toEqual([{ key: "enemyIsBoss", value: true }]);
+
+    expect(snap.metadata.provenance).toMatchObject({
       source: "native-json",
       reference: "friend-export",
       attribution: "Someone",
     });
-    expect(snap.metadata).toEqual({ labels: ["hc"], league: "Standard" });
+    expect(snap.metadata.label).toBe("hc");
+    expect(snap.metadata.league).toBe("Standard");
+
+    // Display Cache maps game-data refs → display names (rendering only, AD-3).
+    expect(snap.displayCache.names["Fireball"]).toBe("Fireball");
 
     // Full fidelity ⇒ no defaulted origins.
-    const origins = new Set(snap.assumptions.map((x) => x.origin));
+    const origins = new Set(snap.buildState.assumptions.map((x) => x.origin));
     expect(origins.has("defaulted")).toBe(false);
     expect(origins.has("imported")).toBe(true);
   });
@@ -161,19 +170,24 @@ describe("PobCodeImporter + normalize (round-trip)", () => {
     const artifact = new PobCodeImporter().import(makePobCode());
     const snap = normalize(artifact);
 
-    expect(snap.character.className).toBe("Ranger");
-    expect(snap.character.ascendancyName).toBe("Deadeye");
-    expect(snap.character.level).toBe(92);
+    expect(snap.buildState.character.class).toBe("Ranger");
+    expect(snap.buildState.character.ascendancy).toBe("Deadeye");
+    expect(snap.buildState.character.level).toBe(92);
 
-    const lo = snap.loadouts[0]!;
-    expect(lo.passiveTree.allocatedNodeIds).toEqual([101, 202, 303]); // sorted
-    expect(lo.equipment[0]).toMatchObject({ slot: "Weapon 1", name: "Storm Talon", rarity: "Rare" });
+    const lo = snap.buildState.loadoutContexts[0]!;
+    expect(lo.passiveTree.allocatedNodes).toEqual([101, 202, 303]); // sorted
+    expect(lo.equipment[0]).toMatchObject({ slot: "Weapon 1", itemRef: "Storm Talon", rarity: "Rare" });
 
     // mainSocketGroup="2" ⇒ second group is main.
     expect(lo.skills).toHaveLength(2);
-    expect(lo.skills[0]!.isMain).toBe(false);
-    expect(lo.skills[1]!.isMain).toBe(true);
-    expect(lo.skills[1]!.gems.map((g) => g.name)).toEqual(["Lightning Arrow", "Added Cold Damage"]);
+    expect(lo.skills[0]!.isMainSkill).toBe(false);
+    expect(lo.skills[1]!.isMainSkill).toBe(true);
+    // Active gem → skillGemRef; linked supports → supports (refs are skillIds).
+    expect(lo.skills[1]!.skillGemRef).toBe("LightningArrow");
+    expect(lo.skills[1]!.supports).toEqual(["SupportAddedCold"]);
+    // Display names ride along in the Display Cache.
+    expect(snap.displayCache.names["LightningArrow"]).toBe("Lightning Arrow");
+    expect(snap.displayCache.names["SupportAddedCold"]).toBe("Added Cold Damage");
   });
 
   it("is deterministic: two independent imports produce the same identity", () => {
@@ -184,17 +198,19 @@ describe("PobCodeImporter + normalize (round-trip)", () => {
 
   it("declares defaulted origins for fields it could not extract (game patch)", () => {
     const snap = normalize(new PobCodeImporter().import(makePobCode()));
-    expect(snap.versioning.gamePatch).toBe(UNKNOWN_GAME_PATCH);
-    const patchAssumption = snap.assumptions.find((x) => x.path === "versioning.gamePatch");
+    expect(snap.metadata.patchVersion).toBe(UNKNOWN_GAME_PATCH);
+    const patchAssumption = snap.buildState.assumptions.find((x) => x.path === "versioning.gamePatch");
     expect(patchAssumption?.origin).toBe("defaulted");
     // At least one defaulted assumption must be present for an incomplete source.
-    expect(snap.assumptions.some((x) => x.origin === "defaulted")).toBe(true);
+    expect(snap.buildState.assumptions.some((x) => x.origin === "defaulted")).toBe(true);
   });
 
   it("records a caller-supplied patch as inferred rather than defaulted", () => {
     const snap = normalize(new PobCodeImporter().import(makePobCode()), { gamePatch: "poe2-0.2.0" });
-    expect(snap.versioning.gamePatch).toBe("poe2-0.2.0");
-    expect(snap.assumptions.find((x) => x.path === "versioning.gamePatch")?.origin).toBe("inferred");
+    expect(snap.metadata.patchVersion).toBe("poe2-0.2.0");
+    expect(
+      snap.buildState.assumptions.find((x) => x.path === "versioning.gamePatch")?.origin,
+    ).toBe("inferred");
   });
 });
 
@@ -242,12 +258,12 @@ describe("normalize defaulting", () => {
       gaps: [],
     };
     const snap = normalize(sparse);
-    expect(snap.character).toEqual({ className: "Unknown", ascendancyName: null, level: 1 });
-    expect(snap.loadouts).toHaveLength(1);
-    expect(snap.loadouts[0]!.primary).toBe(true);
-    expect(snap.versioning.gamePatch).toBe(UNKNOWN_GAME_PATCH);
+    expect(snap.buildState.character).toEqual({ class: "Unknown", ascendancy: null, level: 1 });
+    expect(snap.buildState.loadoutContexts).toHaveLength(1);
+    expect(snap.buildState.loadoutContexts[0]!.primary).toBe(true);
+    expect(snap.metadata.patchVersion).toBe(UNKNOWN_GAME_PATCH);
     // Honesty: the sparse build is dominated by defaulted origins.
-    expect(snap.assumptions.filter((x) => x.origin === "defaulted").length).toBeGreaterThan(0);
+    expect(snap.buildState.assumptions.filter((x) => x.origin === "defaulted").length).toBeGreaterThan(0);
   });
 
   it("infers a single primary loadout when none is flagged", () => {
@@ -263,12 +279,12 @@ describe("normalize defaulting", () => {
       gaps: [],
     };
     const snap = normalize(artifact);
-    const primaries = snap.loadouts.filter((l) => l.primary);
+    const primaries = snap.buildState.loadoutContexts.filter((l) => l.primary);
     expect(primaries).toHaveLength(1);
-    expect(primaries[0]!.id).toBe("a");
-    expect(snap.assumptions.some((x) => x.path === "loadouts[0].primary" && x.origin === "inferred")).toBe(
-      true,
-    );
+    expect(primaries[0]!.contextId).toBe("a");
+    expect(
+      snap.buildState.assumptions.some((x) => x.path === "loadouts[0].primary" && x.origin === "inferred"),
+    ).toBe(true);
   });
 });
 
@@ -337,7 +353,7 @@ describe("immutability", () => {
   it("returns a deeply frozen snapshot", () => {
     const snap = normalize(new NativeJsonImporter().import(JSON.stringify(NATIVE_BUILD)));
     expect(Object.isFrozen(snap)).toBe(true);
-    expect(Object.isFrozen(snap.loadouts)).toBe(true);
-    expect(Object.isFrozen(snap.character)).toBe(true);
+    expect(Object.isFrozen(snap.buildState.loadoutContexts)).toBe(true);
+    expect(Object.isFrozen(snap.buildState.character)).toBe(true);
   });
 });

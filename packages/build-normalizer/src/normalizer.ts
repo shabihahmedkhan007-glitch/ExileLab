@@ -1,23 +1,30 @@
 // The Normalizer — translates a Raw Import Artifact into a canonical BuildSnapshot.
-// It owns canonicalization (RFC-0001 I2) and declares every field it fills with an
-// assumption origin (imported | inferred | defaulted) per the honesty-over-
-// completeness invariant (I3/I4). It never contacts an external platform.
+// It maps the importer's source-neutral extraction into @exilelab/core's exact
+// shapes and hands them to `createBuildSnapshot`, which owns canonicalization and
+// the deterministic Canonical Identity (RFC-0001 I2). The normalizer declares
+// every field it fills with an assumption origin (imported | inferred | defaulted)
+// per the honesty-over-completeness invariant (I3/I4). It never contacts an
+// external platform.
+//
+// There is no package-local identity anymore: core's computeBuildStateIdentity
+// (invoked inside createBuildSnapshot) is the ONE identity. Assumptions ride with
+// build state but are EXCLUDED from identity (RFC-0001 §5.3), which core enforces.
 
-import { computeIdentity } from "./identity.js";
 import { NormalizeError } from "./errors.js";
+import { createBuildSnapshot } from "./model.js";
 import type {
   Assumption,
   AssumptionOrigin,
   BuildSnapshot,
+  BuildState,
   Character,
-  Configuration,
-  Gem,
-  Item,
+  ConfigEntry,
+  DisplayCache,
+  EquipmentItem,
   LoadoutContext,
   Metadata,
   Provenance,
-  Resources,
-  SkillGroup,
+  SkillSetup,
 } from "./model.js";
 import type {
   ExtractedGem,
@@ -48,7 +55,7 @@ class Assumptions {
   add(path: string, origin: AssumptionOrigin, note?: string): void {
     this.records.push(note === undefined ? { path, origin } : { path, origin, note });
   }
-  list(): readonly Assumption[] {
+  list(): Assumption[] {
     return this.records;
   }
   hasPath(path: string): boolean {
@@ -56,64 +63,82 @@ class Assumptions {
   }
 }
 
-function deepFreeze<T>(value: T): T {
-  if (value !== null && typeof value === "object") {
-    for (const v of Object.values(value as Record<string, unknown>)) deepFreeze(v);
-    Object.freeze(value);
-  }
-  return value;
+/** core's `.min(1)` string fields reject "" — coerce empty/absent strings to null. */
+function nonEmptyOrNull(value: string | null | undefined): string | null {
+  if (value === undefined || value === null) return null;
+  const trimmed = value.trim();
+  return trimmed.length > 0 ? trimmed : null;
 }
 
-function normalizeGem(gem: ExtractedGem, path: string, a: Assumptions): Gem {
-  let name = gem.name;
-  if (name === undefined) {
-    name = "Unknown Gem";
-    a.add(`${path}.name`, "defaulted", "gem name absent from source");
-  }
-  return {
-    name,
-    skillId: gem.skillId ?? null,
-    level: gem.level ?? null,
-    quality: gem.quality ?? null,
-  };
-}
-
+/**
+ * Map one extracted gem-group into a core SkillSetup: the first gem is the active
+ * skill (skillGemRef); the rest are support gems (supports). Gem display names are
+ * recorded into the Display Cache collector (RFC-0001 AD-3; rendering only).
+ */
 function normalizeSkillGroup(
   group: ExtractedSkillGroup,
   index: number,
   loadoutPath: string,
   forcedMain: boolean,
   a: Assumptions,
-): SkillGroup {
-  const id = group.id ?? `group-${index + 1}`;
+  names: Record<string, string>,
+): SkillSetup {
+  const setupId = nonEmptyOrNull(group.id) ?? `group-${index + 1}`;
   const path = `${loadoutPath}.skills[${index}]`;
-  const gems = (group.gems ?? []).map((g, gi) => normalizeGem(g, `${path}.gems[${gi}]`, a));
+  const gems = group.gems ?? [];
+
+  const recordName = (gem: ExtractedGem, ref: string | null): void => {
+    const name = nonEmptyOrNull(gem.name);
+    if (ref !== null && name !== null) names[ref] = name;
+  };
+  const refOf = (gem: ExtractedGem, gi: number): string | null => {
+    if (gem.name === undefined) {
+      a.add(`${path}.gems[${gi}].name`, "defaulted", "gem name absent from source");
+    }
+    return nonEmptyOrNull(gem.skillId ?? gem.name);
+  };
+
+  const head = gems[0];
+  const skillGemRef = head !== undefined ? refOf(head, 0) : null;
+  if (head !== undefined) recordName(head, skillGemRef);
+
+  const supports: string[] = [];
+  for (let gi = 1; gi < gems.length; gi += 1) {
+    const gem = gems[gi]!;
+    const ref = refOf(gem, gi);
+    recordName(gem, ref);
+    if (ref !== null) supports.push(ref);
+  }
+
   return {
-    id,
-    isMain: forcedMain,
-    gems,
+    setupId,
+    isMainSkill: forcedMain,
+    skillGemRef,
+    socket: null,
+    supports,
   };
 }
 
-function normalizeItem(item: ExtractedItem, index: number, loadoutPath: string, a: Assumptions): Item {
+function normalizeItem(
+  item: ExtractedItem,
+  index: number,
+  loadoutPath: string,
+  a: Assumptions,
+): EquipmentItem {
   const path = `${loadoutPath}.equipment[${index}]`;
-  const id = item.id ?? `item-${index + 1}`;
   let slot = item.slot;
   if (slot === undefined) {
     slot = "unknown";
     a.add(`${path}.slot`, "defaulted", "equipment slot not resolvable from source");
   }
-  let name = item.name;
-  if (name === undefined) {
-    name = "Unknown Item";
+  if (item.name === undefined) {
     a.add(`${path}.name`, "defaulted", "item name absent from source");
   }
   return {
-    id,
-    slot,
-    name,
-    rarity: item.rarity ?? null,
-    lines: item.lines ?? [],
+    slot: nonEmptyOrNull(slot) ?? "unknown",
+    itemRef: nonEmptyOrNull(item.name),
+    rarity: nonEmptyOrNull(item.rarity),
+    modifiers: [...(item.lines ?? [])],
   };
 }
 
@@ -123,8 +148,9 @@ function normalizeLoadout(
   isPrimary: boolean,
   primaryOriginInferred: boolean,
   a: Assumptions,
+  names: Record<string, string>,
 ): LoadoutContext {
-  const id = loadout.id ?? `loadout-${index + 1}`;
+  const contextId = nonEmptyOrNull(loadout.id) ?? `loadout-${index + 1}`;
   if (loadout.id === undefined) a.add(`loadouts[${index}].id`, "defaulted", "loadout id synthesised");
   const path = `loadouts[${index}]`;
 
@@ -134,7 +160,7 @@ function normalizeLoadout(
 
   // Passive tree.
   const rawNodes = loadout.allocatedNodeIds ?? [];
-  const allocatedNodeIds = [...rawNodes].sort((x, y) => x - y);
+  const allocatedNodes = [...rawNodes].sort((x, y) => x - y);
   if (loadout.allocatedNodeIds === undefined || rawNodes.length === 0) {
     a.add(`${path}.passiveTree.allocatedNodeIds`, "defaulted", "no allocated passive nodes in source");
   } else {
@@ -154,7 +180,14 @@ function normalizeLoadout(
   const explicitMainIdx = rawSkills.findIndex((g) => g.isMain === true);
   const anyMain = explicitMainIdx >= 0;
   const skills = rawSkills.map((g, i) =>
-    normalizeSkillGroup(g, i, path, anyMain ? i === explicitMainIdx : i === 0 && rawSkills.length > 0, a),
+    normalizeSkillGroup(
+      g,
+      i,
+      path,
+      anyMain ? i === explicitMainIdx : i === 0 && rawSkills.length > 0,
+      a,
+      names,
+    ),
   );
   if (loadout.skills === undefined) {
     a.add(`${path}.skills`, "defaulted", "no skills in source");
@@ -164,42 +197,41 @@ function normalizeLoadout(
     a.add(`${path}.skills[${explicitMainIdx}].isMain`, "imported");
   }
 
-  const configuration: Configuration = loadout.configuration ?? {};
-  if (loadout.configuration === undefined) {
-    a.add(`${path}.configuration`, "defaulted", "no calculation configuration in source");
-  } else {
-    a.add(`${path}.configuration`, "imported");
-  }
-
-  const resources: Resources = loadout.resources ?? {};
-  if (loadout.resources === undefined) {
-    a.add(`${path}.resources`, "defaulted", "no resource data in source");
-  } else {
-    a.add(`${path}.resources`, "imported");
-  }
-
   return {
-    id,
-    name: loadout.name ?? null,
+    contextId,
     primary: isPrimary,
-    passiveTree: { allocatedNodeIds },
+    passiveTree: { allocatedNodes, masteryEffects: [] },
     equipment,
     skills,
-    configuration,
-    resources,
   };
 }
 
+/** Lift the primary loadout's calculation configuration to build-state (RFC-0001 §5.3). */
+function normalizeConfiguration(primaryRaw: ExtractedLoadout | undefined, a: Assumptions): ConfigEntry[] {
+  const config = primaryRaw?.configuration;
+  if (config === undefined) {
+    a.add("configuration", "defaulted", "no calculation configuration in source");
+    return [];
+  }
+  a.add("configuration", "imported");
+  return Object.entries(config)
+    .filter(([key]) => key.trim().length > 0)
+    .map(([key, value]) => ({ key, value }));
+}
+
 /**
- * Normalize a Raw Import Artifact into a canonical, immutable BuildSnapshot.
+ * Normalize a Raw Import Artifact into a canonical, immutable BuildSnapshot (core).
  * Throws NormalizeError only on internal contradictions; missing source data is
- * handled by defaulting + declared assumptions, never by throwing.
+ * handled by defaulting + declared assumptions, never by throwing. Identity is
+ * computed by core over build state ONLY (I2) — re-importing the same build is
+ * deterministic on identity.
  */
 export function normalize(artifact: RawImportArtifact, options?: NormalizeOptions): BuildSnapshot {
   if (artifact === null || typeof artifact !== "object") {
     throw new NormalizeError("artifact is not an object");
   }
   const a = new Assumptions();
+  const names: Record<string, string> = {};
   const extracted = artifact.extracted;
 
   // --- Character ---
@@ -224,9 +256,13 @@ export function normalize(artifact: RawImportArtifact, options?: NormalizeOption
   } else {
     a.add("character.level", "imported");
   }
-  const character: Character = { className, ascendancyName, level };
+  const character: Character = {
+    class: nonEmptyOrNull(className) ?? "Unknown",
+    ascendancy: nonEmptyOrNull(ascendancyName),
+    level,
+  };
 
-  // --- Versioning ---
+  // --- Versioning (patch → metadata.patchVersion; I5) ---
   let gamePatch = extracted.gamePatch;
   if (gamePatch === undefined) {
     if (options?.gamePatch !== undefined) {
@@ -248,9 +284,11 @@ export function normalize(artifact: RawImportArtifact, options?: NormalizeOption
   const explicitPrimaryIdx = rawLoadouts.findIndex((l) => l.primary === true);
   const primaryIdx = explicitPrimaryIdx >= 0 ? explicitPrimaryIdx : 0;
   const primaryInferred = explicitPrimaryIdx < 0;
-  const loadouts: LoadoutContext[] = rawLoadouts.map((l, i) =>
-    normalizeLoadout(l, i, i === primaryIdx, primaryInferred && i === primaryIdx, a),
+  const loadoutContexts: LoadoutContext[] = rawLoadouts.map((l, i) =>
+    normalizeLoadout(l, i, i === primaryIdx, primaryInferred && i === primaryIdx, a, names),
   );
+
+  const configuration = normalizeConfiguration(rawLoadouts[primaryIdx], a);
 
   // Fold in any importer-declared gaps not already covered, so nothing is silent.
   for (const gap of artifact.gaps) {
@@ -260,40 +298,38 @@ export function normalize(artifact: RawImportArtifact, options?: NormalizeOption
   }
 
   // --- Snapshot context (identity-excluded parts) ---
+  const reference = nonEmptyOrNull(extracted.provenance?.reference);
+  const attribution = nonEmptyOrNull(extracted.provenance?.attribution);
+  const rawRef = nonEmptyOrNull(artifact.ref);
   const provenance: Provenance = {
     source: artifact.source,
-    rawArtifactRef: artifact.ref,
-    reference: extracted.provenance?.reference ?? null,
-    attribution: extracted.provenance?.attribution ?? null,
+    ...(reference !== null ? { reference } : {}),
     importedAt: artifact.receivedAt,
+    ...(attribution !== null ? { attribution } : {}),
+    ...(rawRef !== null ? { rawImportArtifactId: rawRef } : {}),
   };
+
+  const labels = extracted.metadata?.labels ?? [];
+  const league = nonEmptyOrNull(extracted.metadata?.league);
+  const label = labels.length > 0 ? labels.join(", ") : undefined;
   const metadata: Metadata = {
-    labels: extracted.metadata?.labels ?? [],
-    league: extracted.metadata?.league ?? null,
-  };
-  const mainSkillName = loadouts[primaryIdx]?.skills.find((s) => s.isMain)?.gems[0]?.name;
-  const displayCache = {
-    labels: {
-      className: character.className,
-      ...(character.ascendancyName !== null ? { ascendancy: character.ascendancyName } : {}),
-      ...(mainSkillName !== undefined ? { mainSkill: mainSkillName } : {}),
-    },
-  };
-
-  const versioning = { gamePatch, snapshotFormatVersion: SNAPSHOT_FORMAT_VERSION };
-  const identity = computeIdentity(character, loadouts, versioning);
-
-  const snapshot: BuildSnapshot = {
-    identity,
-    character,
-    loadouts,
-    versioning,
+    patchVersion: nonEmptyOrNull(gamePatch) ?? UNKNOWN_GAME_PATCH,
+    formatVersion: String(SNAPSHOT_FORMAT_VERSION),
     provenance,
-    assumptions: a.list(),
-    metadata,
-    displayCache,
+    ...(label !== undefined ? { label } : {}),
+    ...(league !== null ? { league } : {}),
   };
-  return deepFreeze(snapshot);
+
+  const displayCache: DisplayCache = { names, icons: {} };
+
+  const buildState: BuildState = {
+    character,
+    loadoutContexts,
+    configuration,
+    assumptions: a.list(),
+  };
+
+  return createBuildSnapshot({ buildState, metadata, displayCache });
 }
 
 function defaultLoadout(a: Assumptions): ExtractedLoadout {

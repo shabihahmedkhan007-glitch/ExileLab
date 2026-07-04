@@ -4,9 +4,9 @@
 // choices across sources rank higher (community-validated)"; Phase 3 "community
 // consensus boost").
 
-import type { BuildSnapshot, BuildMutation } from './model.js';
-import type { SnapshotDiff } from './diff.js';
-import { diffSnapshots, changeKey } from './diff.js';
+import type { BuildSnapshot } from "./model.js";
+import type { SnapshotDiff, Candidate } from "./diff.js";
+import { diffSnapshots, changeKey } from "./diff.js";
 
 /** One public build to compare the user's build against. */
 export interface CompareSource {
@@ -33,7 +33,7 @@ export interface ConsensusChange {
   /** How many distinct sources share it. */
   readonly sourceCount: number;
   /** A representative candidate BuildMutation (against the user's snapshot). */
-  readonly candidate: BuildMutation;
+  readonly candidate: Candidate;
   /** True once `sourceCount` meets the consensus threshold. */
   readonly communityValidated: true;
 }
@@ -64,7 +64,7 @@ export function compareMany(
 ): MultiCompareResult {
   const perSource: SourceDiff[] = others.map((source) => ({
     sourceId: source.sourceId,
-    diff: diffSnapshots(user, source.snapshot, source.snapshot.provenance),
+    diff: diffSnapshots(user, source.snapshot, source.snapshot.metadata.provenance),
   }));
 
   // Group candidates by semantic change key, tracking which distinct sources
@@ -73,13 +73,13 @@ export function compareMany(
   interface Bucket {
     readonly changeKey: string;
     readonly sourceIds: Set<string>;
-    candidate: BuildMutation;
+    candidate: Candidate;
   }
   const buckets = new Map<string, Bucket>();
 
   for (const { sourceId, diff } of perSource) {
     for (const cand of diff.candidates) {
-      const op = cand.ops[0];
+      const op = cand.operations[0];
       if (op === undefined) continue;
       const key = changeKey(op);
       let bucket = buckets.get(key);
@@ -107,5 +107,5 @@ export function compareMany(
   // Most-corroborated first; stable tiebreak by changeKey.
   consensus.sort((x, y) => y.sourceCount - x.sourceCount || x.changeKey.localeCompare(y.changeKey));
 
-  return { userId: user.id, perSource, consensus };
+  return { userId: user.identity, perSource, consensus };
 }

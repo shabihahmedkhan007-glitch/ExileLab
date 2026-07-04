@@ -17,7 +17,8 @@ export {
   type SlotStatus,
   type SetupStatus,
   type ConfigStatus,
-} from './diff.js';
+  type Candidate,
+} from "./diff.js";
 
 // Multi-source comparison + consensus.
 export {
@@ -26,23 +27,24 @@ export {
   type SourceDiff,
   type ConsensusChange,
   type MultiCompareResult,
-} from './compare.js';
+} from "./compare.js";
 
-// Canonical model contract this package depends on (local mirror of the future
-// @exilelab/core types — see model.ts). Re-exported so consumers of the diff
-// output can work with candidates and promote them.
+// Canonical model contract — re-exported straight from @exilelab/core (RFC-0001
+// landed). Consumers of the diff output work with candidates and promote them.
 export {
+  createBuildSnapshot,
+  createBuildMutation,
   promoteMutation,
-  computeCanonicalIdentity,
+  computeBuildStateIdentity,
   getPrimaryLoadout,
-  makeSnapshot,
-  MutationBaseMismatchError,
   type BuildSnapshot,
+  type BuildState,
   type BuildMutation,
-  type MutationOp,
+  type MutationOperation,
   type LoadoutContext,
-  type GearItem,
+  type EquipmentItem,
   type SkillSetup,
-  type ConfigValue,
+  type ConfigEntry,
+  type Character,
   type Provenance,
-} from './model.js';
+} from "./model.js";

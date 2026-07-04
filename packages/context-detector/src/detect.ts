@@ -5,7 +5,7 @@
 // primary Archetype, all detected tags, a suggested Goal Preset, per-axis hints,
 // and a human-readable rationale. Deterministic and side-effect-free.
 
-import type { ArchetypeDetection, BuildSnapshot } from './types.js';
+import type { ArchetypeDetection, BuildSnapshot, DetectionInput } from './types.js';
 import { extractFeatures } from './features.js';
 import { ARCHETYPE_RULES, FALLBACK_RULE, type ArchetypeRule } from './rules.js';
 import {
@@ -27,11 +27,11 @@ export interface DetectOptions {
  * earlier-authored rule wins), keeping output stable and reproducible.
  */
 export function detectArchetype(
-  snapshot: BuildSnapshot,
+  input: BuildSnapshot | DetectionInput,
   options: DetectOptions = {},
 ): ArchetypeDetection {
   const table = options.mechanics ?? DEFAULT_SKILL_MECHANICS;
-  const features = extractFeatures(snapshot, table);
+  const features = extractFeatures(input, table);
 
   const matched: ArchetypeRule[] = ARCHETYPE_RULES.filter((rule) =>
     rule.matches(features),

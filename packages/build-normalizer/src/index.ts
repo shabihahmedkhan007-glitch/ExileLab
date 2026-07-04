@@ -2,23 +2,23 @@
 // Importers are the ONLY components that know source formats; the normalizer owns
 // canonicalization and declares every assumption. No network calls, ever.
 
-// Canonical model (long-term home is @exilelab/core; re-exported here until it lands).
+// Canonical model — re-exported straight from @exilelab/core (RFC-0001 landed).
+// The normalizer emits core's BuildSnapshot natively; there is no local mirror.
 export type {
   AssumptionOrigin,
   Assumption,
   BuildSource,
   Character,
-  PassiveTree,
-  Item,
-  Gem,
-  SkillGroup,
-  Configuration,
-  Resources,
+  PassiveTreeAllocation,
+  MasteryEffect,
+  EquipmentItem,
+  SkillSetup,
+  ConfigEntry,
   LoadoutContext,
-  Versioning,
   Provenance,
   DisplayCache,
   Metadata,
+  BuildState,
   BuildSnapshot,
 } from "./model.js";
 
@@ -64,5 +64,6 @@ export {
   type NormalizeOptions,
 } from "./normalizer.js";
 
-// Identity (canonicalization).
-export { computeIdentity } from "./identity.js";
+// Canonical Identity + canonicalization now live in @exilelab/core (RFC-0001 I2).
+// Re-exported so importers/tools that need the identity function have one home.
+export { computeBuildStateIdentity, createBuildSnapshot } from "@exilelab/core";

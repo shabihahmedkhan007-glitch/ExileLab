@@ -9,6 +9,7 @@ import {
   minionSnapshot,
   plainCasterSnapshot,
   twisterSnapshot,
+  twisterWithDecoyFirst,
 } from './test-fixtures.js';
 
 describe('detectArchetype — Twister attack-as-movement', () => {
@@ -138,14 +139,9 @@ describe('detectArchetype — degenerate input', () => {
   });
 
   it('respects the primary loadout, not merely the first, when detecting', () => {
-    const snapshot = twisterSnapshot();
-    // Add a non-primary decoy loadout at the front; detection must ignore it.
-    snapshot.loadouts.unshift({
-      id: 'decoy',
-      isPrimary: false,
-      skills: [{ skillId: 'fireball', isMainSkill: true }],
-    });
-    const result = detectArchetype(snapshot);
+    // A non-primary decoy loadout sits at the front; detection must ignore it and
+    // classify off the (second) PRIMARY Loadout Context (RFC-0001 AD-5).
+    const result = detectArchetype(twisterWithDecoyFirst());
     expect(result.archetype).toBe('attack-as-movement');
   });
 
