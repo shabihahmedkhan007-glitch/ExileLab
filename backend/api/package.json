@@ -19,13 +19,15 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@exilelab/core": "workspace:*",
     "@exilelab/build-normalizer": "workspace:*",
     "@exilelab/context-detector": "workspace:*",
+    "@exilelab/core": "workspace:*",
+    "@exilelab/engine-adapter": "workspace:*",
     "@exilelab/preference-engine": "workspace:*",
     "@exilelab/rulebook": "workspace:*",
-    "@exilelab/engine-adapter": "workspace:*",
     "@fastify/cors": "^10",
-    "fastify": "^5"
+    "@types/pg": "^8.20.0",
+    "fastify": "^5",
+    "pg": "^8.22.0"
   }
 }

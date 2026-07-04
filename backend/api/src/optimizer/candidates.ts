@@ -59,9 +59,18 @@ export function generateCandidates(base: CoreSnapshot): Candidate[] {
     );
   }
 
-  // Glass-cannon body-armour swap: big damage, "reduced maximum Life" tanks EHP —
-  // exercises the belowFloor cut under survivability-floored presets.
+  // Glass-cannon swap: a big-damage chest, paid for by respeccing defensive
+  // passives into it — exercises the belowFloor cut under survivability-floored
+  // presets. NOTE (v0 engine model): the engine-adapter MockEngine derives EHP
+  // from allocated defensive nodes + equipped gear, and does NOT parse per-mod
+  // strings like "60% reduced maximum Life". So the survivability sacrifice is
+  // expressed STRUCTURALLY — the offensive chest plus deallocating a cluster of
+  // defensive passives — which the mock reflects as a genuine EHP drop below the
+  // hardcore floor. When the real PoB2 sidecar lands (engine-adapter, ADR-001) the
+  // life-reduction mod is parsed directly and this structural stand-in is no longer
+  // needed. The respecced nodes are drawn from the build's own allocated set.
   const bodySlot = primary.equipment.find((e) => /body|chest|armour/i.test(e.slot));
+  const defensiveRespec = primary.passiveTree.allocatedNodes.slice(0, 5);
   candidates.push(
     makeCandidate(
       base.identity,
@@ -79,6 +88,13 @@ export function generateCandidates(base: CoreSnapshot): Candidate[] {
             ],
           },
         },
+        ...defensiveRespec.map(
+          (nodeId): MutationOperation => ({
+            kind: "deallocatePassiveNode",
+            loadoutContextId,
+            nodeId,
+          }),
+        ),
       ],
       "Swap to a glass-cannon chest — large damage gain, but it cuts your Life.",
       3,

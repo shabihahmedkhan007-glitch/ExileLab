@@ -1,0 +1,34 @@
+# Local Postgres 17 for ExileLab OLTP (PRD §9.2). Runnable on ANY Docker host.
+#
+# This machine has NO Docker, so the integration leg of the store test suite is
+# skipped here (describe.skipIf(!process.env.DATABASE_URL)). On a Docker host:
+#
+#   docker compose -f backend/api/docker-compose.db.yml up -d
+#   export DATABASE_URL=postgres://exilelab:exilelab@localhost:5433/exilelab
+#   pnpm --filter @exilelab/api test        # integration suite now runs
+#
+# Port 5433 on the host avoids clashing with a system Postgres on 5432. The
+# schema is applied automatically by the app/tests via ensureSchema(); it is also
+# mounted read-only into the container's init dir for a fresh volume so a manual
+# `psql` session sees the tables too.
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: exilelab-postgres
+    environment:
+      POSTGRES_USER: exilelab
+      POSTGRES_PASSWORD: exilelab
+      POSTGRES_DB: exilelab
+    ports:
+      - "5433:5432"
+    volumes:
+      - exilelab-pgdata:/var/lib/postgresql/data
+      - ./sql/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U exilelab -d exilelab"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  exilelab-pgdata:

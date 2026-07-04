@@ -11,6 +11,7 @@
 import { detectSource, normalize } from "@exilelab/build-normalizer";
 import { promoteMutation } from "@exilelab/core";
 import type {
+  BuildMutation,
   BuildSnapshot as CoreSnapshot,
   CalculationResult,
 } from "@exilelab/core";
@@ -30,14 +31,21 @@ import type {
 import { runDoctor } from "@exilelab/rulebook";
 import type { DoctorReport, Goal } from "@exilelab/rulebook";
 
-import { toCoreSnapshot } from "./domain/snapshot-adapter.js";
-import { toDetectorSnapshot } from "./domain/context-adapter.js";
+// The calculation engine lives in EXACTLY ONE place: @exilelab/engine-adapter.
+// Swapping the deterministic MockEngine for the real PoB2 LuaJIT sidecar happens
+// there and only there (ADR-001) — behind the same EngineAdapter seam this service
+// depends on. The backend never re-implements engine math; it consumes the
+// adapter's Calculation Results and translates them (engine/outputs.ts) into the
+// Preference-Engine and Doctor slices its downstream consumers want.
 import {
-  ENGINE_VERSION,
   MockEngine,
-  toCalculationResult,
-} from "./engine/mock-engine.js";
-import type { EngineAdapter, Measurement } from "./engine/mock-engine.js";
+  withCache,
+  InMemoryCalculationResultStore,
+  serializeResultKey,
+} from "@exilelab/engine-adapter";
+import type { EngineAdapter } from "@exilelab/engine-adapter";
+import { toMeasurement, toStoredResult } from "./engine/outputs.js";
+import type { Measurement } from "./engine/outputs.js";
 import { generateCandidates } from "./optimizer/candidates.js";
 import type { Repositories } from "./store/repositories.js";
 import { createInMemoryRepositories } from "./store/repositories.js";
@@ -176,13 +184,19 @@ export class ExileLabService {
 
   constructor(
     private readonly repos: Repositories = createInMemoryRepositories(),
-    private readonly engine: EngineAdapter = new MockEngine(),
+    // The engine seam: the package MockEngine wrapped in the package's caching
+    // adapter over an in-memory Result store (RFC-0001 AD-2/AD-7). Real sidecar
+    // swaps in HERE-EQUIVALENT wiring inside the engine-adapter package (ADR-001).
+    private readonly engine: EngineAdapter = withCache(
+      new MockEngine(),
+      new InMemoryCalculationResultStore(),
+    ),
   ) {}
 
   // -- Import ---------------------------------------------------------------
 
   /** POST /import: detect → import → normalize → store a canonical snapshot. */
-  importBuild(input: string): ImportResponse {
+  async importBuild(input: string): Promise<ImportResponse> {
     if (typeof input !== "string" || input.trim().length === 0) {
       throw new HttpError(400, "input must be a non-empty string");
     }
@@ -196,13 +210,15 @@ export class ExileLabService {
     let core: CoreSnapshot;
     try {
       const raw = importer.import(input);
-      const normalized = normalize(raw);
-      core = toCoreSnapshot(normalized);
+      // The normalizer now emits core's canonical BuildSnapshot directly — no
+      // bridging adapter. Identity is core's Canonical Identity (RFC-0001 I2),
+      // so re-importing the same build is idempotent on buildId.
+      core = normalize(raw);
     } catch (err) {
       throw new HttpError(422, `import failed: ${(err as Error).message}`);
     }
-    const buildId = this.repos.builds.save(core);
-    this.measureAndStore(core); // base Calculation Result
+    const buildId = await this.repos.builds.save(core);
+    await this.measureAndStore(core); // base Calculation Result
 
     return {
       buildId,
@@ -217,11 +233,11 @@ export class ExileLabService {
   // -- Read -----------------------------------------------------------------
 
   /** GET /builds/:id: snapshot + latest Calculation Result + archetype. */
-  getBuild(buildId: string): BuildDetailResponse {
-    const core = this.requireBuild(buildId);
-    let calculation = this.repos.calculations.latestForBuild(buildId);
+  async getBuild(buildId: string): Promise<BuildDetailResponse> {
+    const core = await this.requireBuild(buildId);
+    let calculation = await this.repos.calculations.latestForBuild(buildId);
     if (calculation === undefined) {
-      calculation = this.measureAndStore(core).result;
+      calculation = (await this.measureAndStore(core)).result;
     }
     return {
       summary: this.summarize(core),
@@ -236,11 +252,11 @@ export class ExileLabService {
   // -- Tune -----------------------------------------------------------------
 
   /** POST /builds/:id/tune: score candidate mutations under the player's goal. */
-  tuneBuild(buildId: string, request: TuneRequest): TuneResponse {
-    const base = this.requireBuild(buildId);
+  async tuneBuild(buildId: string, request: TuneRequest): Promise<TuneResponse> {
+    const base = await this.requireBuild(buildId);
     const { weights, constraints, presetId, kind } = this.resolveWeights(request);
 
-    const baseMeasure = this.measure(base);
+    const baseMeasure = (await this.measure(base)).measurement;
     const baseScore = scoreBuild(baseMeasure.preference, weights, constraints)
       .weightedScore;
 
@@ -248,12 +264,11 @@ export class ExileLabService {
     const belowFloor: CutRecommendation[] = [];
 
     for (const candidate of generateCandidates(base)) {
-      this.repos.mutations.save(candidate.mutation); // so /promote can find it
-      const promoted = promoteMutation(base, candidate.mutation);
-      const candMeasure = this.measureAndStore(
-        promoted,
-        candidate.mutation.mutationId,
-        base.identity,
+      await this.repos.mutations.save(candidate.mutation); // so /promote can find it
+      // The adapter promotes the mutation internally and keys the Result by
+      // (base.identity, mutationId) per AD-7 — no manual promotion needed here.
+      const candMeasure = (
+        await this.measureAndStore(base, candidate.mutation)
       ).measurement;
 
       const candidateMetrics = {
@@ -307,7 +322,7 @@ export class ExileLabService {
       buildId,
       applied: { presetId, kind },
       baseScore,
-      engineVersion: this.engine.version,
+      engineVersion: this.engine.engineVersion,
       recommendations,
       belowFloor,
     };
@@ -316,12 +331,12 @@ export class ExileLabService {
   // -- Promote --------------------------------------------------------------
 
   /** POST /builds/:id/promote: apply a mutation → a NEW snapshot (old untouched). */
-  promote(buildId: string, mutationId: string): PromoteResponse {
-    const base = this.requireBuild(buildId);
+  async promote(buildId: string, mutationId: string): Promise<PromoteResponse> {
+    const base = await this.requireBuild(buildId);
     if (typeof mutationId !== "string" || mutationId.length === 0) {
       throw new HttpError(400, "mutationId is required");
     }
-    const mutation = this.repos.mutations.get(mutationId);
+    const mutation = await this.repos.mutations.get(mutationId);
     if (mutation === undefined) {
       throw new HttpError(404, `no mutation with id ${mutationId}`);
     }
@@ -332,8 +347,8 @@ export class ExileLabService {
       );
     }
     const promoted = promoteMutation(base, mutation);
-    const newBuildId = this.repos.builds.save(promoted);
-    this.measureAndStore(promoted);
+    const newBuildId = await this.repos.builds.save(promoted);
+    await this.measureAndStore(promoted);
 
     return {
       previousBuildId: buildId,
@@ -347,8 +362,8 @@ export class ExileLabService {
   // -- Doctor ---------------------------------------------------------------
 
   /** GET /builds/:id/doctor: goal-aware Doctor Report over the engine outputs. */
-  doctor(buildId: string, goalRaw: string, tierRaw?: string): DoctorReport {
-    const base = this.requireBuild(buildId);
+  async doctor(buildId: string, goalRaw: string, tierRaw?: string): Promise<DoctorReport> {
+    const base = await this.requireBuild(buildId);
     const goal = goalRaw as Goal;
     if (!VALID_GOALS.has(goal)) {
       throw new HttpError(
@@ -364,7 +379,7 @@ export class ExileLabService {
       }
       tier = Math.floor(parsed);
     }
-    const measure = this.measure(base);
+    const measure = (await this.measure(base)).measurement;
     return runDoctor(measure.doctor, goal, tier);
   }
 
@@ -375,51 +390,50 @@ export class ExileLabService {
 
   // -- Internals ------------------------------------------------------------
 
-  private requireBuild(buildId: string): CoreSnapshot {
-    const core = this.repos.builds.get(buildId);
+  private async requireBuild(buildId: string): Promise<CoreSnapshot> {
+    const core = await this.repos.builds.get(buildId);
     if (core === undefined) {
       throw new HttpError(404, `no build with id ${buildId}`);
     }
     return core;
   }
 
-  /** Deterministic, cached measurement (dedup by the measured snapshot identity). */
-  private measure(snapshot: CoreSnapshot): Measurement {
-    const cached = this.measurements.get(snapshot.identity);
-    if (cached !== undefined) return cached;
-    const m = this.engine.measure(snapshot);
-    this.measurements.set(snapshot.identity, m);
-    return m;
+  /**
+   * Deterministic, cached measurement. Delegates the actual calculation to the
+   * engine-adapter (the sole calculator, ADR-001) and translates its Calculation
+   * Result into the two consumer slices (engine/outputs.ts). A candidate is passed
+   * as `(base, mutation)`; the adapter promotes it internally and keys the Result
+   * by (base.identity, mutationId) per AD-7. Dedup is by the Result's canonical key.
+   */
+  private async measure(
+    snapshot: CoreSnapshot,
+    mutation?: BuildMutation,
+  ): Promise<{ measurement: Measurement; result: CalculationResult }> {
+    const result = await this.engine.calculate(snapshot, mutation);
+    const cacheKey = serializeResultKey(result.key);
+    let measurement = this.measurements.get(cacheKey);
+    if (measurement === undefined) {
+      measurement = toMeasurement(result);
+      this.measurements.set(cacheKey, measurement);
+    }
+    return { measurement, result };
   }
 
   /**
-   * Measure and persist the Calculation Result artifact. `resultSnapshotId`
-   * (defaulting to the measured snapshot) is the artifact's key subject; a
-   * candidate keys the result by (baseSnapshotId, mutationId) per AD-7.
+   * Measure and persist the stored Calculation Result artifact (its metrics are
+   * the mapped `EngineMetrics` surface the API exposes — a pure projection of the
+   * adapter's Result, not a recalculation). Keyed by the adapter's canonical key.
    */
-  private measureAndStore(
+  private async measureAndStore(
     snapshot: CoreSnapshot,
-    mutationId?: string,
-    resultSnapshotId?: string,
-  ): { measurement: Measurement; result: CalculationResult } {
-    const measurement = this.measure(snapshot);
-    const subjectId = resultSnapshotId ?? snapshot.identity;
-    const key = {
-      snapshotId: subjectId,
-      ...(mutationId !== undefined ? { mutationId } : {}),
-      engineVersion: this.engine.version,
-    };
-    let result = this.repos.calculations.get(key);
-    if (result === undefined) {
-      result = toCalculationResult(
-        subjectId,
-        measurement,
-        this.engine.version,
-        mutationId,
-      );
-      this.repos.calculations.save(result);
+    mutation?: BuildMutation,
+  ): Promise<{ measurement: Measurement; result: CalculationResult }> {
+    const { measurement, result } = await this.measure(snapshot, mutation);
+    const stored = toStoredResult(result, measurement, result.key);
+    if ((await this.repos.calculations.get(result.key)) === undefined) {
+      await this.repos.calculations.save(stored);
     }
-    return { measurement, result };
+    return { measurement, result: stored };
   }
 
   private resolveWeights(request: TuneRequest): {
@@ -514,6 +528,10 @@ export class ExileLabService {
   }
 
   private archetype(core: CoreSnapshot): ArchetypeDetection {
-    return detectArchetype(toDetectorSnapshot(core));
+    // The Context Detector consumes core's BuildSnapshot natively (it is
+    // source-blind and reads build state + Display Cache). Engine-derived
+    // defensive/resource magnitudes (RFC-0001 AD-7) are not available here, so
+    // detection keys off skill mechanics — sufficient for the launch rules table.
+    return detectArchetype(core);
   }
 }

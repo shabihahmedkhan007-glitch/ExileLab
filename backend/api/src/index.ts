@@ -25,21 +25,53 @@ export {
   InMemoryBuildRepository,
   InMemoryCalculationResultRepository,
   InMemoryMutationRepository,
+  InMemoryRawImportArtifactRepository,
 } from "./store/repositories.js";
 export type {
   BuildRepository,
   CalculationResultRepository,
   MutationRepository,
+  RawImportArtifactRepository,
   Repositories,
 } from "./store/repositories.js";
 
-export { MockEngine, ENGINE_VERSION } from "./engine/mock-engine.js";
-export type { EngineAdapter, Measurement } from "./engine/mock-engine.js";
+// Postgres persistence (Open Task 11) — selected at runtime by DATABASE_URL via
+// `repositoriesFromEnv`; the in-memory bundle above stays the default.
+export {
+  PostgresBuildRepository,
+  PostgresCalculationResultRepository,
+  PostgresMutationRepository,
+  PostgresRawImportArtifactRepository,
+  createPostgresRepositories,
+  repositoriesFromEnv,
+  repositoriesOver,
+  ensureSchema,
+  pgQueryable,
+} from "./store/postgres-repositories.js";
+export type {
+  PostgresRepositories,
+  Queryable,
+  QueryResultLike,
+} from "./store/postgres-repositories.js";
+
+// The engine is the engine-adapter package's — swapping mock→real PoB2 happens
+// there and only there (ADR-001). The backend's contribution is the small
+// Calculation-Result → consumer-slice translation in engine/outputs.ts.
+export { MockEngine, MOCK_ENGINE_VERSION } from "@exilelab/engine-adapter";
+export type { EngineAdapter } from "@exilelab/engine-adapter";
+export {
+  toEngineMetrics,
+  toEngineOutputs,
+  toMeasurement,
+} from "./engine/outputs.js";
+export type { Measurement } from "./engine/outputs.js";
 
 export { generateCandidates } from "./optimizer/candidates.js";
 export type { Candidate } from "./optimizer/candidates.js";
 
-export { toCoreSnapshot } from "./domain/snapshot-adapter.js";
-export { toDetectorSnapshot } from "./domain/context-adapter.js";
+// The build-normalizer emits core's canonical BuildSnapshot directly and the
+// Context Detector consumes it natively (RFC-0001 landed), so the former bridging
+// adapters (snapshot-adapter / context-adapter) are gone — the import route is
+// importAny → normalize → core BuildSnapshot with no translation seam.
 
 export { TWISTER_HUNTRESS, twisterHuntressJson } from "./fixtures.js";

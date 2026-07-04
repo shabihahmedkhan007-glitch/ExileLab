@@ -12,6 +12,7 @@ import cors from "@fastify/cors";
 
 import { ExileLabService, HttpError } from "./services.js";
 import type { TuneRequest } from "./services.js";
+import { repositoriesFromEnv } from "./store/postgres-repositories.js";
 
 export interface BuildAppOptions {
   /** Inject a service (e.g. with seeded repositories) for tests. */
@@ -25,7 +26,11 @@ export interface BuildAppOptions {
 export async function buildApp(
   options: BuildAppOptions = {},
 ): Promise<FastifyInstance> {
-  const service = options.service ?? new ExileLabService();
+  // Repository selection by env (Open Task 11 §3): DATABASE_URL set → Postgres
+  // (schema applied on connect); otherwise the in-memory default. Tests run with
+  // DATABASE_URL unset and never touch a database. An injected service wins.
+  const service =
+    options.service ?? new ExileLabService(await repositoriesFromEnv());
   const app = Fastify({ logger: options.logger ?? false });
 
   await app.register(cors, {
@@ -56,7 +61,7 @@ export async function buildApp(
     if (typeof input !== "string") {
       throw new HttpError(400, "body must be { input: string }");
     }
-    const result = service.importBuild(input);
+    const result = await service.importBuild(input);
     return reply.status(201).send(result);
   });
 
@@ -81,7 +86,7 @@ export async function buildApp(
       if (typeof mutationId !== "string") {
         throw new HttpError(400, "body must be { mutationId: string }");
       }
-      const result = service.promote(request.params.id, mutationId);
+      const result = await service.promote(request.params.id, mutationId);
       return reply.status(201).send(result);
     },
   );
