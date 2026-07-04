@@ -87,3 +87,25 @@ Consequences:
 - No build hosting, creator marketplace, or ranked browsing; the aggregation service and normalizer become core infrastructure instead.
 - Objective-function quality (the preference score) becomes the #1 product risk.
 - Positioning, PRD, plans, and UX are all derived from this pivot; `PRODUCT_PLAN.md` is at v2 accordingly.
+
+---
+
+## ADR-004 — Canonical Build Model: BuildSnapshot (RFC-0001)
+
+Date: 2026-07-04
+
+Status: Accepted
+
+Context:
+ExileLab imports builds from many sources (PoB codes, Maxroll, Mobalytics, poe.ninja, GGG API) and feeds many consumers (engine, Context Detector, Preference Engine, Comparator, Upgrade Planner, Doctor, Coach). Without one canonical representation this is an N×M integration problem, and the path of least resistance — adopting Path of Building's document format as the internal language — would permanently couple the core to a third-party format. Full rationale, alternatives, and risks: `rfcs/0001-canonical-build-model.md` (Accepted 2026-07-04; discussion resolved same day).
+
+Decision:
+Adopt **BuildSnapshot** as the single canonical, normalized, source-independent representation of build state — the system's narrow waist. Key rulings (AD-1…AD-7 of the RFC): BuildSnapshot owns the canonical-representation name and Build Genome stays reserved for a future derived abstraction; snapshots are immutable, with change modeled as BuildMutation deltas promoted to new snapshots on acceptance; game data is referenced by ID + patch with a minimal identity-excluded Display Cache; raw payloads are importer artifacts with time-boxed retention, never part of the snapshot; multiple Loadout Contexts are modeled from day one; the model is ExileLab's own ("A-lite"), independent of PoB's format, with a conformance-tested adapter at the engine boundary; snapshots hold normalized build state only — calculated and derived values are separate downstream artifacts. Invariants I1–I7 apply, including the admission rule (I7): every element must be justified by a named downstream consumer requirement.
+
+Consequences:
+- All importers converge on one output; all consumers are source-blind by construction (attribution reads Provenance only).
+- ExileLab commits to retaining per-patch game data for as long as referencing snapshots must remain interpretable.
+- Re-normalization is guaranteed only within the raw-retention window (~90-day working default); older snapshots require re-fetching (accepted residual risk).
+- A permanent, conformance-tested translation adapter exists at the engine boundary; PoB payloads circulate only inside disposable Phase 0 spikes.
+- Deterministic identity discipline (canonicalization) becomes a first-class normalizer responsibility; every downstream cache keys off snapshot identity.
+- GLOSSARY reconciled and extended (BuildSnapshot, Build Genome, BuildMutation, Raw Import Artifact, Calculation Result, Loadout Context, Display Cache).

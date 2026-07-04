@@ -12,11 +12,11 @@
 
 ## Current Objective
 
-Begin Phase 0 work: RFC-0001 — Canonical Build Model (BuildSnapshot), alongside S4 (GGG OAuth draft) and S1 (engine benchmark). **Documentation is frozen as of 2026-07-04** — changes only via the WORKFLOW.md lifecycle (RFC → review → docs) from here on.
+**RFC-0001 is Accepted and its documentation impact is applied.** Next milestone: **Phase 0 validation spikes** — S4 (GGG OAuth application, longest lead) and S1 (engine benchmark GO/NO-GO) first, per PRODUCT_PLAN Phase 0. Documentation changes continue to flow only through the WORKFLOW.md lifecycle.
 
 ## Current RFC
 
-**RFC-0001 — Canonical Build Model (BuildSnapshot): drafted, In Review.** Draft at `rfcs/0001-canonical-build-model.md` (13 sections; decisions AD-1…AD-7; invariants I1–I7; consumer contract; two implementation-stage open questions OQ-1/OQ-2). Revised in review per founder directive: **I7 admission rule** — every element of the model must be justified by a named downstream consumer requirement; no convenience data (§5.3 category justifications added; Display Cache survives under a narrow multi-renderer justification). Incorporates all resolved discussion answers: Q1 BuildSnapshot wins the canonical name (Genome stays reserved/derived); Q2 mutations as base+delta with promotion on adoption; Q3 hybrid game-data strategy (ID+patch references authoritative, display cache excluded from hash); Q4 time-boxed raw-payload retention (~90-day working default); Q5 multi-loadout modeled from day one. Awaiting founder review → Accept/Reject. (S7, the PRD v2 revision, does **not** need an RFC — it applies the already-accepted ADR-003 pivot to a lagging document.)
+None in flight. **RFC-0001 — Canonical Build Model (BuildSnapshot): ACCEPTED (founder, 2026-07-04)** — `rfcs/0001-canonical-build-model.md`. Documentation impact pass applied same day: GLOSSARY reconciled (BuildSnapshot canonical; Build Genome reserved/derived) + 5 new terms (BuildMutation, Raw Import Artifact, Calculation Result, Loadout Context, Display Cache); ADR-004 appended; TECH_ARCHITECTURE System Components + Data Flow populated (first real content); PRODUCT_PRD/PLAN verified, no changes needed. Future RFC seams left by 0001: BuildMutation semantics, Build Genome, Patch Adaptation, Canonical Build dedup. (S7, the PRD v2 revision, does **not** need an RFC — it applies the already-accepted ADR-003 pivot to a lagging document.)
 
 ## Completed Work
 
@@ -33,16 +33,16 @@ Begin Phase 0 work: RFC-0001 — Canonical Build Model (BuildSnapshot), alongsid
 
 ## Open Tasks
 
-1. RFC-0001 — Canonical Build Model (BuildSnapshot): **drafted, In Review** → founder review → on acceptance, apply §13 Documentation Impact in one pass (GLOSSARY reconciliation + new terms, ADR-004, TECH_ARCHITECTURE System Components/Data Flow, status update).
-2. S4 — draft & submit GGG OAuth application (longest external lead time).
-3. S1 — engine benchmark spike (GO/NO-GO gate: median full calc <500ms, misc <50ms).
-4. Collect fixtures: 3 benchmark builds, 20-character import corpus, 1 archetype in 3 source versions (incl. a Twister Huntress).
-5. S2 — zlib shim + share-code round-trip (byte parity on 10 pobb.in codes).
-6. S5 — preference-engine vertical slice + scoring design note.
-7. S3 — import heuristics (gate ≥90% sane FullDPS).
-8. S6 — aggregation feasibility (3-source normalize + diff demo).
-9. S7 — PRD v2 revision + founder sign-off (also covers PRD pillar-numbering cosmetics).
-10. Decide: is an execution-level work-breakdown doc (BUILD-PLAN) needed for Phase 0, or does PRODUCT_PLAN.md suffice? (Requested pre-reorg, never written.)
+1. S4 — draft & submit GGG OAuth application (longest external lead time).
+2. S1 — engine benchmark spike (GO/NO-GO gate: median full calc <500ms, misc <50ms).
+3. Collect fixtures: 3 benchmark builds, 20-character import corpus, 1 archetype in 3 source versions (incl. a Twister Huntress).
+4. S2 — zlib shim + share-code round-trip (byte parity on 10 pobb.in codes).
+5. S5 — preference-engine vertical slice + scoring design note.
+6. S3 — import heuristics (gate ≥90% sane FullDPS).
+7. S6 — aggregation feasibility (3-source normalize + diff demo).
+8. S7 — PRD v2 revision + founder sign-off (also covers PRD pillar-numbering cosmetics).
+9. Decide: is an execution-level work-breakdown doc (BUILD-PLAN) needed for Phase 0, or does PRODUCT_PLAN.md suffice? (Requested pre-reorg, never written.)
+10. Future RFCs when their phase needs them: BuildMutation semantics (before Optimizer core, Phase 2); Build Genome (Phase 3); Patch Adaptation (post-ExileCon); Canonical Build dedup (Phase 3).
 
 ## Known Risks
 
@@ -54,16 +54,19 @@ Top of the register (full table in `PRODUCT_PLAN.md` → Risks): objective-funct
 
 ## Next Recommended Task
 
-**Founder reviews RFC-0001** (`rfcs/0001-canonical-build-model.md`) → Accept or Reject. On acceptance: apply the §13 Documentation Impact pass. S4 (OAuth draft) can proceed in parallel — it has the longest external lead time.
+**S4 — draft the GGG OAuth application** (Open Task 1; longest external lead time, start immediately), then **S1 — engine benchmark spike** (Open Task 2; the architecture's GO/NO-GO gate). Both are Phase 0 spikes from PRODUCT_PLAN; neither requires an RFC (they are Research/Prototype-stage work).
 
 ## Recent Decisions
 
+- **ADR-004 — Canonical Build Model: BuildSnapshot (RFC-0001)** (2026-07-04): immutable source-independent canonical representation; BuildMutation base+delta; hybrid game-data referencing with identity-excluded Display Cache; time-boxed raw retention; multi-loadout day one; model independent of PoB format; I7 admission rule.
 - ADR-001 — PoB2 engine headless, unmodified, pinned submodule (2026-07-03).
 - ADR-002 — Full legal & ToS compliance; official APIs only (2026-07-03).
 - ADR-003 — Pivot: optimization layer, not standalone ecosystem; Build Market deleted (2026-07-03).
 - Process (2026-07-04, this doc + WORKFLOW.md): repository is the source of truth; assistant memory stays minimal; teaching/mentor style is session-scoped, never persisted.
 
 ## Last Session Summary
+
+**2026-07-04 (RFC-0001 accepted + docs pass):** Founder accepted RFC-0001 (with the I7 admission rule added during review). Executed the §13 documentation impact pass in one sweep: GLOSSARY — BuildSnapshot takes the canonical definition, Build Genome re-scoped to reserved/derived, Aggregation Engine entry corrected ("normalizes into BuildSnapshots"), five new terms added; DECISIONS — ADR-004 appended; TECH_ARCHITECTURE — System Components and Data Flow populated from RFC-0001 §5.2 (first real content); PRODUCT_PRD/PLAN verified consistent, unchanged. Next milestone recorded: Phase 0 spikes (S4 OAuth first, S1 benchmark GO/NO-GO). No implementation.
 
 **2026-07-04 (RFC-0001 Discussion):** Wrote the Discussion-stage document for RFC-0001 (`rfcs/0001-canonical-build-model.discussion.md`): BuildSnapshot as the system's immutable "narrow waist"; boundaries (no preferences/calc results/prices/guide content); invariants refined (honest fidelity over strict completeness; game-patch + format versioning; deterministic identity); category inventory (Configuration, Assumptions, Provenance first-class); pipeline recommendation raw→snapshot→calc→derived (normalized-only snapshot, Option A); "A-lite" independent-model recommendation vs PoB-format coupling; 8 risks; 5 open questions (Q1–Q5) awaiting founder answers before the RFC draft. No RFC created, no code — architecture discussion only.
 

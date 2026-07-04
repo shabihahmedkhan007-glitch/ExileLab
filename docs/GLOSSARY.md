@@ -6,11 +6,26 @@ Terms marked *(reserved)* are named here to prevent naming drift but are not yet
 
 ---
 
-**Build Snapshot**
-An immutable, imported copy of a build at a point in time — source (PoB code, platform link, or OAuth character), patch version, and the full normalized build data. All calculations, reports, and diffs reference a specific snapshot. A re-import creates a new snapshot; it never mutates an old one.
+**BuildSnapshot** *(canonical spelling; defined by RFC-0001)*
+The immutable, normalized, source-independent representation of one build's complete state at one moment, on one game patch — ExileLab's canonical internal language. Every importer produces BuildSnapshots; every downstream system consumes them; none may talk to external platforms directly. Carries a deterministic Canonical Identity computed over its build state only (Metadata and Display Cache excluded). A re-import or an accepted BuildMutation creates a *new* snapshot; nothing ever mutates an old one. Contains one or more Loadout Contexts. Full contract: invariants I1–I7 and the consumer guarantees in RFC-0001.
 
 **Build Genome** *(reserved)*
-The normalized, source-agnostic structured representation of a build (tree allocation, items, gems/links, config) that every import — regardless of origin platform — is converted into. The Build Normalizer produces it; everything downstream consumes it.
+Reserved for a future *derived* abstraction — the comparison-oriented "essence" of a build for archetype matching and similarity at aggregation scale. Whenever it exists, it is computed **from** BuildSnapshots and is never the canonical representation itself (RFC-0001, AD-1). Scoped by a future RFC; do not use this term for normalized build data.
+
+**BuildMutation**
+A lightweight, immutable delta referencing a base BuildSnapshot, describing one candidate change — the optimizer's working unit (thousands may exist per optimization run). An accepted mutation is **promoted**: applied to its base to produce a new BuildSnapshot. Defined at architecture level in RFC-0001 (AD-2); detailed semantics deferred to a future RFC.
+
+**Raw Import Artifact**
+The original payload an importer fetched or received from an external source. An importer-owned artifact with time-boxed retention (RFC-0001, AD-4), linked from a snapshot's Provenance for re-normalization and debugging. Never part of a BuildSnapshot, never consumed downstream, never redistributed.
+
+**Calculation Result**
+Engine output for a (BuildSnapshot — optionally plus a BuildMutation — × engine version) pair. A separate immutable artifact keyed by those identities; never embedded in a snapshot (RFC-0001, AD-7).
+
+**Loadout Context**
+One coherent equipment-and-tree configuration within a build (PoE2 weapon sets with per-set passive points). A BuildSnapshot supports multiple Loadout Contexts from day one, with one designated primary (RFC-0001, AD-5); consumers must not assume exactly one exists.
+
+**Display Cache**
+Minimal denormalized rendering data (names/icons-level) carried by a BuildSnapshot so UI surfaces — including statically-rendered shared reports — can render historical snapshots without a historical-game-data lookup. Strictly rendering-only: excluded from Canonical Identity, never a source of semantic truth, capped at what renderers need (RFC-0001, AD-3 + I7 note).
 
 **Canonical Build**
 The deduplicated representative of one archetype variant within the aggregation dataset — when many public builds are near-identical copies of the same guide/ladder build, the Aggregation Engine collapses them into one Canonical Build (with attribution) used for comparison and percentile statistics.
@@ -43,7 +58,7 @@ The Character Doctor's output: a severity-sorted, goal-aware diagnosis of a buil
 The product's single LLM-narration persona and the only channel through which generated text reaches the user (always inside the labeled AI callout). The Build Coach explains deterministic findings; it never produces a number, item name, or node name that isn't in the structured results it narrates.
 
 **Aggregation Engine**
-(Formerly "Build Aggregation Service" — standardized to **Aggregation Engine** on 2026-07-04; the old name survives only in ADR-003's historical text.) The service that collects public builds via public interchange endpoints only (never guide content), with attribution, normalizes them into Build Genomes, and maintains Canonical Builds and archetype statistics.
+(Formerly "Build Aggregation Service" — standardized to **Aggregation Engine** on 2026-07-04; the old name survives only in ADR-003's historical text.) The service that collects public builds via public interchange endpoints only (never guide content), with attribution, normalizes them into BuildSnapshots, and maintains Canonical Builds and archetype statistics.
 
 **Comparative Optimization**
 The feature that diffs a user's build snapshot against Canonical Builds of the same archetype and re-scores the differences under the *user's* weights — surfacing which specific divergences help or hurt *their* goals.
