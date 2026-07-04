@@ -1,0 +1,164 @@
+@import "tailwindcss";
+
+/*
+  ExileLab visual language — "Linear wearing a Path of Exile ring".
+  Dark theme is default and primary (players live in dark UIs). One accent
+  (violet), used sparingly. PoE stat-color dialect for stat values. Green/red
+  deltas. Deliberate spacing, consistent radii, real typographic hierarchy.
+*/
+
+@theme {
+  /* --- Surfaces (dark, primary) --- */
+  --color-bg: #0a0b0f;
+  --color-surface: #111219;
+  --color-surface-2: #171922;
+  --color-elevated: #1c1f2b;
+  --color-line: #23262f;
+  --color-line-strong: #2f3342;
+
+  /* --- Text --- */
+  --color-ink: #e9ecf3;
+  --color-muted: #a2a8b8;
+  --color-faint: #6b7180;
+
+  /* --- The single accent (used sparingly) --- */
+  --color-accent: #8b7bff;
+  --color-accent-strong: #a598ff;
+  --color-accent-dim: #4a4470;
+
+  /* --- Verdict deltas (PoB green/red convention) --- */
+  --color-gain: #4ad991;
+  --color-loss: #ff6470;
+
+  /* --- Severity (Doctor chips) --- */
+  --color-sev-pass: #4ad991;
+  --color-sev-minor: #f3d472;
+  --color-sev-major: #ffa657;
+  --color-sev-critical: #ff6470;
+
+  /* --- PoE stat-color dialect --- */
+  --color-fire: #ff6b5e;
+  --color-cold: #63b3ff;
+  --color-lightning: #f5efad;
+  --color-chaos: #d661ff;
+  --color-life: #ff5b6a;
+  --color-mana: #5b83ff;
+  --color-es: #c9d2e6;
+
+  /* --- Type --- */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia,
+    ui-serif, serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code",
+    Menlo, Consolas, monospace;
+
+  /* --- Radii --- */
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-line);
+  }
+  html {
+    color-scheme: dark;
+  }
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "cv01", "ss01";
+  }
+  /* Subtle top-lit vignette so the near-black bg has depth, not flatness. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    background:
+      radial-gradient(
+        1200px 600px at 50% -10%,
+        color-mix(in oklab, var(--color-accent) 10%, transparent),
+        transparent 60%
+      );
+  }
+  h1, h2, h3 {
+    letter-spacing: -0.02em;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--color-accent) 40%, transparent);
+    color: #fff;
+  }
+  /* Focus states on every interactive element (quality bar). */
+  a:focus-visible,
+  button:focus-visible,
+  [role="button"]:focus-visible,
+  input:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+  /* Range input — the product's primary control surface (Law 1). */
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 4px;
+    border-radius: 999px;
+    background: var(--color-line-strong);
+    cursor: pointer;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 999px;
+    background: var(--color-accent);
+    border: 2px solid var(--color-bg);
+    box-shadow: 0 0 0 1px var(--color-accent-dim);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-accent) 30%, transparent);
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 999px;
+    background: var(--color-accent);
+    border: 2px solid var(--color-bg);
+    cursor: pointer;
+  }
+}
+
+@layer components {
+  .card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg);
+  }
+  .tabular {
+    font-variant-numeric: tabular-nums;
+    font-family: var(--font-mono);
+  }
+}
+
+/* Reduced-motion honesty. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
