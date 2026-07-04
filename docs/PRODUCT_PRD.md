@@ -1,7 +1,14 @@
-# PRD — "ExileLab" (working title): The PoE2 Build-Intelligence Platform
+# PRD — "ExileLab" (working title): The PoE2 Personalized Build-Optimization Layer
 
-**Version:** 1.0 · **Date:** 2026-07-03 · **Status:** Draft for founder review
+**Version:** 2.0 · **Date:** 2026-07-04 · **Status:** Revised per ADR-003 pivot — awaiting founder sign-off
 **Authors:** Product research synthesized from a 10-agent research workflow (GGG API/ToS, competitors, community sentiment, monetization, calc-engine feasibility, tech stack, local PoB2 repo audit, price-data sourcing, GGG IP policy, PoE2 1.0 roadmap). Sources cited in Appendix A.
+
+### Revision history
+
+| Version | Date | Change |
+|---|---|---|
+| 1.0 | 2026-07-03 | Original four-pillar "PoB, but smarter" PRD (AI Build Optimizer, Character Doctor, Build Market, Market Intelligence). |
+| 2.0 | 2026-07-04 | **Applies the ADR-003 architecture pivot** (Accepted 2026-07-03; authoritative pivot text in `PRODUCT_PLAN.md` v2, "What changed in v2" + "PRD deltas"). ExileLab is re-scoped from a standalone four-pillar ecosystem to a **personalized build-optimization layer on top of existing platforms**. Changes: (1) §1 repositioned from "PoB, but smarter" to "an intelligent build optimizer that adapts builds to YOUR playstyle"; (2) the **Build Market** pillar is DELETED (§4.3 is now a tombstone) — we never compete with build repositories, and market/ladder aggregation survives only as supporting infrastructure (the Aggregation Engine, see `PRODUCT_PLAN.md`); (3) §4.1 Optimizer reframed from DPS-delta maximization to **preference-weighted Δscore** (Weighted Score, Preference Axes, Goal Presets, satisficing — see GLOSSARY); (4) §11 roadmap and §12 success metrics re-derived to the v2 phase shape, adding the north-star metric ">30% of optimizer runs use non-default weights"; (5) stale Build-Market / "Netflix for builds" / MKT-* references across §2/§3/§5/§6/§13 updated or annotated. **§7 legal and the §7.5 Compliance Charter are LOCKED and untouched** — not one word of the charter rules changed in this revision. |
 
 > **Working title note:** the product name must NOT contain "Path of Exile", "PoE", or "Path of Building" (GGG trademark / community-project branding). "ExileLab" is a placeholder; "exile" is common in tolerated community tool names (exiledtools.com, exile.exchange). Final name TBD.
 
@@ -11,20 +18,19 @@
 
 ## 1. Executive summary
 
-**One-liner:** *PoB, but smarter.* A freemium web platform that imports a player's Path of Exile 2 character and tells them — with PoB-grade deterministic math, never LLM guesses — what's wrong with their build, exactly what to change, and what the best upgrades are for their budget.
+**One-liner:** *An intelligent build optimizer that adapts builds to YOUR playstyle.* A freemium web **optimization layer** that sits on top of existing platforms (Maxroll, Mobalytics, poe.ninja, PoB links) — import a Path of Exile 2 build from anywhere, and the system, with PoB-grade deterministic math (never LLM guesses), optimizes it against **your** declared priorities rather than a fixed max-DPS objective, tells you what's holding your goals back, and finds the best upgrades for your budget. We never compete with the build repositories; we make the builds they already host better for each individual player.
 
-Four product pillars on one shared engine:
+Product pillars on one shared engine (the Build Market pillar was deleted in v2 — see §4.3):
 
 | # | Pillar | What it does | Legal/platform risk | Differentiation today |
 |---|--------|--------------|--------------------|----------------------|
-| 1 | **AI Build Optimizer** | Wasted-stat detection (overcapped resists, dead nodes), item-swap DPS deltas, budget-aware upgrade finder ("best upgrades for 10 div") | **Low** (official character API + our own math) | Does not exist for PoE2 in any form |
-| 4 | **Character Doctor** | Diagnoses why a build fails: chaos res too low, no stun immunity, defenses too thin for tier-X maps, and why you keep dying | **Low** | Does not exist; GGG ships no death recap and says it wants to "reduce how much obscure game knowledge creates power gaps" |
-| 3 | **Build Market** | Upload/import builds, ranked by computed budget / mapping speed / boss DPS / survivability ("Netflix for builds") | **Low-medium** (GGG is building build *distribution*; our moat is computed *ranking*, which GGG has explicitly sworn off) | Aggregators show raw ladder data or editorial tiers; nobody ranks by computed performance |
-| 2 | **Market Intelligence** (redesigned from "Trade Sniper") | Currency-flip dashboard, price history, undervalued-listing signals, user-initiated upgrade pricing, alerting | **HIGH as originally scoped — must be redesigned** (see §7) | Existing snipers are dumb notification pipes; nobody computes fair value — but the data & ToS constraints are severe |
+| 1 | **Personalized Build Optimizer** | Preference-weighted optimization: user sets priorities via Goal Presets + Preference Axes sliders, and every recommendation (wasted-stat findings, passive-node swaps, item swaps, budget upgrade finder) is ranked by **Δ Weighted Score under the user's weights**, with satisficing so the engine stops chasing overkill DPS | **Low** (official character API + our own math) | Does not exist for PoE2 in any form; incumbents optimize for max DPS, never *your* objective |
+| 4 | **Character Doctor** (goal-aware) | Diagnoses why a build fails *relative to the player's declared goal*: chaos res too low, no stun immunity, defenses too thin for tier-X maps, and why you keep dying | **Low** | Does not exist; GGG ships no death recap and says it wants to "reduce how much obscure game knowledge creates power gaps" |
+| 2 | **Market Intelligence** (redesigned from "Trade Sniper", demoted to a supporting price layer) | Currency-flip dashboard, price history, user-initiated upgrade pricing feeding the Currency-Efficiency axis of the optimizer, alerting | **HIGH as originally scoped — must be redesigned** (see §7) | Existing snipers are dumb notification pipes; nobody computes fair value — but the data & ToS constraints are severe |
 
 **Core architecture decision (locked):** the deterministic PoB2 calculation engine (this repo, MIT-licensed) runs headless server-side and produces every number; an LLM (via OpenRouter, cheap flash-class models) only *narrates* the engine's structured output into human advice. This is exactly the credibility gap current AI tools fail on — the community demonstrably distrusts LLM game math ("the more specific you get, the more likely ChatGPT is giving you false information") while trusting PoB numbers absolutely.
 
-**Business model (locked):** freemium. Free tier = the viral growth engine (import + stat sheet + top-3 diagnoses + build browsing). Premium ≈ **$5.99/mo / $49/yr / $9.99 League Pass (2 months, one-time)** = unlimited priority-queue optimizer runs, full Doctor reports, budget upgrade finder, market alerts. Realistic steady state: 3K–12K subscribers → **$160K–$650K ARR** — a strong small-team business, seasonal around league launches.
+**Business model (locked):** freemium. Free tier = the viral growth engine (import from any source + stat sheet + suggested Goal Preset + top-3 diagnoses). Premium ≈ **$5.99/mo / $49/yr / $9.99 League Pass (2 months, one-time)** = unlimited priority-queue optimizer runs, full Doctor reports, budget upgrade finder, comparative optimization, market alerts. Realistic steady state: 3K–12K subscribers → **$160K–$650K ARR** — a strong small-team business, seasonal around league launches.
 
 **Timing:** PoE2 1.0 goes **free-to-play in late 2026** (announced at ExileCon, Nov 7–8, 2026). A massive new-player wave — the exact audience for Doctor/Optimizer — arrives right as we could launch. Patch 0.5 (May 2026) was the final EA content update; **ExileCon is a hard re-planning checkpoint** for this PRD.
 
@@ -63,7 +69,7 @@ Four product pillars on one shared engine:
 |---|---|---|---|
 | **The Stuck Mapper** (primary) | Lvl 70–85, dies in T5–T12 maps, doesn't know why; found their build on YouTube; has never opened PoB | Doctor → Optimizer | League Pass / monthly during league |
 | **The Min-Maxer** | PoB power user; wants "best upgrade per divine" answered rigorously instead of manually trying 40 items | Optimizer, Market Intelligence | Annual — highest LTV |
-| **The League Starter** | Returns every league, needs a build that fits budget & playstyle, wants to know a guide still works post-patch | Build Market | League Pass |
+| **The League Starter** | Returns every league, imports a guide build from Maxroll/Mobalytics, wants it adapted to their budget & playstyle and to know it still works post-patch | Optimizer (comparative + goal presets) | League Pass |
 | **The Currency Gamer** | Plays the market as the game; flips currency, hunts underpriced uniques | Market Intelligence | Would pay the most — but this persona is the ToS-riskiest to serve (§7) |
 | **The New 1.0 Player** (late 2026 wave) | F2P launch arrival; overwhelmed; needs "what's wrong / what next" in plain language | Doctor (free tier) | Conversion funnel seed |
 
@@ -71,11 +77,13 @@ Four product pillars on one shared engine:
 
 ## 4. Product pillars — detailed specs
 
-> All four ship as one platform with a shared account, shared character import, and one engine service. "Parallel" development is sequenced *inside* one roadmap (§11) because pillars 1 & 4 share ~80% of their plumbing and unblock 3; pillar 2's data layer is a separate service.
+> All pillars ship as one platform with a shared account, shared multi-source build import, and one engine service. "Parallel" development is sequenced *inside* one roadmap (§11) because the Optimizer (pillar 1) and Character Doctor (pillar 4) share ~80% of their plumbing; the Aggregation Engine that powers comparative optimization is core infrastructure (see `PRODUCT_PLAN.md`), and pillar 2's price-data layer is a separate supporting service. (The former Build Market pillar was deleted in v2 — §4.3.)
 
-### 4.1 Pillar 1 — AI Build Optimizer
+### 4.1 Pillar 1 — Personalized Build Optimizer
 
-**Job to be done:** "Look at my character and tell me the highest-impact changes, with numbers."
+**Job to be done:** "Look at my build and tell me the highest-impact changes *for what I'm trying to do*, with numbers." Not "maximize DPS" — optimize **my** objective.
+
+**The pivot in one paragraph (v2):** the optimizer no longer maximizes a single fixed metric. The **Preference Engine** (the most important component in the product; see GLOSSARY and `PRODUCT_PLAN.md`) computes a **Weighted Score** = `Σ wᵢ · normalizeᵢ(metricᵢ)` over engine outputs across eight **Preference Axes** (Damage, Survivability, Movement Speed, Attack Speed, Cast Speed, Skill Mobility Efficiency, Resource Sustain, Currency Efficiency). Weights come from sliders; **Goal Presets** (Fast Mapping, Boss Farming, Hardcore Survivability, Budget Farming, …) one-click-set them. **Satisficing** matters: the Damage axis scores against a per-goal *target band* (e.g. "enough to carry six players"), so past the target the optimizer stops chasing overkill DPS and spends remaining points/budget on the user's other priorities. Every optimizer surface below ranks candidates by **Δ Weighted Score under the user's weights**, never by raw ΔDPS. The **Context Detector** classifies the imported build's Archetype and *suggests* default weights before the user touches a slider (e.g. an attack-as-movement Twister build → Attack Speed HIGH, Movement Speed LOW), always visible and overridable.
 
 **Input paths (all already proven in this repo):**
 - OAuth character import — `GET api.pathofexile.com/character/poe2/{name}` (equipment, inventory, passives) via our own registered OAuth client (`src/Classes/PoEAPI.lua` shows the flow; we must NOT reuse `client_id=pob`).
@@ -86,18 +94,22 @@ Four product pillars on one shared engine:
 
 | ID | Feature | Tier | Spec |
 |---|---|---|---|
-| OPT-1 | **Wasted-stat report** | F (top 3) / P (full) | Engine outputs `FireResistOverCap` etc. natively (`BuildDisplayStats.lua`). Report: overcapped resists (with exact wasted %), stats on gear contributing zero to the build, dead/inefficient passive nodes (one-step node deltas via `calcs.getNodeCalculator`), unused gem links, spirit/mana waste. Each finding = {severity, numeric impact, affected slot/node, suggested action}. |
-| OPT-2 | **Dead-node detector & tree suggestions** | P | Local search over unallocated/allocated nodes using the accelerated node calculator (same machinery as PoB's heat map, which evaluates thousands of node deltas in seconds). Suggest reallocation sets with net DPS/EHP delta. Precedents: poesto, poe-graph-optimization, PoESkillTree GA. |
-| OPT-3 | **Item swap analyzer** | P | User pastes/selects candidate item(s) → `calcs.getMiscCalculator` computes exact DPS/EHP delta ("Ring B = +18.2% DPS, −3% EHP"). Batch mode: compare all inventory/stash candidates for a slot. |
-| OPT-4 | **Budget upgrade finder** ("best upgrades for 10 div") | P (flagship) | Pipeline: (a) enumerate slots by upgrade headroom; (b) fetch priced candidates — uniques from poe.ninja/poe2scout price tables, rares via **user-initiated, rate-limited trade2 spot queries** (Exiled Exchange 2 pattern — see §7 data constraints); (c) heuristic pre-filter (mod-weight scoring) to top-N per slot; (d) full engine calc per candidate; (e) rank by ΔDPS-or-ΔEHP per divine; (f) output ranked list with deep links to the official trade site (user clicks through and buys — we never automate trade actions). **At launch, rare-item coverage is best-effort; unique-first suggestions are the reliable core** (no PoE2 rare price index exists anywhere — see §8). |
-| OPT-5 | **Plain-language explanations** | P | LLM renders the engine's structured findings JSON into prose ("Your cold res is 12% overcapped — that suffix on your boots is doing nothing; here's what to look for instead"). Strict-schema structured output; cached by hash(build+findings); never generates numbers. |
-| OPT-6 | **Optimizer run quota & queue** | F: ~3 runs/week, standard queue. P: unlimited, priority queue | The Raidbots model — server compute is the honest paywall justification. |
+| OPT-0 | **Preference Engine + Goal Presets + Context Detector** | F (presets + suggested weights) / P (full slider control + persistence) | The heart of v2. Deterministic Weighted Score over eight Preference Axes; one-click Goal Presets; per-axis normalization curves with satisficing target bands; Context Detector suggests weights from the detected Archetype with a human-readable rationale. Never calls the LLM. Every finding below is scored through it. |
+| OPT-1 | **Wasted-stat report** | F (top 3) / P (full) | Engine outputs `FireResistOverCap` etc. natively (`BuildDisplayStats.lua`). Report: overcapped resists (with exact wasted %), stats on gear contributing zero to the build, dead/inefficient passive nodes (one-step node deltas via `calcs.getNodeCalculator`), unused gem links, spirit/mana waste. Findings are **weighted by the user's axes** (e.g. overcapped resist matters more under a Survivability-heavy preset). Each finding = {severity, Δ Weighted Score, per-axis decomposition, affected slot/node, suggested action}. |
+| OPT-2 | **Dead-node detector & tree suggestions** | P | Local search over unallocated/allocated nodes using the accelerated node calculator (same machinery as PoB's heat map, which evaluates thousands of node deltas in seconds). Suggest reallocation sets ranked by **Δ Weighted Score under the user's weights** (not net DPS). Precedents: poesto, poe-graph-optimization, PoESkillTree GA. |
+| OPT-3 | **Item swap analyzer** | P | User pastes/selects candidate item(s) → `calcs.getMiscCalculator` computes the resulting metrics → Preference Engine returns a **Δ Weighted Score card decomposed per axis** ("Ring B = +3% your objective: +1.2% damage, +4% sustain, −0.5% EHP"). Batch mode: compare all inventory/stash candidates for a slot. |
+| OPT-4 | **Budget upgrade finder** ("best upgrades for 10 div") | P (flagship) | Pipeline: (a) enumerate slots by upgrade headroom; (b) fetch priced candidates — uniques from poe.ninja/poe2scout price tables, rares via **user-initiated, rate-limited trade2 spot queries** (Exiled Exchange 2 pattern — see §7 data constraints); (c) heuristic pre-filter (mod-weight scoring) to top-N per slot; (d) full engine calc per candidate; (e) rank by **Δ Weighted Score per divine** (the Currency-Efficiency axis modulates: a budget-farming preset penalizes expensive marginal upgrades — "avoid over-optimization"); (f) output ranked list with deep links to the official trade site (user clicks through and buys — we never automate trade actions). **At launch, rare-item coverage is best-effort; unique-first suggestions are the reliable core** (no PoE2 rare price index exists anywhere — see §8). |
+| OPT-5 | **Comparative optimization** | P | Import user's build → the Aggregation Engine fetches public versions of the same Archetype (Maxroll / Mobalytics / poe.ninja) via public interchange endpoints only → the Comparator diffs tree/gear/gems → each meaningful divergence is engine-evaluated as a candidate change on the *user's* build and ranked by **Δ Weighted Score under the user's weights**, with a community-consensus boost and source attribution ("top players run X instead of your Y: +12% to *your* objective, ~2 div — as seen in Maxroll's guide →"). Compliance: public build payloads only, never guide content — see §7.5 and `PRODUCT_PLAN.md` Compliance notes. |
+| OPT-6 | **Plain-language explanations** | P | LLM (the Build Coach) renders the engine's structured findings JSON into prose, now explaining *trade-offs against the user's stated priorities* ("Your cold res is 12% overcapped — under your Boss-Farming preset that suffix is doing nothing; here's what to look for instead"). Strict-schema structured output; cached by hash(build+findings); never generates numbers. |
+| OPT-7 | **Optimizer run quota & queue** | F: ~3 runs/week, standard queue. P: unlimited, priority queue | The Raidbots model — server compute is the honest paywall justification. An Optimization Run is the metered freemium compute unit. |
 
-**Acceptance criteria (v1):** import → full report < 30s standard queue; every numeric claim reproducible in desktop PoB2 within engine parity tolerance; upgrade finder returns ≥3 priced suggestions for ≥80% of imported characters at 5/10/50 div budgets (unique-first acceptable).
+**Acceptance criteria (v1):** import from any supported source → suggested Goal Preset + full report < 30s standard queue; **every recommendation ranked by Δ Weighted Score under the user's weights, never raw ΔDPS**; changing the preset/sliders visibly re-orders the recommendations (fast-mapping weights rank a movement-speed swap above a pure-DPS swap; boss-carry reverses it); satisficing verified (a boss-carry preset does NOT chase overkill DPS past its target band); every numeric claim reproducible in desktop PoB2 within engine parity tolerance; upgrade finder returns ≥3 priced suggestions for ≥80% of imported builds at 5/10/50 div budgets (unique-first acceptable).
 
-### 4.2 Pillar 4 — Character Doctor
+### 4.2 Pillar 4 — Character Doctor (goal-aware)
 
-**Job to be done:** "Tell me why my build sucks / why I keep dying — in words I understand."
+**Job to be done:** "Tell me why my build sucks / why I keep dying — *relative to what I'm trying to do* — in words I understand."
+
+**v2 note:** the rulebook is now **goal-aware** — thresholds are parameterized by the declared Goal Preset (hardcore-survivability tightens EHP floors; speed-clear relaxes them), so the same build is graded differently under different goals. Percentiles and "tier expectation" bands read from the Aggregation Engine's Canonical Builds of the *same Archetype*, never the global population.
 
 **Design note:** the character API is a read-only snapshot; flask uptime and in-combat behavior are NOT exposed by any API. v1 diagnoses what the engine can prove from the snapshot; behavior-based diagnostics (flask uptime, actual death causes via client log parsing) are a later desktop-companion feature (log reading is explicitly tolerated by GGG, but it's not web).
 
@@ -111,7 +123,7 @@ Four product pillars on one shared engine:
 | DOC-4 | Missing stun/freeze/ailment protection | ailment avoidance/immunity outputs |
 | DOC-5 | Defense layering incoherent (e.g. armour build with zero phys mitigation depth, ES with no recharge protection) | armour/evasion/ES, block, suppression outputs |
 | DOC-6 | Sustain broken | `NetLifeRegen`, `TotalBuildDegen`, leech outputs |
-| DOC-7 | DPS below tier expectation | `FullDPS` vs tier bands (percentile vs our build corpus once Build Market has data) |
+| DOC-7 | DPS below tier expectation for the declared goal | `FullDPS` vs goal target band (percentile vs the Aggregation Engine's Canonical Builds of the same Archetype) |
 | DOC-8 | Cost warnings / unusable skills | `LifeCost/ManaCost` + `WarningList` (`Calcs.lua:412-448`) |
 | DOC-9 | Content-readiness verdict | Composite: "This build is ready for T13; your realistic wall is T8 — because X, Y." |
 
@@ -119,22 +131,13 @@ Four product pillars on one shared engine:
 
 **Engineering prerequisite (both pillars):** `loadBuildFromJSON` leaves main-skill unselected and config unset ("Good luck!" — `HeadlessWrapper.lua:218-226`). We must build **import heuristics**: auto-pick main skill (highest-DPS socketed active skill), sane config defaults per content tier, boss-config presets. This is the single biggest product-quality determinant for import-and-diagnose UX and needs its own spec + test corpus of real characters.
 
-### 4.3 Pillar 3 — Build Market
+### 4.3 Pillar 3 — Build Market — DELETED in v2 (tombstone)
 
-**Job to be done:** "Find me a build that fits my budget/playstyle — ranked by what it actually does, not by editorial opinion."
-
-**Strategic positioning (from 1.0-roadmap research):** GGG now owns build *distribution* (in-game Build Planner, `.build` files, partner-gated subscribe API that Maxroll/Mobalytics already have; Rogers floated a "most-used builds ladder"). GGG has explicitly sworn off *quality ranking* ("It's not on us to decide what's good"). **Our moat is computed performance ranking — never compete on hosting/distribution.**
-
-| ID | Feature | Tier |
-|---|---|---|
-| MKT-1 | Ingest builds: PoB codes, `.build` files, ladder scraping via official ladder API (top 1,000/league), creator uploads | — |
-| MKT-2 | **Computed scorecards**: every build run through the engine → boss DPS, clear-speed proxy (movement/AoE/single-target mix), survivability grade (EHP/max-hit/sustain), **budget estimate** (sum of priced uniques + gear-quality heuristic) | F (browse) |
-| MKT-3 | Rank/filter by budget bracket, ascendancy, skill, playstyle, patch; "still works in 0.5?" staleness flags (auto re-calc on patch data update) | F basic / P advanced filters |
-| MKT-4 | "Builds like mine but better" — similarity match from imported character | P |
-| MKT-5 | Creator pages + verified guide links; deep-link out to guides (be the index, not the host) | F |
-| MKT-6 | League-start planner: budget-phased progression snapshots of a build (day-1 → week-1 → endgame) | P |
-
-**Cold start:** seed from ladder API (top 1,000 per league is official and sanctioned) + poe.ninja-style public character import of consenting/public profiles + PoB code submissions incentivized by free Premium for creators.
+> **Deleted per ADR-003** (Accepted 2026-07-03). ExileLab is an optimization *layer* — **we never compete with build repositories** (Maxroll, Mobalytics, poe.ninja, pobb.in, GGG's Build Planner). There is no build hosting, no creator marketplace, and no ranked/computed-scorecard browsing surface. The pillar's original "Netflix for builds" positioning is retired.
+>
+> **What survives, and where:** the underlying build/ladder *aggregation* capability lives on as pure infrastructure — the **Aggregation Engine** (collects public builds via public interchange endpoints only, never guide content, with source attribution; maintains Canonical Builds and Archetype statistics) — and powers **Comparative Optimization** (OPT-5) and the Doctor's Archetype percentiles (DOC-7), not a marketplace. See `PRODUCT_PLAN.md` (v2) "The Comparative Optimization Engine" + "Aggregation Engine", GLOSSARY (Aggregation Engine, Canonical Build, Comparative Optimization), and the compliance rules in §7.5.
+>
+> This section number is retained (empty) so downstream cross-references stay traceable; the former MKT-1…MKT-6 feature IDs are withdrawn.
 
 ### 4.4 Pillar 2 — Market Intelligence (REDESIGNED from "Trade Market Sniper")
 
@@ -144,7 +147,7 @@ Four product pillars on one shared engine:
 - The trade2 site API is **undocumented**; GGG's ToU prohibits scraping (s7(f)), bots (s7(c)), and reverse-engineering endpoints (s7(i)); the dev docs say undocumented-API access requests "will be denied."
 - Live search requires a logged-in session (POESESSID) — GGG's official position: sharing POESESSID with tools is "specifically against our terms of use." The official site caps live searches at 20/account *specifically to prevent sniping load*.
 - Enforcement precedent exists: PoE Overlay 2020 account-lock waves ("hitting their API a few million times a day"); RMT/trade-bot ban waves during PoE2 EA; the 2026 Jenebu ban. GGG deliberately ships trade friction (instant-buyout Merchant's Tabs shrink sniping windows).
-- A server-side sniping service would risk **OAuth revocation for the whole platform** — killing pillars 1, 3, 4 to serve pillar 2.
+- A server-side sniping service would risk **OAuth revocation for the whole platform** — killing pillars 1 & 4 (and the aggregation infrastructure) to serve pillar 2.
 
 **What ships instead (compliant core, gray edges clearly flagged):**
 
@@ -169,9 +172,9 @@ Four product pillars on one shared engine:
 |---|---|---|
 | Character import & stat sheet | ✅ | ✅ |
 | Character Doctor | Top-3 diagnoses | Full report + fixes + LLM narration + re-checks |
-| Optimizer | ~3 runs/week, standard queue | Unlimited, priority queue |
+| Optimizer (preference-weighted) | ~3 runs/week, standard queue; presets + suggested weights | Unlimited, priority queue; full slider control + weight persistence |
 | Budget upgrade finder | — | ✅ |
-| Build Market | Browse + basic filters | Computed-rank filters, "builds like mine", league-start planner |
+| Comparative optimization (vs public builds of your Archetype) | — | ✅ |
 | Market Intelligence | Delayed snapshots | Full dashboards, watchlists, alerts |
 | Saved characters | 1 | Unlimited |
 | Ads (if run) | Light | Removed |
@@ -213,7 +216,7 @@ The PoE2 tool ecosystem is entirely free/open-source; the community tolerates fr
 | Build planning | PoB2 fork (desktop, gold-standard math), pob.cool (WASM web port), pobb.in (share codes), Maxroll planner, Mobalytics | All passive — show numbers, recommend nothing; no trade-priced upgrades |
 | Economy | poe.ninja (uniques, 8 categories, free), poe2scout (currency, open API), exiledtools (signals on ninja data) | No rare pricing anywhere; no build-integrated market view |
 | Price check | Exiled Exchange 2, Sidekick, PoE Overlay II | Per-item overlay lookups; no valuation model |
-| Build discovery | poe.ninja builds (raw ladder), pobarchives (21K+ builds, no rankings), Maxroll/Mobalytics tiers (editorial) | Nobody ranks by computed budget/DPS/survivability |
+| Build discovery/hosting | poe.ninja builds (raw ladder), pobarchives (21K+ builds), Maxroll/Mobalytics tiers (editorial), GGG Build Planner | **Not our fight (v2).** We do not host, rank, or browse builds; we are the optimization *layer* that adapts any build they host to the individual player. Their build corpora are inputs to our Aggregation Engine (public payloads only, attributed), not competitors. |
 | AI analysis | PoAI, poe2skills-ai, Questie AI, MCP hobby projects | LLM-first → hallucinated math → no trust, no traction |
 | Adjacent proof | Raidbots ($/mo for sim compute), Mobalytics (acquired 2025), WoWAnalyzer | Model validation, not competition |
 
@@ -291,7 +294,7 @@ This charter resolves Open Decision #1 (§14): the Pillar-2 redesign (§4.4) is 
 
 | Layer | Choice | Why |
 |---|---|---|
-| Frontend | **Next.js 15 + TypeScript**, TanStack Query/Table, Tailwind + shadcn/ui | Build Market & shareable Doctor reports are SEO-critical (RSC/ISR); optimizer views are client components — one framework covers both |
+| Frontend | **Next.js 15 + TypeScript**, TanStack Query/Table, Tailwind + shadcn/ui | Shareable stat sheets & Doctor report cards are SEO-critical (RSC/ISR); optimizer/slider views are client components — one framework covers both |
 | Passive tree | Custom **PixiJS WebGL2** renderer from this repo's TreeData atlases | Well-trodden (pob-web, pobb.in); ~2–4 week build, read-only v1 |
 | API | **Node 22 + Fastify** | TS end-to-end; small-team velocity |
 | Jobs | **BullMQ on Redis** | Optimizer runs are job-shaped; Temporal is overkill |
@@ -318,39 +321,44 @@ This charter resolves Open Decision #1 (§14): the Pillar-2 redesign (§4.4) is 
 ## 10. AI strategy (deterministic core, LLM shell)
 
 1. **The engine is the product; the LLM is the interface.** Every number from `calcs.*`; LLM renders findings JSON → prose. Community evidence is unambiguous: LLM game-math is distrusted ("dead wrong", "well articulated but often completely wrong"), PoB math is gospel.
-2. LLM tasks (all cheap, cacheable, schema-constrained): findings narration, fix phrasing, build-summary blurbs for Build Market cards, natural-language search parsing ("tanky minion build under 5 div" → structured filters).
+2. LLM tasks (all cheap, cacheable, schema-constrained, all via the Build Coach persona): findings narration, fix phrasing framed as trade-offs against the user's stated priorities, natural-language goal parsing ("tanky minion build, boss farming, under 5 div" → preset + weight hints).
 3. Explicit non-goals: LLM-computed stats, LLM build generation, chat assistant (v1). Scope creep here is a 10–50× cost multiplier and a trust killer.
-4. "AI Build Optimizer" is the marketing name for **deterministic search + LLM explanation** — and the GGG OAuth application should describe it that way (they auto-reject applications that smell LLM-generated).
+4. "Personalized Build Optimizer" is the marketing name for **deterministic preference-weighted search + LLM explanation** — and the GGG OAuth application should describe it that way (they auto-reject applications that smell LLM-generated).
 
 ---
 
 ## 11. Roadmap
 
-> Solo/small-team pacing. All four pillars progress "in parallel" as thin slices on the shared platform, but plumbing order is dictated by dependencies: engine service → import+Doctor → optimizer → market layers.
+> Solo/small-team pacing (v2 phase shape — mirrors `PRODUCT_PLAN.md` v2). Plumbing order is dictated by dependencies: engine service → multi-source import + suggested preset → **preference-weighted optimizer + Doctor** → comparative optimization + upgrade finder → hardening/launch. The former Phase 4 "Build Market" is deleted (ADR-003); the roadmap is one phase shorter as a result.
 
-**Phase 0 — Validation (2–3 wks):** Spikes 1–5. Gate: engine economics viable + OAuth application submitted. *If the benchmark fails (>2s/calc on complex builds), the optimizer scope shrinks to precomputed-candidate mode — decide then.*
+**Phase 0 — Validation (2–3 wks):** Spikes S1–S7 (engine benchmark go/no-go; zlib round-trip; import heuristics; GGG OAuth application; **S5 preference-engine vertical slice** — score one build under different weight vectors, orderings must flip sensibly; **S6 aggregation feasibility** — normalize the same Archetype from 3 sources + comparator diff; **S7 this PRD v2 revision**). Gate: engine economics viable + S5 orderings founder-validated + S6 diff works + OAuth submitted. *If the benchmark fails (>2s/calc on complex builds), the optimizer scope shrinks to precomputed-candidate mode — decide then.*
 
-**Phase 1 — Foundation (4–6 wks):** Engine-as-a-service (pool, cache, conformance suite, patch-pinning pipeline); accounts; import (OAuth + PoB code + `.build`); web stat sheet.
+**Phase 1 — Foundation (4–6 wks):** Engine-as-a-service (pool, cache, conformance suite, patch-pinning pipeline); accounts; **multi-source import** (OAuth + PoB code + pobb.in/Maxroll/poe.ninja links + `.build`) with source attribution; **Context Detector v1** (Archetype classification + suggested Goal Preset with rationale); web stat sheet + read-only preference-slider preview.
 
-**Phase 2 — Doctor + Optimizer core (6–8 wks):** Diagnostic rulebook + tier thresholds; wasted-stat report; node deltas; item-swap analyzer; LLM narration; free/premium gating + Stripe + League Pass; **launch closed beta into the league community** (shareable free Doctor reports = the acquisition loop).
+**Phase 2 — Personalized Optimizer + Doctor + payments (6–8 wks) → CLOSED BETA:** **Preference Engine v1** (axes, normalization curves, satisficing targets, weight persistence); preference-driven optimizer core (weighted wasted-stat report, node suggestions + item-swap analyzer ranked by Δ Weighted Score); **goal-aware Character Doctor** rulebook; LLM trade-off narration; free/premium gating + Stripe + League Pass; **launch closed beta into the league community** (shareable free Doctor cards = the acquisition loop). Beta gate includes preset-override telemetry (>30% of users adjust ≥1 slider) — validates the pivot's core hypothesis.
 
-**Phase 3 — Budget upgrade finder + Market layer (6–8 wks):** cxapi/poe2scout/ninja ingestion (ClickHouse); unique-first upgrade finder with trade deep-links; currency dashboard + flip analytics + watchlist alerts; user-initiated rare spot-pricing.
+**⚑ Hard checkpoint — ExileCon, Nov 7–8, 2026:** re-plan against announcements: 1.0 date (launch timing), PoE2 stash API (light up river adapter + revisit MI-6), first-party death recap (reshape Doctor toward optimization), Build Planner subscribe-API public access (integrate as an *export* target — send the optimized build to the player's in-game planner, a perfect fit for the layer positioning).
 
-**Phase 4 — Build Market (6–8 wks):** ladder ingestion + scorecards + ranked browse; "builds like mine"; creator pages; staleness flags. **Public launch targeting the 1.0 F2P window.**
+**Phase 3 — Comparative optimization + budget upgrade finder (6–8 wks):** **Aggregation Engine** (productionize S6: public-interchange-endpoint fetchers only, normalizer hardening, polite caching, per-source kill-switches, attribution pipeline, Archetype index); **Comparator + comparative recommendations** (diff vs Canonical Builds of the same Archetype, each engine-evaluated on the user's build, ranked by Δ Weighted Score under the user's weights, community-consensus boost, every card attributes its source); **price layer (supporting service)** — cxapi/poe2scout/ninja ingestion (ClickHouse); **preference-driven budget upgrade finder** — unique-first, ranked by Δ Weighted Score per divine, with user-initiated rare spot-pricing and trade deep-links; watchlist alerts. Partnership outreach to Maxroll/Mobalytics/poe.ninja (traffic-referral pitch).
 
-**⚑ Hard checkpoint — ExileCon, Nov 7–8, 2026:** re-plan against announcements: 1.0 date (launch timing), PoE2 stash API (light up river adapter + revisit MI-6), first-party death recap (reshape Doctor toward optimizer/planning), Build Planner subscribe-API public access (apply immediately).
+**Phase 4 — Hardening + public launch (4–6 wks, was 6–8: Build Market deleted):** load test (k6, WASM client-calc lever if COGS demands); security pass (authz edges, webhook signatures, SSRF on aggregation fetchers), backup/restore drill, status page; launch checklist (name/domain/trademark, §7.4 legal review incl. the aggregation surface, LGPL base64 swap, pricing page, "optimize for YOUR playstyle" demo content, creator collabs). **PUBLIC LAUNCH targeting the 1.0 F2P window.**
 
 ---
 
 ## 12. Success metrics
 
+> Re-derived to the v2 phase exits (see `PRODUCT_PLAN.md` v2, Phase 2 beta gates + Phase 4 launch targets). Build-Market-specific metrics are dropped with the pillar; the pivot adds a **north-star adoption metric** for personalization.
+
 | Stage | Metric | Target |
 |---|---|---|
 | Beta | Import → full report completion | >70% |
-| Beta | Doctor report shared (link/screenshot) | >15% of reports |
+| Beta | Doctor report shared (link/screenshot) | ≥15% of reports |
+| Beta | **Preset-override engagement** (users who adjust ≥1 preference slider) — validates the pivot hypothesis | >30% |
+| Beta | First paying subscribers | >0 (conversion signal) |
 | Launch | Registered users (first full league) | 50K |
 | Launch | Free→paid conversion | ≥2% (stress-floor 1%) |
 | Launch | Optimizer suggestion → trade deep-link CTR | >25% (proxy for "advice trusted") |
+| Launch | **★ North-star — optimizer runs that use non-default weights** (personalization actually adopted, not just DPS-max by another name) | >30% |
 | Ongoing | League-over-league returning users | >40% |
 | Ongoing | Engine parity bugs escaping to prod | <5/patch cycle |
 | Ongoing | Infra + LLM COGS as % of MRR | <20% |
@@ -359,8 +367,13 @@ This charter resolves Open Decision #1 (§14): the Pillar-2 redesign (§4.4) is 
 
 ## 13. Top risks & mitigations
 
+> **v2 top-risk shift:** with the Build Market pillar deleted, its "marketplace cold-start" risk is retired; the new #1 product risk is **objective-function quality** — a bad weight/curve set produces confident bad advice (risk 0 below). Risks 0, 0a, 0b are the pivot's additions.
+
 | # | Risk | L×I | Mitigation |
 |---|---|---|---|
+| 0 | **Objective-function quality** (bad axis weights/normalization curves → confident bad recommendations) — the #1 product risk in v2 | M × Critical | S5 spike validates orderings before build-out; per-axis Δ Weighted Score decomposition shown to the user (auditability); golden-ordering + satisficing-band tests; beta "was this recommendation good?" loop; presets tuned per Archetype via the Context Detector |
+| 0a | Context Detector misreads a build → wrong *suggested* priorities | M × M | Suggestions always visible + overridable; rationale shown; override telemetry flags weak Archetypes; fixture per known mechanic |
+| 0b | Third-party source dependence (Maxroll/Mobalytics/poe.ninja interchange formats or goodwill change) → weakens comparative optimization | M × M | Public-interchange-endpoints-only + prominent attribution + partnership outreach; per-source kill-switch; PoB-code paste always works as a universal fallback; never republish guide content |
 | 1 | GGG declines/revokes OAuth (whole platform) | M × Critical | Hand-written application early (Spike-4); scrupulous rate-limit compliance; web-app category; written acknowledgment attempt; PoB-code + `.build` import paths work with zero GGG API |
 | 2 | Trade-feature overreach triggers enforcement | H if ignored | §4.4 redesign shipped as spec'd; kill-switch on the isolated market-ingestion service; never POESESSID/automation |
 | 3 | No rare-price data weakens flagship upgrade finder | Certain × M | Unique-first launch; honest UX copy; river adapter contingency; user-initiated spot-checks |
