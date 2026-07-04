@@ -12,7 +12,7 @@
 
 ## Current Objective
 
-Repository housekeeping before spikes begin: initialize git, fix known documentation inconsistencies (see Open Tasks 2), then start S4 + S1.
+Repository housekeeping before spikes begin: fix known documentation inconsistencies (see Open Tasks 1), then start S4 + S1.
 
 ## Current RFC
 
@@ -26,20 +26,22 @@ None. RFC-0001 not yet created. (S7, the PRD v2 revision, does **not** need an R
 - 2026-07-03 — UX/presentation vision written → `docs/UX_PRESENTATION.md`.
 - 2026-07-04 — Repository reorganized: `docs/` structure, `rfcs/`, `research/`, scaffolded code dirs; VISION, TECH_ARCHITECTURE (placeholder), DECISIONS (ADR-001–003), GLOSSARY created.
 - 2026-07-04 — Repository operating system established: README session-start protocol, PRINCIPLES.md, WORKFLOW.md, this document.
+- 2026-07-04 — Git repository initialized; first commit `4ea751c` on `main` (founder).
+- 2026-07-04 — Root cleanup: pivot PDF archived to `research/archive/` (staged, commit pending).
 
 ## Open Tasks
 
-1. `git init` + first commit (do first — makes everything below undoable).
-2. Doc consistency pass: fix stale `PLAN.md`/`PRD.md`/`PRESENTATION.md` filename references inside `PRODUCT_PLAN.md` and `UX_PRESENTATION.md` (incl. its self-referencing header); settle "Build Aggregation Service" → "Aggregation Engine" naming (GLOSSARY already prefers the latter); PRD pillar-numbering cosmetics fold into S7.
-3. S4 — draft & submit GGG OAuth application (longest external lead time).
-4. S1 — engine benchmark spike (GO/NO-GO gate: median full calc <500ms, misc <50ms).
-5. Collect fixtures: 3 benchmark builds, 20-character import corpus, 1 archetype in 3 source versions (incl. a Twister Huntress).
-6. S2 — zlib shim + share-code round-trip (byte parity on 10 pobb.in codes).
-7. S5 — preference-engine vertical slice + scoring design note.
-8. S3 — import heuristics (gate ≥90% sane FullDPS).
-9. S6 — aggregation feasibility (3-source normalize + diff demo).
-10. S7 — PRD v2 revision + founder sign-off.
-11. Decide: is an execution-level work-breakdown doc (BUILD-PLAN) needed for Phase 0, or does PRODUCT_PLAN.md suffice? (Requested pre-reorg, never written.)
+1. Doc consistency pass: fix stale `PLAN.md`/`PRD.md`/`PRESENTATION.md` filename references inside `PRODUCT_PLAN.md` and `UX_PRESENTATION.md` (incl. its self-referencing header); note the pivot PDF's new location (`research/archive/`) where it is mentioned; settle "Build Aggregation Service" → "Aggregation Engine" naming (GLOSSARY already prefers the latter); PRD pillar-numbering cosmetics fold into S7.
+2. S4 — draft & submit GGG OAuth application (longest external lead time).
+3. S1 — engine benchmark spike (GO/NO-GO gate: median full calc <500ms, misc <50ms).
+4. Collect fixtures: 3 benchmark builds, 20-character import corpus, 1 archetype in 3 source versions (incl. a Twister Huntress).
+5. S2 — zlib shim + share-code round-trip (byte parity on 10 pobb.in codes).
+6. S5 — preference-engine vertical slice + scoring design note.
+7. S3 — import heuristics (gate ≥90% sane FullDPS).
+8. S6 — aggregation feasibility (3-source normalize + diff demo).
+9. S7 — PRD v2 revision + founder sign-off.
+10. Decide: is an execution-level work-breakdown doc (BUILD-PLAN) needed for Phase 0, or does PRODUCT_PLAN.md suffice? (Requested pre-reorg, never written.)
+11. Add a minimal `CLAUDE.md` pointing at README.md so the session-start protocol auto-loads, and a `.gitignore` before code lands (recommended, not yet approved).
 
 ## Known Risks
 
@@ -47,11 +49,11 @@ Top of the register (full table in `PRODUCT_PLAN.md` → Risks): objective-funct
 
 ## Blockers
 
-- Repository is **not yet a git repository** — blocks honest history, the ADR append-only guarantee, and commit-based workflow. Resolve first.
+- None.
 
 ## Next Recommended Task
 
-**Open Task 1 + 2:** `git init`, initial commit of the current state, then the doc consistency pass (stale filename references). After that, start S4 (OAuth draft) and S1 (engine benchmark) in parallel.
+**Open Task 1:** the doc consistency pass (stale filename references, PDF location mentions, aggregation naming). After that, start S4 (OAuth draft) and S1 (engine benchmark) in parallel.
 
 ## Recent Decisions
 
@@ -62,7 +64,7 @@ Top of the register (full table in `PRODUCT_PLAN.md` → Risks): objective-funct
 
 ## Last Session Summary
 
-**2026-07-04:** Reorganized the repo into the documented structure (moved PLAN/PRD/PRESENTATION into `docs/` under new names, created VISION/TECH_ARCHITECTURE/DECISIONS/GLOSSARY, rfcs/ + research/ process dirs, scaffolded code dirs). Ran a full planning review (found the stale-reference and PRD-v1 inconsistencies now in Open Tasks). Established the repository operating system: README session-start protocol, PRINCIPLES.md, WORKFLOW.md lifecycle, and this living status document. No application code written; no RFCs created.
+**2026-07-04 (cleanup):** Root cleanup before RFC-0001 — created `research/archive/` and moved the pivot PDF into it (contents untouched; the three by-name mentions in DECISIONS/PRODUCT_PLAN/UX_PRESENTATION are not path-links, so nothing broke; path notes folded into Open Task 1). Confirmed the repo was already git-initialized with first commit `4ea751c` by the founder — Blockers cleared. Move + this status update staged; commit left to founder. Earlier same day: full repo reorganization, planning review, and the repository operating system (README protocol, PRINCIPLES, WORKFLOW, this doc). No application code; no RFCs.
 
 ## Last Updated
 
