@@ -18,6 +18,7 @@ import { compact } from "@/lib/format";
 import { rescoreAndRank } from "@/lib/scoring";
 import { PreferencePanel } from "@/components/PreferencePanel";
 import { ScoreBar } from "@/components/ScoreBar";
+import { AICallout } from "@/components/AICallout";
 import { SectionLabel } from "@/components/ui";
 
 export function TuneView({
@@ -100,6 +101,13 @@ export function TuneView({
               />
             ))
           )}
+        </div>
+
+        {/* Build Coach narration of the top changes — below the ranked list
+            (UX §4.2). Default COLLAPSED on Tune; the numbers lead, the prose
+            follows. Absent narration renders nothing (kill-switch, UX §7.4). */}
+        <div className="mt-5">
+          <AICallout narration={tune.narration} defaultOpen={false} />
         </div>
 
         {/* The floor cut line — refused suggestions (UX §4.2). */}

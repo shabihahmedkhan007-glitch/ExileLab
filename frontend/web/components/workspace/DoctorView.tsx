@@ -1,8 +1,9 @@
 // DoctorView — "the report screen" (UX §4.3). Goal-aware: a goal switcher
 // re-fetches and visibly re-grades (the grade is honest about its scope). Per-
 // category letter grades, then severity-sorted FindingCard rows with inline
-// deterministic evidence and expandable fixes. The AICallout is present but
-// empty — no LLM exists yet, so no generated prose renders (Law 3, UX §7).
+// deterministic evidence and expandable fixes. The report FOOTER is the single
+// AICallout — the Build Coach's optional narration of the findings above it,
+// default-expanded here (Law 3, UX §7). Absent narration renders nothing.
 
 "use client";
 
@@ -129,9 +130,10 @@ export function DoctorView({
               ))}
           </div>
 
-          {/* The one home for generated prose — empty until the Coach lands. */}
+          {/* Report FOOTER: the one home for generated prose (UX §4.3). Default
+              expanded on Doctor. Absent narration → renders nothing (kill-switch). */}
           <div className="mt-5">
-            <AICallout text={null} />
+            <AICallout narration={report.narration} defaultOpen />
           </div>
 
           <p className="mt-6 text-xs text-faint">

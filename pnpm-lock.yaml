@@ -32,6 +32,9 @@ importers:
       '@exilelab/build-normalizer':
         specifier: workspace:*
         version: link:../../packages/build-normalizer
+      '@exilelab/coach':
+        specifier: workspace:*
+        version: link:../../packages/coach
       '@exilelab/context-detector':
         specifier: workspace:*
         version: link:../../packages/context-detector
@@ -104,6 +107,15 @@ importers:
       '@exilelab/core':
         specifier: workspace:*
         version: link:../core
+
+  packages/coach:
+    dependencies:
+      '@exilelab/core':
+        specifier: workspace:*
+        version: link:../core
+      zod:
+        specifier: ^3
+        version: 3.25.76
 
   packages/comparator:
     dependencies:

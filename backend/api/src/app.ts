@@ -13,10 +13,22 @@ import cors from "@fastify/cors";
 import { ExileLabService, HttpError } from "./services.js";
 import type { TuneRequest } from "./services.js";
 import { repositoriesFromEnv } from "./store/postgres-repositories.js";
+import { coachFromEnv } from "./coach-config.js";
+import { withCache } from "@exilelab/engine-adapter";
+import {
+  InMemoryCalculationResultStore,
+  MockEngine,
+} from "@exilelab/engine-adapter";
+import type { BuildCoach } from "@exilelab/coach";
 
 export interface BuildAppOptions {
   /** Inject a service (e.g. with seeded repositories) for tests. */
   service?: ExileLabService;
+  /**
+   * Inject a Build Coach (tests use a MockNarrationProvider-backed coach). Ignored
+   * when `service` is supplied. Default: env-configured (disabled without a key).
+   */
+  coach?: BuildCoach;
   /** CORS origin for the web app (default http://localhost:3000). */
   corsOrigin?: string;
   /** Fastify logger toggle (off by default; the server script turns it on). */
@@ -30,7 +42,14 @@ export async function buildApp(
   // (schema applied on connect); otherwise the in-memory default. Tests run with
   // DATABASE_URL unset and never touch a database. An injected service wins.
   const service =
-    options.service ?? new ExileLabService(await repositoriesFromEnv());
+    options.service ??
+    new ExileLabService(
+      await repositoriesFromEnv(),
+      // Same default engine wiring the service uses internally (the seam lives in
+      // engine-adapter, ADR-001); named here so an injected coach can be passed.
+      withCache(new MockEngine(), new InMemoryCalculationResultStore()),
+      options.coach ?? coachFromEnv(),
+    );
   const app = Fastify({ logger: options.logger ?? false });
 
   await app.register(cors, {

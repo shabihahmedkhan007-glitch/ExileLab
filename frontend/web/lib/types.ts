@@ -18,6 +18,23 @@ export const PREFERENCE_AXES = [
 export type PreferenceAxis = (typeof PREFERENCE_AXES)[number];
 export type AxisWeights = Record<PreferenceAxis, number>;
 
+// --- Build Coach narration (GLOSSARY "Build Coach"; UX §7 trust rules) -------
+// Mirrored EXACTLY from the API's NarrationResult (packages/coach/src/types.ts,
+// surfaced by backend/api/src/services.ts). The ONLY generated text the UI ever
+// renders, and only ever inside <AICallout>. Present on a response ONLY when the
+// Coach returned non-null — absent on every degradation (kill-switch, UX §7.4).
+
+export interface NarrationResult {
+  /** The two-to-three sentence coach-voice summary (guardrail-verified). */
+  text: string;
+  /** The provider model that produced it (part of the cache/input hash). */
+  model: string;
+  /** ISO timestamp the narration was produced/cached at. */
+  cachedAt: string;
+  /** sha256(stableStringify(input) + model) — cache key and provenance stamp. */
+  inputHash: string;
+}
+
 // --- Import / snapshot summary ----------------------------------------------
 
 export interface SnapshotSummary {
@@ -119,6 +136,11 @@ export interface TuneResponse {
   engineVersion: string;
   recommendations: Recommendation[];
   belowFloor: CutRecommendation[];
+  /**
+   * Optional Build Coach narration of the top changes (UX §4.2 AICallout).
+   * Present ONLY when the Coach returns non-null; absent on any degradation.
+   */
+  narration?: NarrationResult;
 }
 
 export interface PromoteResponse {
@@ -198,4 +220,10 @@ export interface DoctorReport {
   findings: Finding[];
   grades: CategoryGrades;
   verdict: Finding;
+  /**
+   * Optional Build Coach narration of the report (UX §4.3 footer callout).
+   * Present ONLY when the Coach returns non-null; absent on any degradation
+   * (kill-switch) — the report is otherwise identical.
+   */
+  narration?: NarrationResult;
 }

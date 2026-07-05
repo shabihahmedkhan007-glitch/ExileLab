@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@exilelab/build-normalizer": "workspace:*",
+    "@exilelab/coach": "workspace:*",
     "@exilelab/context-detector": "workspace:*",
     "@exilelab/core": "workspace:*",
     "@exilelab/engine-adapter": "workspace:*",

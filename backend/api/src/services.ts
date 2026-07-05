@@ -30,6 +30,9 @@ import type {
 } from "@exilelab/preference-engine";
 import { runDoctor } from "@exilelab/rulebook";
 import type { DoctorReport, Goal } from "@exilelab/rulebook";
+import { createBuildCoach } from "@exilelab/coach";
+import type { BuildCoach, NarrationResult } from "@exilelab/coach";
+import { doctorNarrationInput, tuneNarrationInput } from "./coach-input.js";
 
 // The calculation engine lives in EXACTLY ONE place: @exilelab/engine-adapter.
 // Swapping the deterministic MockEngine for the real PoB2 LuaJIT sidecar happens
@@ -148,7 +151,19 @@ export interface TuneResponse {
   recommendations: Recommendation[];
   /** Below-floor candidates, excluded from ranking (UX §4.2 cut line). */
   belowFloor: CutRecommendation[];
+  /**
+   * Optional Build Coach narration of the top changes (UX §4.2 AICallout). Present
+   * ONLY when the Coach returns non-null; absent on any degradation (kill-switch).
+   */
+  narration?: NarrationResult;
 }
+
+/**
+ * A Doctor Report plus the optional Build Coach narration (UX §4.3 footer callout).
+ * The `narration` key is present ONLY when the Coach returns non-null — silent
+ * degradation drops the field entirely, leaving the report otherwise identical.
+ */
+export type DoctorResponse = DoctorReport & { narration?: NarrationResult };
 
 export interface PromoteResponse {
   previousBuildId: string;
@@ -191,6 +206,11 @@ export class ExileLabService {
       new MockEngine(),
       new InMemoryCalculationResultStore(),
     ),
+    // The Build Coach seam (LLM narration). Defaults to a DISABLED coach: no
+    // provider, no network, narration omitted everywhere. buildApp injects an
+    // env-configured coach in production and a MockNarrationProvider-backed coach
+    // in tests. A disabled coach makes ZERO provider calls (charter/kill-switch).
+    private readonly coach: BuildCoach = createBuildCoach({ enabled: false }),
   ) {}
 
   // -- Import ---------------------------------------------------------------
@@ -318,7 +338,7 @@ export class ExileLabService {
       (a, b) => b.delta - a.delta || a.mutationId.localeCompare(b.mutationId),
     );
 
-    return {
+    const response: TuneResponse = {
       buildId,
       applied: { presetId, kind },
       baseScore,
@@ -326,6 +346,17 @@ export class ExileLabService {
       recommendations,
       belowFloor,
     };
+
+    // Build Coach narration of the top changes (UX §4.2). Non-null only; on any
+    // degradation the field is simply absent.
+    if (recommendations.length > 0) {
+      const narration = await this.coach.narrateTune(
+        tuneNarrationInput(recommendations, presetId ?? "custom", this.archetype(base)),
+      );
+      if (narration !== null) response.narration = narration;
+    }
+
+    return response;
   }
 
   // -- Promote --------------------------------------------------------------
@@ -362,7 +393,7 @@ export class ExileLabService {
   // -- Doctor ---------------------------------------------------------------
 
   /** GET /builds/:id/doctor: goal-aware Doctor Report over the engine outputs. */
-  async doctor(buildId: string, goalRaw: string, tierRaw?: string): Promise<DoctorReport> {
+  async doctor(buildId: string, goalRaw: string, tierRaw?: string): Promise<DoctorResponse> {
     const base = await this.requireBuild(buildId);
     const goal = goalRaw as Goal;
     if (!VALID_GOALS.has(goal)) {
@@ -380,7 +411,14 @@ export class ExileLabService {
       tier = Math.floor(parsed);
     }
     const measure = (await this.measure(base)).measurement;
-    return runDoctor(measure.doctor, goal, tier);
+    const report = runDoctor(measure.doctor, goal, tier);
+
+    // Build Coach narration of the report (UX §4.3 footer callout). Non-null only;
+    // on any degradation the narration field is simply absent (kill-switch).
+    const narration = await this.coach.narrateDoctor(
+      doctorNarrationInput(report, goal, this.archetype(base)),
+    );
+    return narration !== null ? { ...report, narration } : report;
   }
 
   /** GET /goals: the built-in Goal Presets (preset gallery, UX §3 /goals). */

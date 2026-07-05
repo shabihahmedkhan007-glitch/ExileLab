@@ -1,22 +1,44 @@
 // AICallout — the ONLY container generated text may ever appear in (UX §5, §7,
-// Law 3: "math wears the crown, the LLM holds the coat"). No LLM exists in this
-// build (deterministic-systems principle), so this renders nothing by default.
-// It is built now so that when the Build Coach lands, generated prose has exactly
-// one distinctly-styled, labelled, collapsible home — and never leaks inline with
-// engine numbers. Passing no `text` (the current, permanent-for-now state) yields
-// null: no broken empty state, invisible kill-switch degradation (UX §7.4).
+// Law 3: "math wears the crown, the LLM holds the coat"). Distinct dashed accent
+// border, ✨ icon, a permanent "generated" label, and a collapse control. The
+// prose is typographically SECONDARY to the deterministic numbers around it
+// (muted, small) so the user is never unsure which is computed and which is
+// narrated (UX §7.5).
+//
+// Kill-switch invisibility (UX §7.4): the `narration` field is present on an API
+// response ONLY when the Build Coach returned non-null. Absent (or empty text) →
+// this renders `null`: no empty frame, no loading state, zero layout shift. The
+// narration arrives with the same response it narrates — there is NEVER a
+// separate fetch or spinner for it.
 
 "use client";
 
 import { useState } from "react";
+import type { NarrationResult } from "@/lib/types";
+import { relativeTime } from "@/lib/format";
 
-export function AICallout({ text }: { text?: string | null }) {
-  const [open, setOpen] = useState(true);
-  // No generated text exists yet → render nothing (invisible degradation).
-  if (!text || text.trim().length === 0) return null;
+// The exact affordance copy from UX §7.2 — surfaced on hover of the callout.
+const HOVER_AFFORDANCE =
+  "Narration is AI-generated from the deterministic results above. The numbers are computed, not generated.";
+
+export function AICallout({
+  narration,
+  defaultOpen = true,
+}: {
+  narration?: NarrationResult | null;
+  /** Doctor footer defaults expanded; Tune defaults collapsed (task rule 1). */
+  defaultOpen?: boolean;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+
+  // Kill-switch: no narration (or empty) → render nothing (invisible degradation).
+  if (!narration || narration.text.trim().length === 0) return null;
 
   return (
-    <div className="rounded-[var(--radius-lg)] border border-dashed border-accent-dim bg-[color-mix(in_oklab,var(--color-accent)_7%,transparent)]">
+    <div
+      title={HOVER_AFFORDANCE}
+      className="rounded-[var(--radius-lg)] border border-dashed border-accent-dim bg-[color-mix(in_oklab,var(--color-accent)_7%,transparent)]"
+    >
       <button
         onClick={() => setOpen((v) => !v)}
         className="flex w-full items-center justify-between px-4 py-3 text-left"
@@ -29,15 +51,19 @@ export function AICallout({ text }: { text?: string | null }) {
             generated
           </span>
         </span>
-        <span className="text-faint">{open ? "–" : "+"}</span>
+        <span className="text-faint" aria-hidden>
+          {open ? "–" : "+"}
+        </span>
       </button>
       {open ? (
-        <p
-          className="px-4 pb-4 text-sm leading-relaxed text-muted"
-          title="Narration is AI-generated from the deterministic results above. The numbers are computed, not generated."
-        >
-          {text}
-        </p>
+        <div className="px-4 pb-4">
+          <p className="text-sm leading-relaxed text-muted">{narration.text}</p>
+          {/* Provenance stamp — faint, secondary; reinforces "not computed". */}
+          <p className="mt-2 text-[11px] text-faint">
+            AI-generated from the deterministic results above · {narration.model}{" "}
+            · {relativeTime(narration.cachedAt)}
+          </p>
+        </div>
       ) : null}
     </div>
   );
