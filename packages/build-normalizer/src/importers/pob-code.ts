@@ -35,11 +35,12 @@ export function encodePobCode(xml: string, deflate: (buf: Buffer) => Buffer): st
 const MAX_CODE_LENGTH = 4 * 1024 * 1024; // 4 MiB of base64 text
 const MAX_INFLATED_BYTES = 8 * 1024 * 1024; // 8 MiB of decoded XML
 
-/** Decode a share code back to XML text, or null if it is not a valid code. */
-function tryDecode(input: string): string | null {
-  if (input.length > MAX_CODE_LENGTH) return null;
-  const normalized = input
-    .trim()
+/** Minimum plausible length for a share-code line (real codes are hundreds of chars). */
+const MIN_CODE_LINE_LENGTH = 40;
+
+/** Decode one candidate code string, or null. */
+function decodeCandidate(candidate: string): string | null {
+  const normalized = candidate
     .replace(/\s+/g, "")
     .replace(/-/g, "+")
     .replace(/_/g, "/");
@@ -56,6 +57,31 @@ function tryDecode(input: string): string | null {
   } catch {
     return null;
   }
+}
+
+/**
+ * Decode a share code back to XML text, or null if it is not a valid code.
+ *
+ * PASTE TOLERANCE ("the paste box accepts anything", UX §3): people paste codes
+ * surrounded by junk — Discord preamble, "here's my build:", comment lines. If
+ * the input as a whole is not a code, each individual line that LOOKS like one
+ * (long, pure base64url) is tried; the first line that decodes to XML wins.
+ * Strictness is preserved: whatever is tried must still inflate under the bomb
+ * cap AND (for detect) contain PoB marker tags.
+ */
+function tryDecode(input: string): string | null {
+  if (input.length > MAX_CODE_LENGTH) return null;
+  const whole = decodeCandidate(input.trim());
+  if (whole !== null) return whole;
+
+  for (const line of input.split(/\r?\n/)) {
+    const t = line.trim();
+    if (t.length < MIN_CODE_LINE_LENGTH) continue;
+    if (!/^[A-Za-z0-9+/=_-]+$/.test(t)) continue;
+    const xml = decodeCandidate(t);
+    if (xml !== null) return xml;
+  }
+  return null;
 }
 
 function parseIntOrNull(v: string | undefined): number | null {

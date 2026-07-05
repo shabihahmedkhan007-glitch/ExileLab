@@ -318,6 +318,21 @@ describe("malformed input", () => {
     expect(() => new PobCodeImporter().import(notDeflated)).toThrow(ImportError);
   });
 
+  it("accepts a share code surrounded by junk lines (the paste box accepts anything)", () => {
+    // Real-world paste: comment/preamble lines around the code (e.g. the
+    // synthetic fixture's own '#' header, or a Discord message). The importer
+    // must find and decode the code line.
+    const surrounded = [
+      "# here's my build, roast it",
+      "",
+      makePobCode(),
+      "thanks!",
+    ].join("\n");
+    expect(detectSource(surrounded)).toBeInstanceOf(PobCodeImporter);
+    const snap = normalize(new PobCodeImporter().import(surrounded));
+    expect(snap.buildState.character.class).toBe("Ranger");
+  });
+
   it("PoB importer rejects a decompression bomb instead of inflating it (DoS guard)", () => {
     // ~100 MiB of zeros deflates to ~100 KiB — a classic zip bomb. The importer
     // must refuse (typed error / detect=false), never allocate the inflated buffer.
