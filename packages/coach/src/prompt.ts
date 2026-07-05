@@ -15,25 +15,29 @@ import type { NarrationInput, StructuredPrompt } from './types.js';
 
 /**
  * The default narration model (configurable via COACH_MODEL). PRD §9.2 / §10:
- * cheap, explanation-only. Chosen 2026-07 from live OpenRouter pricing.
+ * cheap, explanation-only. Chosen + live-tested 2026-07 against OpenRouter.
  *
- * DEMO DEFAULT — $0: Qwen3-Next-80B's free variant. 80B-MoE quality at zero
- * cost; the content-hash cache keeps request volume far under the free tier's
- * rate limits, and every degradation path (rate-limited, unavailable,
- * schema-invalid, guardrail-rejected) silently drops the card — nothing breaks.
- * Privacy note: free-tier endpoints may use prompts for provider training; our
- * NarrationInput is non-personal game-build data only, acceptable for the demo
- * phase, NOT for production accounts.
+ * DEFAULT — inclusionai/ling-2.6-flash: the cheapest paid model that reliably
+ * works end-to-end (≈$0.0000094/narration ≈ $1 per 100k, ~1.4s, verified to
+ * pass the guardrail with clean coach-tone prose). "Effectively free" without
+ * the free tier's fragility.
  *
- * THE PAID LADDER (env COACH_MODEL, zero code changes), per-narration at our
+ * NOTE on the $0 tier: qwen/qwen3-next-80b-a3b-instruct:free is genuinely free
+ * but its upstream provider rate-limits aggressively (observed HTTP 429,
+ * retry-after ~26s) — impractical for a narration that rides a live
+ * doctor/tune response, so it is NOT the default. It still works as a COACH_MODEL
+ * override when the upstream has capacity; every failure silently drops the card.
+ *
+ * THE LADDER (env COACH_MODEL, zero code changes), per-narration at our
  * ~700-in/80-out profile:
- *   inclusionai/ling-2.6-flash            ≈ $0.0000094  (absolute paid floor)
- *   qwen/qwen3-30b-a3b-instruct-2507      ≈ $0.000049   (proven instructor)
- *   openai/gpt-4.1-nano                   ≈ $0.0001     (grammar-enforced schema
- *                                                        — production pick)
- *   anthropic/claude-haiku-4.5            ≈ $0.001      (best discipline)
+ *   qwen/qwen3-next-80b-a3b-instruct:free  $0            (flaky upstream 429s)
+ *   inclusionai/ling-2.6-flash             ≈ $0.0000094  (DEFAULT — reliable floor)
+ *   qwen/qwen3-30b-a3b-instruct-2507       ≈ $0.000049   (proven instructor, ~4s)
+ *   openai/gpt-4.1-nano                    ≈ $0.0001     (grammar-enforced schema,
+ *                                                         fastest — production pick)
+ *   anthropic/claude-haiku-4.5             ≈ $0.001      (best discipline)
  */
-export const DEFAULT_MODEL = 'qwen/qwen3-next-80b-a3b-instruct:free';
+export const DEFAULT_MODEL = 'inclusionai/ling-2.6-flash';
 
 /** The coach persona + hard grounding instruction (UX §9 + §7 rule 3). */
 export const SYSTEM_PROMPT = [
