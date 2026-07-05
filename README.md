@@ -23,9 +23,53 @@ Why it's different: **preference-first, not DPS-first** · **context-aware, a co
 
 ## Status
 
-**Pre-implementation, by design.** The product is fully specified in `docs/` and is entering Phase 0
-(validation spikes) — no application code exists yet. Current status always lives in
-`docs/PROJECT_CONTEXT.md`.
+**Foundation + product surfaces built and green** (230+ tests): the canonical build model
+(RFC-0001), preference engine, context detector, goal-aware Doctor, comparator, Build Coach
+(LLM narration, kill-switched), Fastify API, and the Next.js web app — Overview, Tune, Doctor,
+Compare, and Upgrades. The calculation engine is a clearly-marked deterministic mock until the
+Phase 0 S1 spike lands the real PoB2 sidecar; prices are synthetic and disclaimed until the
+compliance-reviewed price layer ships. Current status always lives in `docs/PROJECT_CONTEXT.md`.
+
+## Launch it locally
+
+Prereqs: **Node 22+** and **pnpm 9+** (`npm i -g pnpm`).
+
+```bash
+pnpm install        # once, from the repo root
+pnpm -r build       # build all workspace packages
+```
+
+**Terminal 1 — the API** (port 3001):
+
+```powershell
+# optional: enable the Build Coach (AI narration of results)
+$env:OPENROUTER_API_KEY = "sk-or-..."      # from https://openrouter.ai/keys
+# bash/mac: export OPENROUTER_API_KEY=sk-or-...
+
+pnpm --filter @exilelab/api exec tsx src/server.ts
+```
+
+**Terminal 2 — the web app** (port 3000):
+
+```bash
+pnpm --filter @exilelab/web dev
+```
+
+Open **http://localhost:3000**, paste a build into the box — try the contents of
+`research/fixtures/benchmark-builds/dot-caster.json` or the share code in
+`research/fixtures/archetype-3-sources/b-pob-share-code.txt` — and explore the
+Overview / Tune / Doctor / Compare / Upgrades tabs.
+
+**What the env switches do**
+
+| Variable | Absent (default) | Set |
+|---|---|---|
+| `OPENROUTER_API_KEY` | Build Coach off — no ✨ narration cards, everything else works | Coach narrates Doctor/Tune results (guardrailed: the LLM can never introduce a number not in the findings) |
+| `COACH_MODEL` | `google/gemini-flash-1.5` | any OpenRouter model id |
+| `PRICE_PROVIDER` | `mock` — deterministic synthetic prices, visibly disclaimed | any other value kills the price layer (Upgrades returns 503, Tune drops cost chips) |
+| `DATABASE_URL` | in-memory storage | Postgres 17 persistence (`backend/api/docker-compose.db.yml`) |
+
+Run the test suite anytime with `pnpm -r test`.
 
 ## Working in this repository
 
