@@ -55,15 +55,17 @@ export function ScoreBar({
             <span className="truncate text-sm font-medium text-ink">
               {rec.description}
             </span>
-            <span
-              className={`ml-auto shrink-0 rounded-md border px-2 py-0.5 text-[11px] tabular ${
-                rec.cost > 0
-                  ? "border-line-strong bg-surface-2 text-muted"
-                  : "border-line bg-transparent text-faint"
-              }`}
-            >
-              {costLabel(rec.cost)}
-            </span>
+            {rec.cost !== undefined ? (
+              <span
+                className={`ml-auto shrink-0 rounded-md border px-2 py-0.5 text-[11px] tabular ${
+                  rec.cost > 0
+                    ? "border-line-strong bg-surface-2 text-muted"
+                    : "border-line bg-transparent text-faint"
+                }`}
+              >
+                {costLabel(rec.cost)}
+              </span>
+            ) : null}
           </div>
           {/* The bar. */}
           <div className="mt-2 h-2.5 w-full overflow-hidden rounded-full bg-surface-2">

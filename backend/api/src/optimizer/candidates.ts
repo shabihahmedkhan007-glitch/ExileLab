@@ -20,9 +20,11 @@ export interface Candidate {
   mutation: BuildMutation;
   /** Human-readable, coach-voice change description (never shames — UX §9). */
   description: string;
-  /** Priced cost of the change in Divines (0 for a free respec-style change). */
-  costDivines: number;
 }
+// NOTE: candidates carry NO price. Pricing happens exclusively through the
+// PriceProvider seam (src/prices/) so every cost shown or scored is subject to
+// the kill-switch and the synthetic-price disclaimer — a hardcoded Divine
+// figure here would be an invented number influencing the Weighted Score.
 
 /** Node ids chosen so (id mod 8) targets a specific metric family in MockEngine. */
 const AXIS_NODES: ReadonlyArray<{ nodeId: number; description: string }> = [
@@ -54,7 +56,6 @@ export function generateCandidates(base: CoreSnapshot): Candidate[] {
         base.identity,
         [{ kind: "allocatePassiveNode", loadoutContextId, nodeId }],
         description,
-        0,
       ),
     );
   }
@@ -97,7 +98,6 @@ export function generateCandidates(base: CoreSnapshot): Candidate[] {
         ),
       ],
       "Swap to a glass-cannon chest — large damage gain, but it cuts your Life.",
-      3,
     ),
   );
 
@@ -125,7 +125,6 @@ export function generateCandidates(base: CoreSnapshot): Candidate[] {
         },
       ],
       "Upgrade to a top-tier weapon — a big damage jump at a premium price.",
-      8,
     ),
   );
 
@@ -136,11 +135,9 @@ function makeCandidate(
   baseSnapshotId: string,
   operations: MutationOperation[],
   description: string,
-  costDivines: number,
 ): Candidate {
   return {
     mutation: createBuildMutation({ baseSnapshotId, operations }),
     description,
-    costDivines,
   };
 }

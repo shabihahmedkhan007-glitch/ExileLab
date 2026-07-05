@@ -21,6 +21,7 @@
   "dependencies": {
     "@exilelab/build-normalizer": "workspace:*",
     "@exilelab/coach": "workspace:*",
+    "@exilelab/comparator": "workspace:*",
     "@exilelab/context-detector": "workspace:*",
     "@exilelab/core": "workspace:*",
     "@exilelab/engine-adapter": "workspace:*",

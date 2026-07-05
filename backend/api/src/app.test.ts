@@ -112,10 +112,17 @@ describe("ExileLab API", () => {
     expect(bossBody.recommendations.length).toBeGreaterThan(0);
 
     // Each recommendation is a ScoreBar payload (UX §4.2): delta + per-axis
-    // decomposition + description + cost; the decomposition sums to the delta.
+    // decomposition + description; cost is OPTIONAL — present only when the
+    // PriceProvider seam priced the change (free respecs carry no chip), and any
+    // priced response must carry the synthetic-price disclaimer (charter §7.5).
     const top = fastBody.recommendations[0];
     expect(typeof top.description).toBe("string");
-    expect(typeof top.cost).toBe("number");
+    const all = [...fastBody.recommendations, ...fastBody.belowFloor];
+    const priced = all.filter((r: { cost?: number }) => typeof r.cost === "number");
+    expect(priced.length).toBeGreaterThan(0); // gear swaps are priced by the mock
+    for (const r of priced) expect(r.cost).toBeGreaterThan(0);
+    expect(fastBody.priceProvenance).toBe("synthetic-mock");
+    expect(typeof fastBody.priceDisclaimer).toBe("string");
     expect(Array.isArray(top.perAxis)).toBe(true);
     const summed = top.perAxis.reduce(
       (acc: number, a: { weightedDelta: number }) => acc + a.weightedDelta,

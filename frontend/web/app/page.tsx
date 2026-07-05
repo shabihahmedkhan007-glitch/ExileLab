@@ -23,15 +23,13 @@ const CARDS: ProductCard[] = [
   {
     verb: "Compare",
     promise:
-      "Your build vs top public builds — re-scored under YOUR priorities.",
+      "Your build vs any public build — re-scored under YOUR priorities.",
     icon: "⚖",
-    phase: "coming in Phase 3",
   },
   {
     verb: "Upgrades",
     promise: "Budget upgrade finder, ranked by score-per-divine.",
     icon: "💠",
-    phase: "coming in Phase 3",
   },
 ];
 

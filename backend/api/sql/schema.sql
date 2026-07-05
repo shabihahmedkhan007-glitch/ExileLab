@@ -112,3 +112,47 @@ CREATE TABLE IF NOT EXISTS raw_import_artifacts (
 -- Retention sweep: purge expired artifacts efficiently.
 CREATE INDEX IF NOT EXISTS raw_artifacts_retention_idx
   ON raw_import_artifacts (retention_expires_at);
+
+-- ---------------------------------------------------------------------------
+-- Report — an IMMUTABLE frozen snapshot of one result (shareable /r/{id}).
+-- A report NEVER recomputes: build_summary / attribution / payload are frozen
+-- verbatim at POST time and returned as-is, so a later change to the underlying
+-- build cannot alter a shared report.
+-- ---------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS reports (
+  report_id      text        PRIMARY KEY,
+  build_id       text        NOT NULL,
+  kind           text        NOT NULL,   -- 'overview' | 'doctor' | 'tune' | 'compare'
+  frozen_at      timestamptz NOT NULL,
+  -- Frozen at POST time; never re-derived on read.
+  build_summary  jsonb       NOT NULL,
+  attribution    text        NOT NULL,   -- charter §7.5: present on every shared report
+  -- The result payload, stored verbatim.
+  payload        jsonb       NOT NULL,
+  created_at     timestamptz NOT NULL DEFAULT now()
+);
+
+-- Find reports for a build (e.g. a build's shared-report history).
+CREATE INDEX IF NOT EXISTS reports_build_idx ON reports (build_id);
+
+-- ---------------------------------------------------------------------------
+-- User — a minimal anonymous account. AUTH SEAM: platform auth (Phase 1 item 5)
+-- replaces this anonymous id with a real authenticated principal.
+-- ---------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS users (
+  user_id     text        PRIMARY KEY,
+  created_at  timestamptz NOT NULL DEFAULT now()
+);
+
+-- ---------------------------------------------------------------------------
+-- SavedBuild — a (user -> build) association (the saved-builds list).
+-- ---------------------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS saved_builds (
+  user_id   text        NOT NULL,
+  build_id  text        NOT NULL,
+  saved_at  timestamptz NOT NULL DEFAULT now(),
+  PRIMARY KEY (user_id, build_id)
+);
+
+-- List a user's saved builds, oldest-first.
+CREATE INDEX IF NOT EXISTS saved_builds_user_idx ON saved_builds (user_id, saved_at);

@@ -23,12 +23,16 @@ import { BuildHeader } from "@/components/workspace/BuildHeader";
 import { Overview } from "@/components/workspace/Overview";
 import { TuneView } from "@/components/workspace/TuneView";
 import { DoctorView } from "@/components/workspace/DoctorView";
+import { CompareView } from "@/components/workspace/CompareView";
+import { UpgradesView } from "@/components/workspace/UpgradesView";
 import { Skeleton } from "@/components/ui";
 
-type Tab = "overview" | "tune" | "doctor";
+type Tab = "overview" | "tune" | "compare" | "upgrades" | "doctor";
 const TABS: { id: Tab; label: string }[] = [
   { id: "overview", label: "Overview" },
   { id: "tune", label: "Tune" },
+  { id: "compare", label: "Compare" },
+  { id: "upgrades", label: "Upgrades" },
   { id: "doctor", label: "Doctor" },
 ];
 
@@ -223,6 +227,26 @@ export default function BuildWorkspacePage() {
           onSelectPreset={onSelectPreset}
           onWeightsChange={onWeightsChange}
           onApply={onApply}
+        />
+      ) : null}
+
+      {tab === "compare" ? (
+        <CompareView
+          buildId={id}
+          presetId={activePresetId}
+          weights={weights}
+          onApply={onApply}
+          applyingId={applyingId}
+        />
+      ) : null}
+
+      {tab === "upgrades" ? (
+        <UpgradesView
+          buildId={id}
+          activePresetId={activePresetId}
+          weights={weights}
+          onApply={onApply}
+          applyingId={applyingId}
         />
       ) : null}
 

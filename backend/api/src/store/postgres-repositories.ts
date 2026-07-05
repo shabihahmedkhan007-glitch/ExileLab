@@ -45,6 +45,13 @@ import type {
   MutationRepository,
   RawImportArtifactRepository,
   Repositories,
+  ReportKind,
+  ReportRepository,
+  SavedBuild,
+  SavedBuildRepository,
+  StoredReport,
+  StoredUser,
+  UserRepository,
 } from "./repositories.js";
 import { createInMemoryRepositories } from "./repositories.js";
 
@@ -387,6 +394,117 @@ export class PostgresRawImportArtifactRepository
   }
 }
 
+export interface ReportRow {
+  readonly report_id: string;
+  readonly build_id: string;
+  readonly kind: string;
+  readonly frozen_at: unknown;
+  readonly build_summary: unknown;
+  readonly attribution: string;
+  readonly payload: unknown;
+}
+
+export function rowToReport(row: ReportRow): StoredReport {
+  return {
+    reportId: row.report_id,
+    buildId: row.build_id,
+    kind: row.kind as ReportKind,
+    frozenAt: asIso(row.frozen_at),
+    buildSummary: asObject(row.build_summary),
+    attribution: row.attribution,
+    payload: asObject(row.payload),
+  };
+}
+
+export class PostgresReportRepository implements ReportRepository {
+  constructor(private readonly db: Queryable) {}
+
+  async save(report: StoredReport): Promise<void> {
+    await this.db.query(
+      `INSERT INTO reports
+         (report_id, build_id, kind, frozen_at, build_summary, attribution, payload)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)
+       ON CONFLICT (report_id) DO NOTHING`,
+      [
+        report.reportId,
+        report.buildId,
+        report.kind,
+        report.frozenAt,
+        JSON.stringify(report.buildSummary),
+        report.attribution,
+        JSON.stringify(report.payload),
+      ],
+    );
+  }
+
+  async get(reportId: string): Promise<StoredReport | undefined> {
+    const res = await this.db.query<ReportRow>(
+      `SELECT report_id, build_id, kind, frozen_at, build_summary, attribution, payload
+         FROM reports WHERE report_id = $1`,
+      [reportId],
+    );
+    const row = res.rows[0];
+    return row === undefined ? undefined : rowToReport(row);
+  }
+}
+
+export interface UserRow {
+  readonly user_id: string;
+  readonly created_at: unknown;
+}
+
+export class PostgresUserRepository implements UserRepository {
+  constructor(private readonly db: Queryable) {}
+
+  async save(user: StoredUser): Promise<void> {
+    await this.db.query(
+      `INSERT INTO users (user_id, created_at) VALUES ($1, $2)
+       ON CONFLICT (user_id) DO NOTHING`,
+      [user.userId, user.createdAt],
+    );
+  }
+
+  async get(userId: string): Promise<StoredUser | undefined> {
+    const res = await this.db.query<UserRow>(
+      `SELECT user_id, created_at FROM users WHERE user_id = $1`,
+      [userId],
+    );
+    const row = res.rows[0];
+    return row === undefined ? undefined : { userId: row.user_id, createdAt: asIso(row.created_at) };
+  }
+}
+
+export interface SavedBuildRow {
+  readonly user_id: string;
+  readonly build_id: string;
+  readonly saved_at: unknown;
+}
+
+export class PostgresSavedBuildRepository implements SavedBuildRepository {
+  constructor(private readonly db: Queryable) {}
+
+  async add(saved: SavedBuild): Promise<void> {
+    await this.db.query(
+      `INSERT INTO saved_builds (user_id, build_id, saved_at) VALUES ($1, $2, $3)
+       ON CONFLICT (user_id, build_id) DO NOTHING`,
+      [saved.userId, saved.buildId, saved.savedAt],
+    );
+  }
+
+  async list(userId: string): Promise<SavedBuild[]> {
+    const res = await this.db.query<SavedBuildRow>(
+      `SELECT user_id, build_id, saved_at FROM saved_builds
+        WHERE user_id = $1 ORDER BY saved_at ASC`,
+      [userId],
+    );
+    return res.rows.map((r) => ({
+      userId: r.user_id,
+      buildId: r.build_id,
+      savedAt: asIso(r.saved_at),
+    }));
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Bundle + wiring.
 // ---------------------------------------------------------------------------
@@ -414,6 +532,9 @@ export function repositoriesOver(db: Queryable): Repositories {
     calculations: new PostgresCalculationResultRepository(db),
     mutations: new PostgresMutationRepository(db),
     rawArtifacts: new PostgresRawImportArtifactRepository(db),
+    reports: new PostgresReportRepository(db),
+    users: new PostgresUserRepository(db),
+    savedBuilds: new PostgresSavedBuildRepository(db),
   };
 }
 

@@ -20,6 +20,7 @@ import { RadarChart } from "@/components/RadarChart";
 import { StatDelta } from "@/components/StatDelta";
 import { SeverityDot } from "@/components/chips";
 import { SectionLabel } from "@/components/ui";
+import { WastedStats } from "./WastedStats";
 
 export function Overview({
   detail,
@@ -157,6 +158,12 @@ export function Overview({
             )}
           </div>
         </div>
+
+        {/* Recoverable inefficiencies, weighted for the active goal (OPT-1). */}
+        <WastedStats
+          buildId={detail.summary.buildId}
+          presetId={activePreset?.id}
+        />
 
         <div className="flex gap-3">
           <button

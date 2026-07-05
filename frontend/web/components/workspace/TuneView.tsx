@@ -110,6 +110,15 @@ export function TuneView({
           <AICallout narration={tune.narration} defaultOpen={false} />
         </div>
 
+        {/* Honest labeling: any Divine cost chip above is a synthetic estimate
+            until the real price layer ships (charter §7.5) — same disclaimer
+            contract as the Upgrades tab. */}
+        {tune.priceDisclaimer ? (
+          <p className="mt-3 text-[11px] leading-relaxed text-faint">
+            {tune.priceDisclaimer}
+          </p>
+        ) : null}
+
         {/* The floor cut line — refused suggestions (UX §4.2). */}
         {tune.belowFloor.length > 0 ? (
           <div className="mt-6">

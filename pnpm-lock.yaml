@@ -35,6 +35,9 @@ importers:
       '@exilelab/coach':
         specifier: workspace:*
         version: link:../../packages/coach
+      '@exilelab/comparator':
+        specifier: workspace:*
+        version: link:../../packages/comparator
       '@exilelab/context-detector':
         specifier: workspace:*
         version: link:../../packages/context-detector

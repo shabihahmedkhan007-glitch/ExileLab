@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
+import { SiteFooter } from "@/components/SiteFooter";
 
 export const metadata: Metadata = {
   title: "ExileLab — tune your build to what you want",
@@ -35,10 +36,7 @@ export default function RootLayout({
           </div>
         </header>
         <main className="mx-auto max-w-6xl px-5">{children}</main>
-        <footer className="mx-auto max-w-6xl px-5 py-10 text-xs text-faint">
-          ExileLab measures builds deterministically and attributes every source.
-          Not affiliated with Grinding Gear Games.
-        </footer>
+        <SiteFooter />
       </body>
     </html>
   );

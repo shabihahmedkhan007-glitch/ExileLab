@@ -25,12 +25,16 @@ import { twisterHuntressJson } from "../fixtures.js";
 import {
   PostgresBuildRepository,
   PostgresCalculationResultRepository,
+  PostgresReportRepository,
+  PostgresSavedBuildRepository,
+  PostgresUserRepository,
   ensureSchema,
   pgQueryable,
   repositoriesOver,
   rowToCalculationResult,
   rowToMutation,
   rowToRawImportArtifact,
+  rowToReport,
   rowToSnapshot,
   snapshotToInsert,
 } from "./postgres-repositories.js";
@@ -228,6 +232,95 @@ describe("repositories over a fake Queryable (no database)", () => {
     if (call === undefined) throw new Error("no call recorded");
     expect(call.text).toContain("ORDER BY computed_at DESC");
     expect(call.values).toEqual(["s1", ""]);
+  });
+
+  it("report save is parameterized and get hydrates jsonb payload/build_summary", async () => {
+    const report = {
+      reportId: "r1",
+      buildId: "b1",
+      kind: "doctor" as const,
+      frozenAt: "2026-07-05T00:00:00.000Z",
+      buildSummary: { buildId: "b1", level: 92 },
+      attribution: "Imported via native-json",
+      payload: { grade: "B", findings: [{ id: "DOC-1" }] },
+    };
+    const save = new FakeQueryable();
+    await new PostgresReportRepository(save).save(report);
+    const saveCall = save.calls[0];
+    if (saveCall === undefined) throw new Error("no call recorded");
+    expect(saveCall.text).toContain("INSERT INTO reports");
+    expect(saveCall.values?.[0]).toBe("r1");
+    // Injection-safe: values travel as bound params, payload serialized to JSON text.
+    expect(saveCall.values?.[6]).toBe(JSON.stringify(report.payload));
+
+    const row = {
+      report_id: "r1",
+      build_id: "b1",
+      kind: "doctor",
+      frozen_at: new Date(report.frozenAt),
+      build_summary: report.buildSummary,
+      attribution: report.attribution,
+      payload: report.payload,
+    };
+    const get = new FakeQueryable((text) => (text.includes("SELECT") ? [row] : []));
+    const got = await new PostgresReportRepository(get).get("r1");
+    expect(got).toEqual(report);
+
+    const absent = new FakeQueryable(() => []);
+    expect(await new PostgresReportRepository(absent).get("missing")).toBeUndefined();
+  });
+
+  it("rowToReport accepts a JSON string for jsonb columns (fake layer)", () => {
+    const got = rowToReport({
+      report_id: "r2",
+      build_id: "b2",
+      kind: "tune",
+      frozen_at: "2026-07-05T00:00:00.000Z",
+      build_summary: JSON.stringify({ x: 1 }),
+      attribution: "a",
+      payload: JSON.stringify({ y: 2 }),
+    });
+    expect(got.buildSummary).toEqual({ x: 1 });
+    expect(got.payload).toEqual({ y: 2 });
+    expect(got.kind).toBe("tune");
+  });
+
+  it("user save/get and saved-build add/list are parameterized and ordered", async () => {
+    const userSave = new FakeQueryable();
+    await new PostgresUserRepository(userSave).save({
+      userId: "u1",
+      createdAt: "2026-07-05T00:00:00.000Z",
+    });
+    expect(userSave.calls[0]?.text).toContain("INSERT INTO users");
+    expect(userSave.calls[0]?.values?.[0]).toBe("u1");
+
+    const userGet = new FakeQueryable((text) =>
+      text.includes("SELECT")
+        ? [{ user_id: "u1", created_at: new Date("2026-07-05T00:00:00.000Z") }]
+        : [],
+    );
+    const gotUser = await new PostgresUserRepository(userGet).get("u1");
+    expect(gotUser).toEqual({ userId: "u1", createdAt: "2026-07-05T00:00:00.000Z" });
+
+    const savedAdd = new FakeQueryable();
+    await new PostgresSavedBuildRepository(savedAdd).add({
+      userId: "u1",
+      buildId: "b1",
+      savedAt: "2026-07-05T00:00:00.000Z",
+    });
+    expect(savedAdd.calls[0]?.text).toContain("INSERT INTO saved_builds");
+
+    const savedList = new FakeQueryable((text) =>
+      text.includes("SELECT")
+        ? [{ user_id: "u1", build_id: "b1", saved_at: new Date("2026-07-05T00:00:00.000Z") }]
+        : [],
+    );
+    const repo = new PostgresSavedBuildRepository(savedList);
+    const list = await repo.list("u1");
+    expect(list).toEqual([
+      { userId: "u1", buildId: "b1", savedAt: "2026-07-05T00:00:00.000Z" },
+    ]);
+    expect(savedList.calls[0]?.text).toContain("ORDER BY saved_at ASC");
   });
 });
 

@@ -11,9 +11,11 @@ import type { FastifyError, FastifyInstance } from "fastify";
 import cors from "@fastify/cors";
 
 import { ExileLabService, HttpError } from "./services.js";
-import type { TuneRequest } from "./services.js";
+import type { TuneRequest, UpgradesRequest } from "./services.js";
+import type { ReportKind } from "./store/repositories.js";
 import { repositoriesFromEnv } from "./store/postgres-repositories.js";
 import { coachFromEnv } from "./coach-config.js";
+import { priceProviderFromEnv } from "./prices/index.js";
 import { withCache } from "@exilelab/engine-adapter";
 import {
   InMemoryCalculationResultStore,
@@ -49,6 +51,9 @@ export async function buildApp(
       // engine-adapter, ADR-001); named here so an injected coach can be passed.
       withCache(new MockEngine(), new InMemoryCalculationResultStore()),
       options.coach ?? coachFromEnv(),
+      // Price-layer kill-switch (UX §4.5): unset/'mock' → synthetic mock; anything
+      // else → null, and the Upgrades route returns a typed 503 (charter §7.5).
+      priceProviderFromEnv(),
     );
   const app = Fastify({ logger: options.logger ?? false });
 
@@ -121,6 +126,121 @@ export async function buildApp(
       return service.doctor(request.params.id, goal, request.query.tier);
     },
   );
+
+  // -- Compare (UX §4.4) ----------------------------------------------------
+  // GET keeps the preset-only form (shareable URL); POST additionally accepts
+  // the user's LIVE slider weights (Law 1 — the thesis row is scored under the
+  // user's actual weights, never a silent preset fallback).
+  app.get<{ Params: { id: string }; Querystring: { with?: string; presetId?: string } }>(
+    "/builds/:id/compare",
+    async (request) => {
+      const other = request.query.with;
+      if (typeof other !== "string" || other.length === 0) {
+        throw new HttpError(400, "query parameter 'with' (the other build id) is required");
+      }
+      return service.compare(request.params.id, other, request.query.presetId);
+    },
+  );
+
+  app.post<{
+    Params: { id: string };
+    Body: { with?: string; presetId?: string; weights?: Record<string, number> };
+  }>("/builds/:id/compare", async (request) => {
+    const other = request.body?.with;
+    if (typeof other !== "string" || other.length === 0) {
+      throw new HttpError(400, "body must include 'with' (the other build id)");
+    }
+    return service.compare(
+      request.params.id,
+      other,
+      request.body?.presetId,
+      request.body?.weights,
+    );
+  });
+
+  app.post<{ Params: { id: string }; Body: { input?: unknown } }>(
+    "/builds/:id/compare/import",
+    async (request, reply) => {
+      const input = request.body?.input;
+      if (typeof input !== "string") {
+        throw new HttpError(400, "body must be { input: string }");
+      }
+      const result = await service.compareImport(request.params.id, input);
+      return reply.status(201).send(result);
+    },
+  );
+
+  // -- Upgrades (UX §4.5) ---------------------------------------------------
+  app.post<{ Params: { id: string }; Body: UpgradesRequest }>(
+    "/builds/:id/upgrades",
+    async (request) => {
+      return service.upgrades(request.params.id, request.body ?? ({} as UpgradesRequest));
+    },
+  );
+
+  // -- Item swap (UX §4.4) --------------------------------------------------
+  app.post<{ Params: { id: string }; Body: { itemText?: unknown } }>(
+    "/builds/:id/itemswap",
+    async (request) => {
+      const itemText = request.body?.itemText;
+      if (typeof itemText !== "string") {
+        throw new HttpError(400, "body must be { itemText: string }");
+      }
+      return service.itemSwap(request.params.id, itemText);
+    },
+  );
+
+  // -- Wasted-stat finder ---------------------------------------------------
+  app.get<{ Params: { id: string }; Querystring: { presetId?: string } }>(
+    "/builds/:id/wasted",
+    async (request) => {
+      return service.wasted(request.params.id, request.query.presetId);
+    },
+  );
+
+  // -- Reports (immutable frozen snapshots, shareable /r/{id}) ---------------
+  app.post<{ Body: { buildId?: unknown; kind?: unknown; payload?: unknown } }>(
+    "/reports",
+    async (request, reply) => {
+      const buildId = request.body?.buildId;
+      const kind = request.body?.kind;
+      if (typeof buildId !== "string" || typeof kind !== "string") {
+        throw new HttpError(400, "body must be { buildId: string, kind: string, payload }");
+      }
+      const result = await service.createReport(
+        buildId,
+        kind as ReportKind,
+        request.body?.payload,
+      );
+      return reply.status(201).send(result);
+    },
+  );
+
+  app.get<{ Params: { id: string } }>("/reports/:id", async (request) => {
+    return service.getReport(request.params.id);
+  });
+
+  // -- Users (anonymous account seam) ---------------------------------------
+  app.post("/users", async (_request, reply) => {
+    const result = await service.createUser();
+    return reply.status(201).send(result);
+  });
+
+  app.post<{ Params: { id: string }; Body: { buildId?: unknown } }>(
+    "/users/:id/builds",
+    async (request, reply) => {
+      const buildId = request.body?.buildId;
+      if (typeof buildId !== "string") {
+        throw new HttpError(400, "body must be { buildId: string }");
+      }
+      const result = await service.saveUserBuild(request.params.id, buildId);
+      return reply.status(201).send(result);
+    },
+  );
+
+  app.get<{ Params: { id: string } }>("/users/:id/builds", async (request) => {
+    return service.listUserBuilds(request.params.id);
+  });
 
   return app;
 }

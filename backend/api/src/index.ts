@@ -10,15 +10,42 @@ export type {
   AssumptionView,
   AxisContribution,
   BuildDetailResponse,
+  CompareCandidate,
+  CompareGearRow,
+  CompareResponse,
+  CompareScoreRow,
   CutRecommendation,
+  DoctorResponse,
   ImportResponse,
+  ItemSwapResponse,
   ProvenanceView,
   PromoteResponse,
   Recommendation,
+  ReportResponse,
   SnapshotSummary,
   TuneRequest,
   TuneResponse,
+  UpgradeCandidate,
+  UpgradesRequest,
+  UpgradesResponse,
+  WastedFinding,
+  WastedKind,
+  WastedResponse,
 } from "./services.js";
+
+// The price-layer seam (UX §4.5) — synthetic mock today, real compliance-reviewed
+// poller later, both behind the PriceProvider interface (charter §7.5).
+export {
+  MockPriceProvider,
+  priceProviderFromEnv,
+  SYNTHETIC_PRICE_DISCLAIMER,
+  SYNTHETIC_PRICE_PROVENANCE,
+} from "./prices/index.js";
+export type { PriceProvider, PriceQuote, PriceProvenance } from "./prices/index.js";
+
+export { parseItemText, ItemParseError } from "./items/parse-item.js";
+export type { ParsedItem } from "./items/parse-item.js";
+export { generateUpgradeCandidates } from "./optimizer/upgrade-candidates.js";
 
 export {
   createInMemoryRepositories,
@@ -26,6 +53,9 @@ export {
   InMemoryCalculationResultRepository,
   InMemoryMutationRepository,
   InMemoryRawImportArtifactRepository,
+  InMemoryReportRepository,
+  InMemoryUserRepository,
+  InMemorySavedBuildRepository,
 } from "./store/repositories.js";
 export type {
   BuildRepository,
@@ -33,6 +63,13 @@ export type {
   MutationRepository,
   RawImportArtifactRepository,
   Repositories,
+  ReportKind,
+  ReportRepository,
+  SavedBuild,
+  SavedBuildRepository,
+  StoredReport,
+  StoredUser,
+  UserRepository,
 } from "./store/repositories.js";
 
 // Postgres persistence (Open Task 11) — selected at runtime by DATABASE_URL via
@@ -42,6 +79,9 @@ export {
   PostgresCalculationResultRepository,
   PostgresMutationRepository,
   PostgresRawImportArtifactRepository,
+  PostgresReportRepository,
+  PostgresUserRepository,
+  PostgresSavedBuildRepository,
   createPostgresRepositories,
   repositoriesFromEnv,
   repositoriesOver,
@@ -74,4 +114,9 @@ export type { Candidate } from "./optimizer/candidates.js";
 // adapters (snapshot-adapter / context-adapter) are gone — the import route is
 // importAny → normalize → core BuildSnapshot with no translation seam.
 
-export { TWISTER_HUNTRESS, twisterHuntressJson } from "./fixtures.js";
+export {
+  TWISTER_HUNTRESS,
+  twisterHuntressJson,
+  TWISTER_HUNTRESS_BOSS,
+  twisterHuntressBossJson,
+} from "./fixtures.js";
