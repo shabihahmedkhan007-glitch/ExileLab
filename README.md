@@ -39,13 +39,27 @@ pnpm install        # once, from the repo root
 pnpm -r build       # build all workspace packages
 ```
 
+**API key setup (once)** — enables the Build Coach (AI narration):
+
+```bash
+# copy the env template, then open backend/api/.env and paste your key
+cp backend/api/.env.example backend/api/.env
+```
+
+Put your key (from https://openrouter.ai/keys) in `backend/api/.env`:
+
+```
+OPENROUTER_API_KEY=sk-or-v1-...
+```
+
+The file is gitignored and auto-loaded on server start. (Alternatively set it in
+the shell — `$env:OPENROUTER_API_KEY="sk-or-..."` on PowerShell, `export …` on
+bash — shell vars override the file.) No key = the coach is simply off;
+everything else works.
+
 **Terminal 1 — the API** (port 3001):
 
-```powershell
-# optional: enable the Build Coach (AI narration of results)
-$env:OPENROUTER_API_KEY = "sk-or-..."      # from https://openrouter.ai/keys
-# bash/mac: export OPENROUTER_API_KEY=sk-or-...
-
+```bash
 pnpm --filter @exilelab/api exec tsx src/server.ts
 ```
 
