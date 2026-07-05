@@ -139,6 +139,35 @@ export const DEFAULT_SKILL_MECHANICS: readonly SkillMechanics[] = [
     dealsDamageOverTime: false,
     resource: 'spirit',
   },
+  {
+    skillId: 'summon-skeletal-warriors',
+    actionType: 'minion',
+    isMovementSkill: false,
+    isChannelled: false,
+    repeatedUseMobility: false,
+    dealsDamageOverTime: false,
+    resource: 'spirit',
+  },
+  {
+    skillId: 'summon-skeletal-snipers',
+    actionType: 'minion',
+    isMovementSkill: false,
+    isChannelled: false,
+    repeatedUseMobility: false,
+    dealsDamageOverTime: false,
+    resource: 'spirit',
+  },
+
+  // Melee hit attacks.
+  {
+    skillId: 'boneshatter',
+    actionType: 'attack',
+    isMovementSkill: false,
+    isChannelled: false,
+    repeatedUseMobility: false,
+    dealsDamageOverTime: false,
+    resource: 'mana',
+  },
 ] as const;
 
 /**
@@ -158,12 +187,24 @@ export function defaultMechanicsFor(skillId: string): SkillMechanics {
   };
 }
 
-/** Build a fast lookup Map from a mechanics table. */
+/**
+ * Canonicalize a skill id for table lookup: lowercase, all non-alphanumerics
+ * stripped. Importers surface ids in different formats for the same skill —
+ * PoB-style PascalCase ("EssenceDrain"), kebab-case ("essence-drain"),
+ * display-ish ("Essence Drain") — and a format mismatch must never silently
+ * demote a known skill to the conservative default (that is exactly the bug
+ * that classified a DoT caster as a hit-attacker).
+ */
+export function canonicalSkillId(skillId: string): string {
+  return skillId.toLowerCase().replace(/[^a-z0-9]/g, '');
+}
+
+/** Build a fast lookup Map from a mechanics table (keys canonicalized). */
 export function indexMechanics(
   table: readonly SkillMechanics[] = DEFAULT_SKILL_MECHANICS,
 ): ReadonlyMap<string, SkillMechanics> {
   const map = new Map<string, SkillMechanics>();
-  for (const row of table) map.set(row.skillId, row);
+  for (const row of table) map.set(canonicalSkillId(row.skillId), row);
   return map;
 }
 
@@ -172,5 +213,5 @@ export function resolveMechanics(
   skillId: string,
   index: ReadonlyMap<string, SkillMechanics>,
 ): SkillMechanics {
-  return index.get(skillId) ?? defaultMechanicsFor(skillId);
+  return index.get(canonicalSkillId(skillId)) ?? defaultMechanicsFor(skillId);
 }
