@@ -14,16 +14,26 @@ import { z } from 'zod';
 import type { NarrationInput, StructuredPrompt } from './types.js';
 
 /**
- * The flash-class default model (configurable via COACH_MODEL). PRD §9.2 / §10:
- * cheap, explanation-only. Chosen 2026-07 from live OpenRouter pricing:
- * gpt-4.1-nano is $0.10/M in · $0.40/M out (≈$0.0001 per narration at our
- * ~700-in/80-out profile), NON-reasoning (no hidden thinking tokens on a
- * 2-sentence task), and OpenAI's strict json_schema is grammar-enforced
- * server-side — eliminating the schema-invalid degradation path entirely.
- * Quality-upgrade alternates (env COACH_MODEL, zero code changes):
- * google/gemini-3.1-flash-lite, anthropic/claude-haiku-4.5.
+ * The default narration model (configurable via COACH_MODEL). PRD §9.2 / §10:
+ * cheap, explanation-only. Chosen 2026-07 from live OpenRouter pricing.
+ *
+ * DEMO DEFAULT — $0: Qwen3-Next-80B's free variant. 80B-MoE quality at zero
+ * cost; the content-hash cache keeps request volume far under the free tier's
+ * rate limits, and every degradation path (rate-limited, unavailable,
+ * schema-invalid, guardrail-rejected) silently drops the card — nothing breaks.
+ * Privacy note: free-tier endpoints may use prompts for provider training; our
+ * NarrationInput is non-personal game-build data only, acceptable for the demo
+ * phase, NOT for production accounts.
+ *
+ * THE PAID LADDER (env COACH_MODEL, zero code changes), per-narration at our
+ * ~700-in/80-out profile:
+ *   inclusionai/ling-2.6-flash            ≈ $0.0000094  (absolute paid floor)
+ *   qwen/qwen3-30b-a3b-instruct-2507      ≈ $0.000049   (proven instructor)
+ *   openai/gpt-4.1-nano                   ≈ $0.0001     (grammar-enforced schema
+ *                                                        — production pick)
+ *   anthropic/claude-haiku-4.5            ≈ $0.001      (best discipline)
  */
-export const DEFAULT_MODEL = 'openai/gpt-4.1-nano';
+export const DEFAULT_MODEL = 'qwen/qwen3-next-80b-a3b-instruct:free';
 
 /** The coach persona + hard grounding instruction (UX §9 + §7 rule 3). */
 export const SYSTEM_PROMPT = [

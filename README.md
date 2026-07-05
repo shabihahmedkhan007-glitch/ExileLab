@@ -65,7 +65,7 @@ Overview / Tune / Doctor / Compare / Upgrades tabs.
 | Variable | Absent (default) | Set |
 |---|---|---|
 | `OPENROUTER_API_KEY` | Build Coach off — no ✨ narration cards, everything else works | Coach narrates Doctor/Tune results (guardrailed: the LLM can never introduce a number not in the findings) |
-| `COACH_MODEL` | `openai/gpt-4.1-nano` (≈$0.0001/narration, grammar-enforced JSON schema) | any OpenRouter model id — e.g. `google/gemini-3.1-flash-lite` or `anthropic/claude-haiku-4.5` for richer prose |
+| `COACH_MODEL` | `qwen/qwen3-next-80b-a3b-instruct:free` — **$0 demo default** (80B-class; rate-limited free tier, fine under our caching; free endpoints may train on prompts — our inputs are non-personal game data) | production ladder: `inclusionai/ling-2.6-flash` (~$1/100k narrations) → `qwen/qwen3-30b-a3b-instruct-2507` → `openai/gpt-4.1-nano` (grammar-enforced schema) → `anthropic/claude-haiku-4.5` |
 | `PRICE_PROVIDER` | `mock` — deterministic synthetic prices, visibly disclaimed | any other value kills the price layer (Upgrades returns 503, Tune drops cost chips) |
 | `DATABASE_URL` | in-memory storage | Postgres 17 persistence (`backend/api/docker-compose.db.yml`) |
 
