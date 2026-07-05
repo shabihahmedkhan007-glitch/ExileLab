@@ -65,7 +65,7 @@ Overview / Tune / Doctor / Compare / Upgrades tabs.
 | Variable | Absent (default) | Set |
 |---|---|---|
 | `OPENROUTER_API_KEY` | Build Coach off — no ✨ narration cards, everything else works | Coach narrates Doctor/Tune results (guardrailed: the LLM can never introduce a number not in the findings) |
-| `COACH_MODEL` | `google/gemini-flash-1.5` | any OpenRouter model id |
+| `COACH_MODEL` | `openai/gpt-4.1-nano` (≈$0.0001/narration, grammar-enforced JSON schema) | any OpenRouter model id — e.g. `google/gemini-3.1-flash-lite` or `anthropic/claude-haiku-4.5` for richer prose |
 | `PRICE_PROVIDER` | `mock` — deterministic synthetic prices, visibly disclaimed | any other value kills the price layer (Upgrades returns 503, Tune drops cost chips) |
 | `DATABASE_URL` | in-memory storage | Postgres 17 persistence (`backend/api/docker-compose.db.yml`) |
 

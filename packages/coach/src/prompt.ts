@@ -13,8 +13,17 @@
 import { z } from 'zod';
 import type { NarrationInput, StructuredPrompt } from './types.js';
 
-/** The flash-class default model (configurable). PRD §9.2 / §10: cheap, explanation-only. */
-export const DEFAULT_MODEL = 'google/gemini-flash-1.5';
+/**
+ * The flash-class default model (configurable via COACH_MODEL). PRD §9.2 / §10:
+ * cheap, explanation-only. Chosen 2026-07 from live OpenRouter pricing:
+ * gpt-4.1-nano is $0.10/M in · $0.40/M out (≈$0.0001 per narration at our
+ * ~700-in/80-out profile), NON-reasoning (no hidden thinking tokens on a
+ * 2-sentence task), and OpenAI's strict json_schema is grammar-enforced
+ * server-side — eliminating the schema-invalid degradation path entirely.
+ * Quality-upgrade alternates (env COACH_MODEL, zero code changes):
+ * google/gemini-3.1-flash-lite, anthropic/claude-haiku-4.5.
+ */
+export const DEFAULT_MODEL = 'openai/gpt-4.1-nano';
 
 /** The coach persona + hard grounding instruction (UX §9 + §7 rule 3). */
 export const SYSTEM_PROMPT = [
